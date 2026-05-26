@@ -10,239 +10,291 @@
         >
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="site-body">
+    <body class="site-body rw-theme">
         @php
+            $heroVideo = asset('videos/hero-background.mp4');
+
+            $navigation = [
+                [
+                    'label' => 'About',
+                    'links' => [
+                        ['title' => 'About Riskwisdom Loans', 'href' => '#about'],
+                        ['title' => 'Our Approach', 'href' => '#why-riskwisdom'],
+                        ['title' => 'Contact Us', 'href' => '#contact'],
+                    ],
+                ],
+                [
+                    'label' => 'Who We Help',
+                    'links' => [
+                        ['title' => 'First Home Buyers', 'href' => '#who-we-help'],
+                        ['title' => 'Families', 'href' => '#who-we-help'],
+                        ['title' => 'Investors', 'href' => '#who-we-help'],
+                        ['title' => 'Business Owners', 'href' => '#who-we-help'],
+                    ],
+                ],
+                [
+                    'label' => 'Solutions',
+                    'links' => [
+                        ['title' => 'Home Loans', 'href' => '#solutions'],
+                        ['title' => 'Refinance Loans', 'href' => '#solutions'],
+                        ['title' => 'Commercial Loans', 'href' => '#solutions'],
+                        ['title' => 'Asset Finance', 'href' => '#solutions'],
+                    ],
+                ],
+                [
+                    'label' => 'Resources',
+                    'links' => [
+                        ['title' => 'Borrowing Power', 'href' => '#resources'],
+                        ['title' => 'Guides & Insights', 'href' => '#resources'],
+                        ['title' => 'Next Step Checklist', 'href' => '#resources'],
+                    ],
+                ],
+                [
+                    'label' => 'Community',
+                    'links' => [
+                        ['title' => 'Referral Partners', 'href' => '#community'],
+                        ['title' => 'Client Experience', 'href' => '#community'],
+                        ['title' => 'Book a Consultation', 'href' => '#contact'],
+                    ],
+                ],
+            ];
+
             $audiences = [
                 [
-                    'label' => '01',
-                    'title' => 'First Home Buyers',
-                    'copy' => 'Step into the market with clear guidance, practical next steps, and lending options shaped around your first purchase.',
+                    'tag' => 'First Home Buyers',
+                    'title' => 'Guidance that makes a first purchase feel more manageable.',
+                    'copy' => 'Understand borrowing options, documentation requirements, and the path from planning through to settlement.',
                 ],
                 [
-                    'label' => '02',
-                    'title' => 'Families',
-                    'copy' => 'Whether you are upsizing, consolidating, or reviewing repayments, we help families structure finance with confidence.',
+                    'tag' => 'Families',
+                    'title' => 'Finance strategies that adapt as your household changes.',
+                    'copy' => 'We help families review repayments, explore refinancing, and structure finance for the next chapter.',
                 ],
                 [
-                    'label' => '03',
-                    'title' => 'Investors',
-                    'copy' => 'Explore property lending strategies that support portfolio growth, cash flow planning, and future opportunities.',
+                    'tag' => 'Investors',
+                    'title' => 'Lending support for buyers building long-term property plans.',
+                    'copy' => 'Compare investment pathways with a focus on cash flow, flexibility, and future opportunities.',
                 ],
                 [
-                    'label' => '04',
-                    'title' => 'Professionals',
-                    'copy' => 'Busy professionals get efficient support, responsive communication, and tailored lending pathways for complex income profiles.',
+                    'tag' => 'Professionals',
+                    'title' => 'Straightforward support for busy borrowers with complex income.',
+                    'copy' => 'Efficient communication, practical guidance, and finance options suited to professional workloads.',
                 ],
                 [
-                    'label' => '05',
-                    'title' => 'Business Owners',
-                    'copy' => 'We help business owners assess finance solutions for property, equipment, and broader borrowing needs without unnecessary friction.',
+                    'tag' => 'Business Owners',
+                    'title' => 'Practical lending help for growth, property, and equipment decisions.',
+                    'copy' => 'Navigate finance with a clearer view of what suits business cash flow and future expansion plans.',
                 ],
                 [
-                    'label' => '06',
-                    'title' => 'Over 50s',
-                    'copy' => 'Receive guidance that respects your stage of life, borrowing priorities, and plans for flexibility in the years ahead.',
+                    'tag' => 'Over 50s',
+                    'title' => 'Loan conversations that respect lifestyle, flexibility, and future priorities.',
+                    'copy' => 'Explore options with calm guidance tailored to where you are now and where you want to be next.',
                 ],
             ];
 
             $solutions = [
                 [
                     'title' => 'Home Loans',
-                    'copy' => 'Owner-occupier lending options designed to balance flexibility, value, and long-term suitability.',
+                    'copy' => 'Owner-occupier finance with clear guidance around structure, repayments, and lender fit.',
                 ],
                 [
                     'title' => 'Refinance Loans',
-                    'copy' => 'Review your existing loan and explore opportunities to simplify repayments, improve features, or consolidate debt.',
-                ],
-                [
-                    'title' => 'Investment Loans',
-                    'copy' => 'Finance strategies for buyers who want to purchase, refinance, or strengthen their investment position.',
+                    'copy' => 'Review your current finance and explore ways to simplify, improve features, or reduce pressure.',
                 ],
                 [
                     'title' => 'Commercial Loans',
-                    'copy' => 'Structured lending for commercial property, business expansion, and strategic borrowing requirements.',
+                    'copy' => 'Support for commercial property purchases, working capital plans, and broader business borrowing.',
+                ],
+                [
+                    'title' => 'Property Investment',
+                    'copy' => 'Finance pathways designed for investors who want strategy as well as loan comparison.',
                 ],
                 [
                     'title' => 'Asset Finance',
-                    'copy' => 'Funding solutions for vehicles, equipment, and business assets that support day-to-day operations and growth.',
+                    'copy' => 'Funding for vehicles, plant, or equipment with a practical focus on business usability.',
                 ],
                 [
                     'title' => 'Construction Loans',
-                    'copy' => 'Guidance through staged funding, progress payments, and lending considerations for new builds or major renovations.',
+                    'copy' => 'Help navigating progress payments, staging, and lender expectations for build projects.',
                 ],
             ];
 
-            $benefits = [
-                'Tailored lending guidance',
-                'Clear explanations without jargon',
-                'Support from enquiry to settlement',
-                'Loan options matched to your scenario',
-            ];
-
-            $resources = [
+            $resourceCards = [
                 [
                     'title' => 'Borrowing Power',
-                    'copy' => 'Build confidence around your next step with calculators and educational tools that help you understand borrowing capacity and repayments.',
+                    'copy' => 'Introduce calculators, repayment tools, and planning resources that help borrowers understand the next step.',
+                    'cta' => 'View tools',
                 ],
                 [
-                    'title' => 'Loan Guides',
-                    'copy' => 'Learn the fundamentals of buying, refinancing, investing, and structuring finance with clear, practical explanations.',
+                    'title' => 'News & Insights',
+                    'copy' => 'Share original market commentary, interest rate updates, and practical finance guidance as content grows.',
+                    'cta' => 'Read insights',
                 ],
                 [
-                    'title' => 'Market Insights',
-                    'copy' => 'Stay informed about interest rate changes, lending updates, and broader property finance topics that may affect your plans.',
+                    'title' => 'Property Profile Reports',
+                    'copy' => 'Offer downloadable or enquiry-based reports that help clients connect lending decisions with property goals.',
+                    'cta' => 'Request a report',
                 ],
             ];
 
-            $promises = [
+            $serviceHighlights = [
                 [
-                    'title' => 'Clarity First',
-                    'copy' => 'We start by understanding your priorities so the advice and options stay aligned with your real goals.',
+                    'title' => 'Tailored lending guidance',
+                    'copy' => 'The process starts with understanding your situation before looking at suitable lender pathways.',
                 ],
                 [
-                    'title' => 'Thoughtful Strategy',
-                    'copy' => 'Every recommendation should make sense not just today, but for the stage you are moving toward next.',
+                    'title' => 'Clear communication',
+                    'copy' => 'Borrowers should know what is happening, what is needed next, and how each step supports the outcome.',
                 ],
                 [
-                    'title' => 'Steady Support',
-                    'copy' => 'You should always know where things stand, what comes next, and what information is still needed.',
+                    'title' => 'Support from enquiry to settlement',
+                    'copy' => 'Documentation, lender communication, and next actions are guided with a calm, practical approach.',
                 ],
             ];
 
-            $process = [
-                'Discover your goals and current position',
-                'Compare suitable lending pathways',
-                'Guide documentation and lender communication',
-                'Support your application through to settlement',
+            $lenderLabels = [
+                'Major Bank Options',
+                'Specialist Lending',
+                'Refinance Pathways',
+                'Investment Strategy',
+                'Commercial Support',
+                'Asset Finance',
             ];
         @endphp
 
-        <header class="site-header">
-            <div class="container nav-shell">
-                <a class="brand" href="{{ route('home') }}">
-                    <span class="brand-mark">RW</span>
-                    <span class="brand-copy">
-                        <strong>Riskwisdom</strong>
-                        <small>Loans</small>
-                    </span>
-                </a>
+        <header class="rw-header">
+            <div class="container rw-header__wrap">
+                <div class="rw-header__bar">
+                    <a class="rw-brand" href="{{ route('home') }}">
+                        <span class="rw-brand__mark">RW</span>
+                        <span class="rw-brand__copy">
+                            <strong>Riskwisdom</strong>
+                            <small>Loans</small>
+                        </span>
+                    </a>
 
-                <nav class="main-nav" aria-label="Primary">
-                    <a href="#who-we-help">Who We Help</a>
-                    <a href="#solutions">Solutions</a>
-                    <a href="#resources">Resources</a>
-                    <a href="#contact">Contact</a>
-                </nav>
+                    <nav class="rw-nav" aria-label="Primary">
+                        @foreach ($navigation as $item)
+                            <div class="rw-nav__item">
+                                <button class="rw-nav__trigger" type="button">{{ $item['label'] }}</button>
+                                <div class="rw-nav__dropdown">
+                                    @foreach ($item['links'] as $link)
+                                        <a href="{{ $link['href'] }}">{{ $link['title'] }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </nav>
 
-                <a class="button button-primary button-nav" href="#contact">Book a Call</a>
+                    <a class="rw-button rw-button--outline" href="#contact">Book a call</a>
+                </div>
             </div>
         </header>
 
-        <main>
-            <section class="hero-section">
-                <div class="container hero-grid">
-                    <div class="hero-copy">
-                        <span class="eyebrow">Original finance homepage concept</span>
-                        <h1>Smarter loan guidance for every stage of life.</h1>
-                        <p class="hero-lead">
-                            Riskwisdom Loans helps borrowers make confident finance decisions with clear explanations,
-                            tailored lending options, and practical support from first enquiry to settlement.
+        <main class="rw-home">
+            <section class="rw-hero">
+                <video class="rw-hero__video" autoplay muted loop playsinline poster="">
+                    <source src="{{ $heroVideo }}" type="video/mp4">
+                </video>
+                <div class="rw-hero__overlay"></div>
+
+                <div class="container rw-hero__content">
+                    <h1>Smarter loan guidance<br>for every stage of life.</h1>
+                    <p>
+                        Riskwisdom Loans helps borrowers move forward with clarity across home loans, refinancing,
+                        investment lending, commercial finance, and asset finance.
+                    </p>
+
+                    <div class="rw-hero__actions">
+                        <a class="rw-button rw-button--solid" href="#contact">Book a call</a>
+                        <a class="rw-button rw-button--ghost" href="#solutions">Explore solutions</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rw-promo">
+                <div class="container rw-promo__inner">
+                    <div>
+                        <span class="rw-section-label">Ready to move forward?</span>
+                        <p>Use this section for campaign banners, limited-time offers, or a simple consultation message.</p>
+                    </div>
+                    <a class="rw-link-arrow" href="#contact">Request a free consultation</a>
+                </div>
+            </section>
+
+            <section class="rw-section rw-section--intro" id="about">
+                <div class="container rw-solution">
+                    <div class="rw-solution__copy">
+                        <span class="rw-section-label">Helping you find the right solution</span>
+                        <h2>Original content built around your own finance brand, not copied wording.</h2>
+                        <p>
+                            This homepage follows the broad structure and premium feel of the reference site while keeping
+                            the copy specific to Riskwisdom Loans. Every heading, card, and menu item can be updated from
+                            this Blade file.
                         </p>
-
-                        <div class="hero-actions">
-                            <a class="button button-primary" href="#contact">Book a Call</a>
-                            <a class="button button-secondary" href="#solutions">Explore Solutions</a>
+                        <p>
+                            It is designed to feel modern, trustworthy, and easy to expand into inner pages as the site
+                            grows.
+                        </p>
+                        <div class="rw-solution__actions">
+                            <a class="rw-button rw-button--solid" href="#solutions">Find out more</a>
+                            <a class="rw-button rw-button--text" href="#contact">Book a call</a>
                         </div>
+                    </div>
 
-                        <ul class="hero-points">
-                            @foreach ($benefits as $benefit)
-                                <li>{{ $benefit }}</li>
-                            @endforeach
+                    <div class="rw-solution__panel">
+                        <div class="rw-solution__panel-top">
+                            <span>Brand direction</span>
+                            <strong>Clean, confident, and easy to adapt</strong>
+                        </div>
+                        <ul class="rw-feature-list">
+                            <li>Editable menu groups with dropdown links</li>
+                            <li>Hero banner with background video and layered overlay</li>
+                            <li>Section cards built from arrays for easier content changes</li>
+                            <li>Production-ready contact section and footer structure</li>
                         </ul>
                     </div>
-
-                    <div class="hero-visual" aria-hidden="true">
-                        <div class="hero-card hero-card-primary">
-                            <p class="card-label">Finance approach</p>
-                            <h2>Calm guidance backed by practical lending strategy.</h2>
-                            <p>
-                                Built for borrowers who want clarity around home loans, refinancing, investment lending,
-                                commercial finance, and asset finance.
-                            </p>
-                        </div>
-
-                        <div class="hero-card hero-card-secondary">
-                            <p class="card-label">How we work</p>
-                            <ul class="process-list">
-                                @foreach ($process as $index => $step)
-                                    <li>
-                                        <span>{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
-                                        <strong>{{ $step }}</strong>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <div class="hero-card hero-card-accent">
-                            <p class="card-label">Contact</p>
-                            <strong>info@riskwisdomloans.com.au</strong>
-                            <span>www.riskwisdomloans.com.au</span>
-                        </div>
-
-                        <span class="hero-orb hero-orb-one"></span>
-                        <span class="hero-orb hero-orb-two"></span>
-                    </div>
                 </div>
             </section>
 
-            <section class="trust-strip">
-                <div class="container trust-grid">
-                    @foreach ($benefits as $benefit)
-                        <article class="trust-card">
-                            <span class="trust-card-mark"></span>
-                            <p>{{ $benefit }}</p>
-                        </article>
-                    @endforeach
-                </div>
-            </section>
-
-            <section class="section" id="who-we-help">
+            <section class="rw-section rw-section--light" id="who-we-help">
                 <div class="container">
-                    <div class="section-heading">
-                        <span class="eyebrow">Who We Help</span>
-                        <h2>Finance solutions built around your goals.</h2>
+                    <div class="rw-section-heading">
+                        <span class="rw-section-label">Who We Help</span>
+                        <h2>Finance made simpler for the people and plans you support.</h2>
                         <p>
-                            Whether you are buying your first property, refinancing for flexibility, planning an
-                            investment move, or funding business growth, the process should feel informed and manageable.
+                            These audience cards are written as original placeholder content and can be adjusted as your
+                            service positioning becomes more specific.
                         </p>
                     </div>
 
-                    <div class="card-grid">
+                    <div class="rw-grid rw-grid--audiences">
                         @foreach ($audiences as $audience)
-                            <article class="info-card">
-                                <span class="card-index">{{ $audience['label'] }}</span>
+                            <article class="rw-card rw-card--audience">
+                                <span class="rw-card__tag">{{ $audience['tag'] }}</span>
                                 <h3>{{ $audience['title'] }}</h3>
                                 <p>{{ $audience['copy'] }}</p>
+                                <a class="rw-link-arrow" href="#contact">Learn more</a>
                             </article>
                         @endforeach
                     </div>
                 </div>
             </section>
 
-            <section class="section section-alt" id="solutions">
+            <section class="rw-section" id="solutions">
                 <div class="container">
-                    <div class="section-heading">
-                        <span class="eyebrow">Loan Solutions</span>
-                        <h2>Find the right finance pathway for your next move.</h2>
+                    <div class="rw-section-heading">
+                        <span class="rw-section-label">Solutions</span>
+                        <h2>Finance options arranged in a format that is easy to expand later.</h2>
                         <p>
-                            We tailor the lending conversation to your situation so you can compare options that fit your
-                            current needs and the future you are working toward.
+                            Use these cards as the starting point for individual service pages such as home loans,
+                            refinance, commercial finance, and construction lending.
                         </p>
                     </div>
 
-                    <div class="card-grid">
+                    <div class="rw-grid rw-grid--solutions">
                         @foreach ($solutions as $solution)
-                            <article class="info-card info-card-alt">
+                            <article class="rw-card rw-card--solution">
                                 <h3>{{ $solution['title'] }}</h3>
                                 <p>{{ $solution['copy'] }}</p>
                             </article>
@@ -251,223 +303,218 @@
                 </div>
             </section>
 
-            <section class="section">
+            <section class="rw-section rw-section--band">
                 <div class="container">
-                    <div class="split-panel">
-                        <div class="split-copy">
-                            <span class="eyebrow">Why Choose Riskwisdom Loans</span>
-                            <h2>Clear advice, thoughtful strategy, and support that keeps moving.</h2>
-                            <p>
-                                Borrowing should not feel confusing or rushed. We focus on understanding your position,
-                                explaining the lending landscape clearly, and helping you move forward with confidence.
-                            </p>
-                            <p>
-                                The goal is not just to find a loan, but to help you understand why a pathway may suit
-                                your circumstances and what it means for the next stage of your plans.
-                            </p>
+                    <div class="rw-lenders">
+                        <div class="rw-lenders__heading">
+                            <span class="rw-section-label">A flexible lending panel message</span>
+                            <h2>Present breadth and confidence without inventing unsupported claims.</h2>
                         </div>
-
-                        <div class="feature-stack">
-                            <article class="feature-card">
-                                <strong>Personalised guidance</strong>
-                                <p>Recommendations should reflect your real objectives, not a one-size-fits-all script.</p>
-                            </article>
-                            <article class="feature-card">
-                                <strong>Responsive communication</strong>
-                                <p>You stay updated on progress, requirements, and lender interactions throughout the process.</p>
-                            </article>
-                            <article class="feature-card">
-                                <strong>Practical finance support</strong>
-                                <p>We help break down the process into clear actions so each stage feels manageable.</p>
-                            </article>
+                        <div class="rw-lenders__list">
+                            @foreach ($lenderLabels as $label)
+                                <span>{{ $label }}</span>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="section" id="resources">
+            <section class="rw-section" id="resources">
                 <div class="container">
-                    <div class="section-heading">
-                        <span class="eyebrow">Resources</span>
-                        <h2>Tools and guidance to support better finance decisions.</h2>
+                    <div class="rw-section-heading">
+                        <span class="rw-section-label">Resources</span>
+                        <h2>Take the first step with useful tools, guides, and finance insights.</h2>
                         <p>
-                            Good decisions start with better information. Use this section to introduce calculators,
-                            guides, and insights as the broader site grows.
+                            The cards below are styled to match the reference direction while staying fully original in
+                            wording and layout implementation.
                         </p>
                     </div>
 
-                    <div class="card-grid card-grid-third">
-                        @foreach ($resources as $resource)
-                            <article class="info-card">
+                    <div class="rw-grid rw-grid--resources">
+                        @foreach ($resourceCards as $resource)
+                            <article class="rw-card rw-card--resource">
                                 <h3>{{ $resource['title'] }}</h3>
                                 <p>{{ $resource['copy'] }}</p>
-                                <a class="text-link" href="#contact">Request More Information</a>
+                                <a class="rw-link-arrow" href="#contact">{{ $resource['cta'] }}</a>
                             </article>
                         @endforeach
                     </div>
                 </div>
             </section>
 
-            <section class="section section-alt">
+            <section class="rw-section rw-section--light" id="community">
                 <div class="container">
-                    <div class="section-heading section-heading-centered">
-                        <span class="eyebrow">Working With Us</span>
-                        <h2>What clients can expect from the experience.</h2>
+                    <div class="rw-section-heading rw-section-heading--center">
+                        <span class="rw-section-label">Client Experience</span>
+                        <h2>Use this area for approved testimonials, or keep it focused on service promises.</h2>
                         <p>
-                            This section replaces fake testimonials with clear service promises until genuine, approved
-                            client feedback is available.
+                            To avoid fake reviews, this version uses clear experience highlights instead of invented
+                            customer quotes.
                         </p>
                     </div>
 
-                    <div class="promise-grid">
-                        @foreach ($promises as $promise)
-                            <article class="promise-card">
-                                <h3>{{ $promise['title'] }}</h3>
-                                <p>{{ $promise['copy'] }}</p>
+                    <div class="rw-grid rw-grid--highlights">
+                        @foreach ($serviceHighlights as $highlight)
+                            <article class="rw-card rw-card--highlight">
+                                <h3>{{ $highlight['title'] }}</h3>
+                                <p>{{ $highlight['copy'] }}</p>
                             </article>
                         @endforeach
                     </div>
                 </div>
             </section>
 
-            <section class="section" id="contact">
-                <div class="container">
-                    <div class="contact-shell">
-                        <div class="contact-copy">
-                            <span class="eyebrow eyebrow-dark">Free Consultation</span>
-                            <h2>Start the conversation with a clear next step.</h2>
-                            <p>
-                                Share a few details about your goals and we will outline the lending pathways that may suit
-                                your situation. This demo form is ready for backend wiring and email delivery.
-                            </p>
+            <section class="rw-section rw-section--cta" id="why-riskwisdom">
+                <div class="container rw-cta">
+                    <div class="rw-cta__copy">
+                        <span class="rw-section-label rw-section-label--dark">Why Riskwisdom Loans</span>
+                        <h2>Give borrowers a reason to trust the process from the first click.</h2>
+                        <p>
+                            This section can be used for awards, lender-panel information, service methodology, or team
+                            positioning once your final business profile is confirmed.
+                        </p>
+                    </div>
 
-                            <div class="contact-details">
-                                <a href="mailto:info@riskwisdomloans.com.au">info@riskwisdomloans.com.au</a>
-                                <a href="https://www.riskwisdomloans.com.au" target="_blank" rel="noreferrer">
-                                    www.riskwisdomloans.com.au
-                                </a>
+                    <div class="rw-cta__panel">
+                        <strong>Current version includes</strong>
+                        <ul>
+                            <li>Editable homepage arrays for easier content updates</li>
+                            <li>Video hero layout similar in feel to the reference screenshot</li>
+                            <li>Dropdown navigation ready for future inner pages</li>
+                            <li>Original finance-focused copy for your own brand</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rw-section rw-section--contact" id="contact">
+                <div class="container rw-contact">
+                    <div class="rw-contact__copy">
+                        <span class="rw-section-label rw-section-label--dark">Free consultation</span>
+                        <h2>Start the conversation with a clearer next step.</h2>
+                        <p>
+                            Share a few details and use this form as the starting point for callback enquiries, lead
+                            capture, or CRM integration once the production flow is finalised.
+                        </p>
+                        <div class="rw-contact__details">
+                            <a href="mailto:info@riskwisdomloans.com.au">info@riskwisdomloans.com.au</a>
+                            <a href="https://www.riskwisdomloans.com.au" target="_blank" rel="noreferrer">
+                                www.riskwisdomloans.com.au
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="rw-contact__card">
+                        @if (session('status'))
+                            <div class="rw-form-alert rw-form-alert-success">
+                                {{ session('status') }}
                             </div>
-                        </div>
+                        @endif
 
-                        <div class="contact-form-card">
-                            @if (session('status'))
-                                <div class="form-alert form-alert-success">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
+                        @if ($errors->any())
+                            <div class="rw-form-alert rw-form-alert-error">
+                                Please complete all required fields and try again.
+                            </div>
+                        @endif
 
-                            @if ($errors->any())
-                                <div class="form-alert form-alert-error">
-                                    Please complete all required fields and try again.
-                                </div>
-                            @endif
+                        <form action="{{ route('contact.submit') }}" method="post" class="rw-form">
+                            @csrf
 
-                            <form action="{{ route('contact.submit') }}" method="post" class="contact-form">
-                                @csrf
+                            <div class="rw-form-grid">
+                                <label>
+                                    <span>First name</span>
+                                    <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="First name">
+                                    @error('first_name')
+                                        <small>{{ $message }}</small>
+                                    @enderror
+                                </label>
 
-                                <div class="form-grid">
-                                    <label>
-                                        <span>First name</span>
-                                        <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="First name">
-                                        @error('first_name')
-                                            <small>{{ $message }}</small>
-                                        @enderror
-                                    </label>
+                                <label>
+                                    <span>Last name</span>
+                                    <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Last name">
+                                    @error('last_name')
+                                        <small>{{ $message }}</small>
+                                    @enderror
+                                </label>
 
-                                    <label>
-                                        <span>Last name</span>
-                                        <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Last name">
-                                        @error('last_name')
-                                            <small>{{ $message }}</small>
-                                        @enderror
-                                    </label>
+                                <label>
+                                    <span>Phone</span>
+                                    <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone number">
+                                    @error('phone')
+                                        <small>{{ $message }}</small>
+                                    @enderror
+                                </label>
 
-                                    <label>
-                                        <span>Phone</span>
-                                        <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone number">
-                                        @error('phone')
-                                            <small>{{ $message }}</small>
-                                        @enderror
-                                    </label>
+                                <label>
+                                    <span>Email</span>
+                                    <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address">
+                                    @error('email')
+                                        <small>{{ $message }}</small>
+                                    @enderror
+                                </label>
 
-                                    <label>
-                                        <span>Email</span>
-                                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address">
-                                        @error('email')
-                                            <small>{{ $message }}</small>
-                                        @enderror
-                                    </label>
+                                <label class="rw-form-full">
+                                    <span>Enquiry</span>
+                                    <textarea name="enquiry" rows="5" placeholder="Tell us about your finance goals">{{ old('enquiry') }}</textarea>
+                                    @error('enquiry')
+                                        <small>{{ $message }}</small>
+                                    @enderror
+                                </label>
+                            </div>
 
-                                    <label class="form-full">
-                                        <span>Enquiry</span>
-                                        <textarea name="enquiry" rows="5" placeholder="Tell us about your finance goals">{{ old('enquiry') }}</textarea>
-                                        @error('enquiry')
-                                            <small>{{ $message }}</small>
-                                        @enderror
-                                    </label>
-                                </div>
-
-                                <button class="button button-primary button-wide" type="submit">Request a Call Back</button>
-                            </form>
-                        </div>
+                            <button class="rw-button rw-button--solid rw-button--wide" type="submit">Request a call back</button>
+                        </form>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer class="site-footer">
-            <div class="container footer-grid">
+        <footer class="rw-footer">
+            <div class="container rw-footer__grid">
                 <div>
-                    <a class="brand brand-footer" href="{{ route('home') }}">
-                        <span class="brand-mark">RW</span>
-                        <span class="brand-copy">
+                    <a class="rw-brand rw-brand--footer" href="{{ route('home') }}">
+                        <span class="rw-brand__mark">RW</span>
+                        <span class="rw-brand__copy">
                             <strong>Riskwisdom</strong>
                             <small>Loans</small>
                         </span>
                     </a>
-                    <p class="footer-copy">
-                        A modern finance homepage built for an original brand direction, ready to expand into a broader
-                        Laravel website.
+                    <p>
+                        Riskwisdom Loans provides clear, practical lending guidance for home buyers, refinancers,
+                        investors, professionals, and business owners.
                     </p>
                 </div>
 
                 <div>
-                    <h3>Quick Links</h3>
-                    <ul class="footer-list">
-                        <li><a href="#who-we-help">Who We Help</a></li>
-                        <li><a href="#solutions">Loan Solutions</a></li>
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#solutions">Home Loans</a></li>
+                        <li><a href="#solutions">Refinance Loans</a></li>
+                        <li><a href="#solutions">Commercial Loans</a></li>
+                        <li><a href="#solutions">Asset Finance</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3>Information</h3>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
                         <li><a href="#resources">Resources</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#community">Client Experience</a></li>
                     </ul>
                 </div>
 
-                <div>
-                    <h3>Contact</h3>
-                    <ul class="footer-list">
+                <div class="rw-footer__contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><a href="tel:+61421670636">+61 421 670 636</a></li>
                         <li><a href="mailto:info@riskwisdomloans.com.au">info@riskwisdomloans.com.au</a></li>
-                        <li>
-                            <a href="https://www.riskwisdomloans.com.au" target="_blank" rel="noreferrer">
-                                riskwisdomloans.com.au
-                            </a>
-                        </li>
-                        <li>Phone details to be added before launch</li>
                     </ul>
-                </div>
-
-                <div>
-                    <h3>Compliance</h3>
-                    <p class="footer-copy footer-copy-tight">
-                        Australian Credit Licence and Credit Representative details should be inserted here before the
-                        site goes live.
-                    </p>
-                    <p class="footer-copy footer-copy-tight">
-                        Your full financial situation and requirements need to be considered prior to any offer and
-                        acceptance of a loan product.
-                    </p>
                 </div>
             </div>
 
-            <div class="container footer-bottom">
+            <div class="container rw-footer__bottom">
                 <p>&copy; {{ now()->year }} Riskwisdom Loans. All rights reserved.</p>
             </div>
         </footer>

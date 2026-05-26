@@ -17,7 +17,8 @@ class ExampleTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertSee('Riskwisdom Loans')
-            ->assertSee('Smarter loan guidance for every stage of life.');
+            ->assertSee('Smarter loan guidance')
+            ->assertSee('for every stage of life.');
     }
 
     public function test_the_contact_form_accepts_a_valid_enquiry(): void
