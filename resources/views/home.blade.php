@@ -192,6 +192,35 @@
                     </nav>
 
                     <a class="rw-button rw-button--outline" href="#contact">Book a call</a>
+
+                    <button
+                        class="rw-mobile-toggle"
+                        type="button"
+                        aria-label="Open menu"
+                        aria-expanded="false"
+                        aria-controls="rw-mobile-menu"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+                <div class="rw-mobile-menu" id="rw-mobile-menu">
+                    <nav class="rw-mobile-menu__nav" aria-label="Mobile">
+                        @foreach ($navigation as $item)
+                            <details class="rw-mobile-menu__group">
+                                <summary>{{ $item['label'] }}</summary>
+                                <div class="rw-mobile-menu__links">
+                                    @foreach ($item['links'] as $link)
+                                        <a href="{{ $link['href'] }}">{{ $link['title'] }}</a>
+                                    @endforeach
+                                </div>
+                            </details>
+                        @endforeach
+                    </nav>
+
+                    <a class="rw-button rw-button--solid rw-mobile-menu__cta" href="#contact">Book a call</a>
                 </div>
             </div>
         </header>
@@ -522,8 +551,27 @@
                 <div class="rw-footer__contact">
                     <h3>Contact Us</h3>
                     <ul>
-                        <li><a href="tel:+61421670636">+61 421 670 636</a></li>
-                        <li><a href="mailto:info@riskwisdomloans.com.au">info@riskwisdomloans.com.au</a></li>
+                        <li>
+                            <a class="rw-footer__contact-link" href="tel:+61421670636">
+                                <span class="rw-footer__contact-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.3.56 3.52.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.3 21 3 13.7 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.22.19 2.4.56 3.52a1 1 0 0 1-.24 1.02l-2.2 2.25Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span>+61 421 670 636</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="rw-footer__contact-link" href="mailto:info@riskwisdomloans.com.au">
+                                <span class="rw-footer__contact-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 7.5 11.2 12.9c.48.36 1.12.36 1.6 0L20 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+                                    </svg>
+                                </span>
+                                <span>info@riskwisdomloans.com.au</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
