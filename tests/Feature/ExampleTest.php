@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ContactEnquiryMail;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -23,6 +25,8 @@ class ExampleTest extends TestCase
 
     public function test_the_contact_form_accepts_a_valid_enquiry(): void
     {
+        Mail::fake();
+
         $response = $this->post('/contact', [
             'first_name' => 'Kal',
             'last_name' => 'Example',
@@ -34,5 +38,10 @@ class ExampleTest extends TestCase
         $response
             ->assertRedirect('/')
             ->assertSessionHas('status');
+
+        Mail::assertSent(ContactEnquiryMail::class, function (ContactEnquiryMail $mail) {
+            return $mail->details['email'] === 'info@riskwisdomloans.com.au'
+                && $mail->details['first_name'] === 'Kal';
+        });
     }
 }

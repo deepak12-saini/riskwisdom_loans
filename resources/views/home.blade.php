@@ -160,6 +160,11 @@
                 'Commercial Support',
                 'Asset Finance',
             ];
+
+            $consultationBenefits = [
+                'Free consultation',
+                'Plan to move forward',
+            ];
         @endphp
 
         <header class="rw-header">
@@ -391,12 +396,15 @@
                 <div class="container rw-contact">
                     <div class="rw-contact__copy">
                         <span class="rw-section-label rw-section-label--dark">Free consultation</span>
-                        <h2>Start the conversation with a clearer next step.</h2>
+                        <h2>Tap into practical lending expertise built around your next move.</h2>
+                        <h3>Clear guidance for buyers, refinancers, investors, and business owners.</h3>
                         <p>
-                            Share a few details and use this form as the starting point for callback enquiries, lead
-                            capture, or CRM integration once the production flow is finalised.
+                            Riskwisdom Loans is focused on making the finance process easier to understand and easier to
+                            act on. Share your details and we will follow up with the guidance that best suits your
+                            borrowing goals.
                         </p>
                         <div class="rw-contact__details">
+                            <a href="tel:+61421670636">+61 421 670 636</a>
                             <a href="mailto:info@riskwisdomloans.com.au">info@riskwisdomloans.com.au</a>
                             <a href="https://www.riskwisdomloans.com.au" target="_blank" rel="noreferrer">
                                 www.riskwisdomloans.com.au
@@ -462,8 +470,14 @@
                                 </label>
                             </div>
 
-                            <button class="rw-button rw-button--solid rw-button--wide" type="submit">Request a call back</button>
+                            <button class="rw-button rw-button--solid rw-button--wide" type="submit">Book a discovery call</button>
                         </form>
+
+                        <div class="rw-contact__benefits">
+                            @foreach ($consultationBenefits as $benefit)
+                                <span>{{ $benefit }}</span>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </section>

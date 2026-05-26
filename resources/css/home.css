@@ -365,7 +365,7 @@ body.site-body.rw-theme {
 }
 
 .rw-section--contact {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.82));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.92));
 }
 
 .rw-section-heading {
@@ -621,18 +621,30 @@ body.site-body.rw-theme {
     padding: 0.4rem 0;
 }
 
+.rw-contact__copy h3 {
+    margin: 1rem 0 0;
+    color: var(--rw-text);
+    font-size: 1.75rem;
+    line-height: 1.25;
+}
+
 .rw-contact__details {
     display: grid;
-    gap: 0.9rem;
-    margin-top: 1.5rem;
+    gap: 0.95rem;
+    margin-top: 2rem;
 }
 
 .rw-contact__details a {
+    color: var(--rw-text);
+    font-size: 1.1rem;
     font-weight: 700;
 }
 
 .rw-contact__card {
-    padding: 1.4rem;
+    padding: 1.55rem;
+    background: linear-gradient(180deg, #162d58 0%, #102449 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 28px 60px rgba(12, 26, 45, 0.18);
 }
 
 .rw-form-alert {
@@ -670,7 +682,7 @@ body.site-body.rw-theme {
 }
 
 .rw-form-grid span {
-    color: var(--rw-text);
+    color: #ffffff;
     font-size: 0.92rem;
     font-weight: 600;
 }
@@ -678,8 +690,8 @@ body.site-body.rw-theme {
 .rw-form-grid input,
 .rw-form-grid textarea {
     width: 100%;
-    border: 1px solid rgba(17, 39, 61, 0.12);
-    border-radius: 1rem;
+    border: 1px solid rgba(17, 39, 61, 0.08);
+    border-radius: 0.9rem;
     background: #fff;
     color: var(--rw-text);
     padding: 0.95rem 1rem;
@@ -693,12 +705,46 @@ body.site-body.rw-theme {
 }
 
 .rw-form-grid small {
-    color: #b33b3b;
+    color: #ffd3d3;
     font-size: 0.84rem;
 }
 
 .rw-form-full {
     grid-column: 1 / -1;
+}
+
+.rw-contact .rw-button--solid {
+    box-shadow: none;
+}
+
+.rw-contact__benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    margin-top: 1.25rem;
+}
+
+.rw-contact__benefits span {
+    position: relative;
+    padding-left: 1.6rem;
+    color: rgba(245, 248, 251, 0.94);
+    font-size: 0.98rem;
+    font-weight: 700;
+}
+
+.rw-contact__benefits span::before {
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    display: grid;
+    width: 1.1rem;
+    height: 1.1rem;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 0.72rem;
+    content: '✓';
 }
 
 .rw-footer {
@@ -815,5 +861,10 @@ body.site-body.rw-theme {
     .rw-lenders__list,
     .rw-form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .rw-contact__benefits {
+        flex-direction: column;
+        gap: 0.9rem;
     }
 }
