@@ -3,11 +3,23 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Riskwisdom Loans | Smarter Loan Guidance</title>
+        <title>Riskwisdom Loans | Risk Wisdom Loans Pty Ltd</title>
         <meta
             name="description"
-            content="Riskwisdom Loans helps borrowers navigate home loans, refinancing, investment lending, commercial finance, and asset finance with clarity."
+            content="Riskwisdom Loans, part of Risk Wisdom Loans Pty Ltd, helps borrowers navigate home loans, refinancing, investment lending, commercial finance, and asset finance with clarity."
         >
+        <link rel="canonical" href="{{ url()->current() }}">
+        <script type="application/ld+json">
+            {!! json_encode([
+                '@context' => 'https://schema.org',
+                '@type' => 'FinancialService',
+                'name' => 'Riskwisdom Loans',
+                'legalName' => 'Risk Wisdom Loans Pty Ltd',
+                'url' => url('/'),
+                'telephone' => '+61 421 670 636',
+                'email' => 'info@riskwisdomloans.com.au',
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="site-body rw-theme">
@@ -283,9 +295,9 @@
                         <span class="rw-section-label">Helping you find the right solution</span>
                         <h2>Finance guidance designed to help you move forward with more confidence.</h2>
                         <p>
-                            At Riskwisdom Loans, the focus is on making finance feel clearer, more practical, and less
-                            overwhelming. Whether you are buying, refinancing, investing, or funding business growth, we
-                            help you understand the options in front of you.
+                            At Riskwisdom Loans, part of Risk Wisdom Loans Pty Ltd, the focus is on making finance feel
+                            clearer, more practical, and less overwhelming. Whether you are buying, refinancing,
+                            investing, or funding business growth, we help you understand the options in front of you.
                         </p>
                         <p>
                             We take the time to understand your circumstances, compare suitable lending pathways, and guide
@@ -573,6 +585,7 @@
                         Riskwisdom Loans provides clear, practical lending guidance for home buyers, refinancers,
                         investors, professionals, and business owners.
                     </p>
+                    <p>Risk Wisdom Loans Pty Ltd</p>
                 </div>
 
                 <div>
@@ -624,7 +637,7 @@
             </div>
 
             <div class="container rw-footer__bottom">
-                <p>&copy; {{ now()->year }} Riskwisdom Loans. All rights reserved.</p>
+                <p>&copy; {{ now()->year }} Riskwisdom Loans. Risk Wisdom Loans Pty Ltd. All rights reserved.</p>
             </div>
         </footer>
     </body>
