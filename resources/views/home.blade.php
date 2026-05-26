@@ -152,6 +152,27 @@
                 ],
             ];
 
+            $experienceStats = [
+                [
+                    'value' => 'Clear',
+                    'label' => 'Straightforward guidance without unnecessary jargon',
+                ],
+                [
+                    'value' => 'Tailored',
+                    'label' => 'Finance pathways aligned to your goals and timing',
+                ],
+                [
+                    'value' => 'Supported',
+                    'label' => 'Ongoing help from enquiry through to settlement',
+                ],
+            ];
+
+            $experienceJourney = [
+                'Understand your goals, borrowing position, and priorities',
+                'Compare suitable options and explain each pathway clearly',
+                'Guide the application, documents, and lender communication',
+            ];
+
             $lenderLabels = [
                 'Home Loan Options',
                 'Refinance Strategies',
@@ -378,18 +399,44 @@
 
             <section class="rw-section rw-section--light" id="community">
                 <div class="container">
-                    <div class="rw-section-heading rw-section-heading--center">
-                        <span class="rw-section-label">Client Experience</span>
-                        <h2>Experience a finance process built on clarity, care, and consistent support.</h2>
-                        <p>
-                            We focus on the kind of service borrowers value most: honest guidance, timely updates, and a
-                            smoother path from enquiry to outcome.
-                        </p>
+                    <div class="rw-experience">
+                        <div class="rw-experience__intro">
+                            <span class="rw-section-label">Client Experience</span>
+                            <h2>Experience a finance journey that feels clear, considered, and well supported.</h2>
+                            <p>
+                                The best client experience is not about noise. It is about knowing your options,
+                                understanding the process, and feeling confident that each next step is handled with care.
+                            </p>
+
+                            <div class="rw-experience__stats">
+                                @foreach ($experienceStats as $stat)
+                                    <article class="rw-experience__stat">
+                                        <strong>{{ $stat['value'] }}</strong>
+                                        <span>{{ $stat['label'] }}</span>
+                                    </article>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="rw-experience__spotlight">
+                            <span class="rw-experience__eyebrow">What the process feels like</span>
+                            <h3>Calm guidance, practical strategy, and communication that keeps moving.</h3>
+                            <p>
+                                We focus on making the process easier to navigate by breaking each step into something
+                                clear, manageable, and relevant to your goals.
+                            </p>
+                            <ul class="rw-experience__list">
+                                @foreach ($experienceJourney as $step)
+                                    <li>{{ $step }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="rw-grid rw-grid--highlights">
                         @foreach ($serviceHighlights as $highlight)
                             <article class="rw-card rw-card--highlight">
+                                <span class="rw-card--highlight__index">{{ str_pad((string) ($loop->iteration), 2, '0', STR_PAD_LEFT) }}</span>
                                 <h3>{{ $highlight['title'] }}</h3>
                                 <p>{{ $highlight['copy'] }}</p>
                             </article>

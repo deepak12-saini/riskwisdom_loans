@@ -617,6 +617,129 @@ body.site-body.rw-theme {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.rw-experience {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 1.35rem;
+    align-items: stretch;
+    margin-bottom: 1.8rem;
+}
+
+.rw-experience__intro,
+.rw-experience__spotlight {
+    border-radius: 1.7rem;
+}
+
+.rw-experience__intro {
+    padding: 2rem;
+    border: 1px solid var(--rw-line);
+    background:
+        radial-gradient(circle at top right, rgba(136, 216, 255, 0.18), transparent 26%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 250, 255, 0.92));
+    box-shadow: var(--rw-shadow);
+}
+
+.rw-experience__intro h2 {
+    margin: 1rem 0 0;
+    font-size: clamp(2.1rem, 4vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+}
+
+.rw-experience__intro p,
+.rw-experience__spotlight p,
+.rw-experience__stat span {
+    color: var(--rw-text-soft);
+    line-height: 1.72;
+}
+
+.rw-experience__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.95rem;
+    margin-top: 1.8rem;
+}
+
+.rw-experience__stat {
+    padding: 1rem;
+    border: 1px solid rgba(17, 39, 61, 0.08);
+    border-radius: 1.2rem;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.rw-experience__stat strong {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--rw-primary-deep);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.rw-experience__spotlight {
+    padding: 2rem;
+    background:
+        radial-gradient(circle at top left, rgba(136, 216, 255, 0.22), transparent 28%),
+        linear-gradient(145deg, rgba(14, 33, 55, 0.98), rgba(22, 54, 91, 0.96)),
+        #11263f;
+    color: #fff;
+    box-shadow: var(--rw-shadow-hero);
+}
+
+.rw-experience__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.1rem;
+    border-radius: 999px;
+    padding: 0.28rem 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(221, 235, 255, 0.95);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.rw-experience__spotlight h3 {
+    margin: 1rem 0 0;
+    font-size: 1.9rem;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+}
+
+.rw-experience__spotlight p {
+    margin-top: 1rem;
+    color: rgba(235, 242, 250, 0.82);
+}
+
+.rw-experience__list {
+    display: grid;
+    gap: 0.95rem;
+    margin: 1.4rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rw-experience__list li {
+    position: relative;
+    padding-left: 1.35rem;
+    color: rgba(245, 248, 251, 0.9);
+    line-height: 1.6;
+}
+
+.rw-experience__list li::before {
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.46rem;
+    height: 0.46rem;
+    border-radius: 999px;
+    background: var(--rw-accent);
+    content: '';
+}
+
 .rw-card {
     padding: 1.55rem;
 }
@@ -660,6 +783,41 @@ body.site-body.rw-theme {
 
 .rw-card--solution {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.92));
+}
+
+.rw-card--highlight {
+    position: relative;
+    overflow: hidden;
+    padding-top: 3.4rem;
+    background:
+        radial-gradient(circle at top right, rgba(27, 99, 200, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.92));
+}
+
+.rw-card--highlight::after {
+    position: absolute;
+    inset: auto -2rem -2rem auto;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(136, 216, 255, 0.18), transparent 72%);
+    content: '';
+}
+
+.rw-card--highlight__index {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.35rem;
+    display: inline-grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(27, 99, 200, 0.1);
+    color: var(--rw-primary-deep);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
 }
 
 .rw-lenders {
@@ -961,6 +1119,7 @@ body.site-body.rw-theme {
     }
 
     .rw-solution,
+    .rw-experience,
     .rw-cta,
     .rw-contact,
     .rw-footer__grid {
@@ -970,6 +1129,10 @@ body.site-body.rw-theme {
     .rw-grid--audiences,
     .rw-grid--solutions {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .rw-experience__stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .rw-lenders__list {
@@ -1018,6 +1181,10 @@ body.site-body.rw-theme {
     .rw-grid--highlights,
     .rw-lenders__list,
     .rw-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rw-experience__stats {
         grid-template-columns: 1fr;
     }
 
