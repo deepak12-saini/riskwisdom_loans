@@ -122,43 +122,43 @@
             $resourceCards = [
                 [
                     'title' => 'Borrowing Power',
-                    'copy' => 'Introduce calculators, repayment tools, and planning resources that help borrowers understand the next step.',
+                    'copy' => 'Explore tools that help you estimate borrowing capacity, review repayments, and plan your next property or finance move with more confidence.',
                     'cta' => 'View tools',
                 ],
                 [
                     'title' => 'News & Insights',
-                    'copy' => 'Share original market commentary, interest rate updates, and practical finance guidance as content grows.',
+                    'copy' => 'Stay informed with practical updates on interest rates, lending trends, and borrower tips that help you make better finance decisions.',
                     'cta' => 'Read insights',
                 ],
                 [
                     'title' => 'Property Profile Reports',
-                    'copy' => 'Offer downloadable or enquiry-based reports that help clients connect lending decisions with property goals.',
+                    'copy' => 'Request property-focused information and planning support that helps connect your finance strategy with the goals you are working toward.',
                     'cta' => 'Request a report',
                 ],
             ];
 
             $serviceHighlights = [
                 [
-                    'title' => 'Tailored lending guidance',
-                    'copy' => 'The process starts with understanding your situation before looking at suitable lender pathways.',
+                    'title' => 'Advice shaped around your situation',
+                    'copy' => 'We start by understanding your goals, income, timing, and priorities before recommending suitable finance pathways.',
                 ],
                 [
-                    'title' => 'Clear communication',
-                    'copy' => 'Borrowers should know what is happening, what is needed next, and how each step supports the outcome.',
+                    'title' => 'Clear communication at every step',
+                    'copy' => 'You should know what is happening, what comes next, and what each stage means for your application and timeline.',
                 ],
                 [
                     'title' => 'Support from enquiry to settlement',
-                    'copy' => 'Documentation, lender communication, and next actions are guided with a calm, practical approach.',
+                    'copy' => 'From documents and lender conversations to final approval, we help keep the process organised, calm, and moving forward.',
                 ],
             ];
 
             $lenderLabels = [
-                'Major Bank Options',
-                'Specialist Lending',
-                'Refinance Pathways',
-                'Investment Strategy',
-                'Commercial Support',
-                'Asset Finance',
+                'Home Loan Options',
+                'Refinance Strategies',
+                'Investment Lending',
+                'Commercial Property',
+                'Business Finance',
+                'Asset & Equipment',
             ];
 
             $consultationBenefits = [
@@ -250,7 +250,7 @@
                 <div class="container rw-promo__inner">
                     <div>
                         <span class="rw-section-label">Ready to move forward?</span>
-                        <p>Use this section for campaign banners, limited-time offers, or a simple consultation message.</p>
+                        <p>Book a free consultation and get clear next steps for your home loan, refinance, or finance enquiry.</p>
                     </div>
                     <a class="rw-link-arrow" href="#contact">Request a free consultation</a>
                 </div>
@@ -260,15 +260,15 @@
                 <div class="container rw-solution">
                     <div class="rw-solution__copy">
                         <span class="rw-section-label">Helping you find the right solution</span>
-                        <h2>Original content built around your own finance brand, not copied wording.</h2>
+                        <h2>Finance guidance designed to help you move forward with more confidence.</h2>
                         <p>
-                            This homepage follows the broad structure and premium feel of the reference site while keeping
-                            the copy specific to Riskwisdom Loans. Every heading, card, and menu item can be updated from
-                            this Blade file.
+                            At Riskwisdom Loans, the focus is on making finance feel clearer, more practical, and less
+                            overwhelming. Whether you are buying, refinancing, investing, or funding business growth, we
+                            help you understand the options in front of you.
                         </p>
                         <p>
-                            It is designed to feel modern, trustworthy, and easy to expand into inner pages as the site
-                            grows.
+                            We take the time to understand your circumstances, compare suitable lending pathways, and guide
+                            you through the process with straightforward advice and responsive support.
                         </p>
                         <div class="rw-solution__actions">
                             <a class="rw-button rw-button--solid" href="#solutions">Find out more</a>
@@ -278,14 +278,14 @@
 
                     <div class="rw-solution__panel">
                         <div class="rw-solution__panel-top">
-                            <span>Brand direction</span>
-                            <strong>Clean, confident, and easy to adapt</strong>
+                            <span>What you can expect</span>
+                            <strong>Practical support, clear options, and a smoother finance journey</strong>
                         </div>
                         <ul class="rw-feature-list">
-                            <li>Editable menu groups with dropdown links</li>
-                            <li>Hero banner with background video and layered overlay</li>
-                            <li>Section cards built from arrays for easier content changes</li>
-                            <li>Production-ready contact section and footer structure</li>
+                            <li>Finance options explained in a way that is easy to understand</li>
+                            <li>Guidance tailored to your goals, timing, and financial position</li>
+                            <li>Responsive support with lender communication and document guidance</li>
+                            <li>A clear path from enquiry through to approval and settlement</li>
                         </ul>
                     </div>
                 </div>
@@ -297,8 +297,8 @@
                         <span class="rw-section-label">Who We Help</span>
                         <h2>Finance made simpler for the people and plans you support.</h2>
                         <p>
-                            These audience cards are written as original placeholder content and can be adjusted as your
-                            service positioning becomes more specific.
+                            Every borrower has different priorities. We tailor our approach to your stage of life, your
+                            income structure, and the outcome you want to achieve.
                         </p>
                     </div>
 
@@ -319,10 +319,10 @@
                 <div class="container">
                     <div class="rw-section-heading">
                         <span class="rw-section-label">Solutions</span>
-                        <h2>Finance options arranged in a format that is easy to expand later.</h2>
+                        <h2>Finance solutions built to support your next property or business decision.</h2>
                         <p>
-                            Use these cards as the starting point for individual service pages such as home loans,
-                            refinance, commercial finance, and construction lending.
+                            From home loans and refinancing to commercial and asset finance, we help you compare the
+                            options that best align with your plans and financial goals.
                         </p>
                     </div>
 
@@ -341,8 +341,8 @@
                 <div class="container">
                     <div class="rw-lenders">
                         <div class="rw-lenders__heading">
-                            <span class="rw-section-label">A flexible lending panel message</span>
-                            <h2>Present breadth and confidence without inventing unsupported claims.</h2>
+                            <span class="rw-section-label">Finance pathways that fit real goals</span>
+                            <h2>Explore lending options across home, investment, commercial, and asset finance.</h2>
                         </div>
                         <div class="rw-lenders__list">
                             @foreach ($lenderLabels as $label)
@@ -359,8 +359,8 @@
                         <span class="rw-section-label">Resources</span>
                         <h2>Take the first step with useful tools, guides, and finance insights.</h2>
                         <p>
-                            The cards below are styled to match the reference direction while staying fully original in
-                            wording and layout implementation.
+                            Good finance decisions start with better information. Use these resources to plan ahead,
+                            understand your options, and move forward with greater confidence.
                         </p>
                     </div>
 
@@ -380,10 +380,10 @@
                 <div class="container">
                     <div class="rw-section-heading rw-section-heading--center">
                         <span class="rw-section-label">Client Experience</span>
-                        <h2>Use this area for approved testimonials, or keep it focused on service promises.</h2>
+                        <h2>Experience a finance process built on clarity, care, and consistent support.</h2>
                         <p>
-                            To avoid fake reviews, this version uses clear experience highlights instead of invented
-                            customer quotes.
+                            We focus on the kind of service borrowers value most: honest guidance, timely updates, and a
+                            smoother path from enquiry to outcome.
                         </p>
                     </div>
 
@@ -402,20 +402,20 @@
                 <div class="container rw-cta">
                     <div class="rw-cta__copy">
                         <span class="rw-section-label rw-section-label--dark">Why Riskwisdom Loans</span>
-                        <h2>Give borrowers a reason to trust the process from the first click.</h2>
+                        <h2>Work with a finance partner focused on making the process easier to navigate.</h2>
                         <p>
-                            This section can be used for awards, lender-panel information, service methodology, or team
-                            positioning once your final business profile is confirmed.
+                            The right loan is not just about rates. It is about structure, flexibility, timing, and
+                            understanding how the decision supports your next step with confidence.
                         </p>
                     </div>
 
                     <div class="rw-cta__panel">
-                        <strong>Current version includes</strong>
+                        <strong>Why borrowers choose us</strong>
                         <ul>
-                            <li>Editable homepage arrays for easier content updates</li>
-                            <li>Video hero layout similar in feel to the reference screenshot</li>
-                            <li>Dropdown navigation ready for future inner pages</li>
-                            <li>Original finance-focused copy for your own brand</li>
+                            <li>Clear explanations without unnecessary jargon</li>
+                            <li>Finance guidance tailored to your individual goals</li>
+                            <li>Ongoing support through documents, lenders, and approvals</li>
+                            <li>A relationship-focused approach from first enquiry onward</li>
                         </ul>
                     </div>
                 </div>
