@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerWrap = document.querySelector('.rw-header__wrap');
     const toggle = document.querySelector('.rw-mobile-toggle');
     const mobileMenu = document.querySelector('.rw-mobile-menu');
+    const contactSection = document.querySelector('#contact');
+    const hasFormFeedback = Boolean(document.querySelector('.rw-form-alert'));
+
+    if (contactSection && (window.location.hash === '#contact' || hasFormFeedback)) {
+        requestAnimationFrame(() => {
+            contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
 
     if (!headerWrap || !toggle || !mobileMenu) {
         return;

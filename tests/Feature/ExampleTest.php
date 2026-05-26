@@ -36,7 +36,7 @@ class ExampleTest extends TestCase
         ]);
 
         $response
-            ->assertRedirect('/')
+            ->assertRedirect(route('home').'#contact')
             ->assertSessionHas('status');
 
         Mail::assertSent(ContactEnquiryMail::class, function (ContactEnquiryMail $mail) {

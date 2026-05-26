@@ -294,6 +294,7 @@ body.site-body.rw-theme {
     font-size: 0.96rem;
     font-weight: 700;
     text-decoration: none;
+    cursor: pointer;
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
@@ -492,6 +493,7 @@ body.site-body.rw-theme {
 
 .rw-section--contact {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.92));
+    scroll-margin-top: 7rem;
 }
 
 .rw-section-heading {
