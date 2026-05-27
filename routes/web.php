@@ -8,6 +8,21 @@ use Illuminate\Support\Facades\Validator;
 
 Route::view('/', 'home')->name('home');
 
+Route::get('/sitemap.xml', function () {
+    $urls = [
+        [
+            'loc' => route('home'),
+            'lastmod' => now()->toAtomString(),
+            'changefreq' => 'weekly',
+            'priority' => '1.0',
+        ],
+    ];
+
+    return response()
+        ->view('sitemap', compact('urls'))
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 Route::post('/contact', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'first_name' => ['required', 'string', 'max:120'],

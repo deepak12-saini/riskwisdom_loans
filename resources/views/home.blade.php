@@ -3,22 +3,32 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Riskwisdom Loans | Risk Wisdom Loans Pty Ltd</title>
+        <title>Risk Wisdom Loans | Riskwisdom Loans – Home, Refinance &amp; Commercial Finance</title>
         <meta
             name="description"
-            content="Riskwisdom Loans, part of Risk Wisdom Loans Pty Ltd, helps borrowers navigate home loans, refinancing, investment lending, commercial finance, and asset finance with clarity."
+            content="Risk Wisdom Loans (Riskwisdom Loans) helps Australian borrowers with home loans, refinancing, investment lending, commercial finance, and asset finance. Risk Wisdom Loans Pty Ltd."
         >
-        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="{{ url('/') }}">
         <link rel="icon" href="{{ asset('images/risk-wisdom-loans-logo.png') }}" type="image/png">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Risk Wisdom Loans | Riskwisdom Loans">
+        <meta property="og:description" content="Clear lending guidance for home loans, refinancing, investment, commercial, and asset finance across Australia.">
+        <meta property="og:url" content="{{ url('/') }}">
+        <meta property="og:image" content="{{ asset('images/risk-wisdom-loans-logo.png') }}">
         <script type="application/ld+json">
             {!! json_encode([
                 '@context' => 'https://schema.org',
                 '@type' => 'FinancialService',
-                'name' => 'Riskwisdom Loans',
+                'name' => 'Risk Wisdom Loans',
+                'alternateName' => 'Riskwisdom Loans',
                 'legalName' => 'Risk Wisdom Loans Pty Ltd',
                 'url' => url('/'),
+                'logo' => asset('images/risk-wisdom-loans-logo.png'),
+                'image' => asset('images/risk-wisdom-loans-logo.png'),
                 'telephone' => '+61 421 670 636',
                 'email' => 'info@riskwisdomloans.com.au',
+                'areaServed' => 'AU',
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
         </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
