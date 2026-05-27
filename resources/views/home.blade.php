@@ -9,6 +9,7 @@
             content="Riskwisdom Loans, part of Risk Wisdom Loans Pty Ltd, helps borrowers navigate home loans, refinancing, investment lending, commercial finance, and asset finance with clarity."
         >
         <link rel="canonical" href="{{ url()->current() }}">
+        <link rel="icon" href="{{ asset('images/risk-wisdom-loans-logo.png') }}" type="image/png">
         <script type="application/ld+json">
             {!! json_encode([
                 '@context' => 'https://schema.org',
@@ -24,6 +25,7 @@
     </head>
     <body class="site-body rw-theme">
         @php
+            $logoUrl = asset('images/risk-wisdom-loans-logo.png');
             $heroVideo = asset('videos/hero-background.mp4');
 
             $navigation = [
@@ -204,11 +206,14 @@
             <div class="container rw-header__wrap">
                 <div class="rw-header__bar">
                     <a class="rw-brand" href="{{ route('home') }}">
-                        <span class="rw-brand__mark">RW</span>
-                        <span class="rw-brand__copy">
-                            <strong>Riskwisdom</strong>
-                            <small>Loans</small>
-                        </span>
+                        <img
+                            class="rw-brand__logo"
+                            src="{{ $logoUrl }}"
+                            alt="Risk Wisdom Loans"
+                            width="220"
+                            height="64"
+                            decoding="async"
+                        >
                     </a>
 
                     <nav class="rw-nav" aria-label="Primary">
@@ -575,11 +580,14 @@
             <div class="container rw-footer__grid">
                 <div>
                     <a class="rw-brand rw-brand--footer" href="{{ route('home') }}">
-                        <span class="rw-brand__mark">RW</span>
-                        <span class="rw-brand__copy">
-                            <strong>Riskwisdom</strong>
-                            <small>Loans</small>
-                        </span>
+                        <img
+                            class="rw-brand__logo"
+                            src="{{ $logoUrl }}"
+                            alt="Risk Wisdom Loans"
+                            width="240"
+                            height="70"
+                            decoding="async"
+                        >
                     </a>
                     <p>
                         Riskwisdom Loans provides clear, practical lending guidance for home buyers, refinancers,
