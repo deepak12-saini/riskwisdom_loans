@@ -1081,9 +1081,19 @@ body.site-body.rw-theme {
 }
 
 .rw-footer__bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 2rem;
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+.rw-footer__bottom p {
+    margin: 0;
+    width: 100%;
+    text-align: center;
 }
 
 @media (max-width: 1100px) {
