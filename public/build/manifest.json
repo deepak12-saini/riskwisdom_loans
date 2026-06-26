@@ -13,11 +13,5 @@
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
-  },
-  "resources/js/book-calendly.js": {
-    "file": "assets/book-calendly-B2PmLry4.js",
-    "name": "book-calendly",
-    "src": "resources/js/book-calendly.js",
-    "isEntry": true
   }
 }

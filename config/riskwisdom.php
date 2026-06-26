@@ -7,7 +7,7 @@ return [
     'legal_name' => 'Risk Wisdom Loans Pty Ltd',
     'brand_name' => 'Riskwisdom Loans',
 
-    'calendly_url' => env('CALENDLY_URL', 'https://calendly.com/riskwisdomloans-info/15min'),
+    'calendly_url' => env('CALENDLY_URL', 'https://calendly.com/riskwisdomloans-info/30min'),
 
     'lead_types' => [
         'contact' => 'Contact form',

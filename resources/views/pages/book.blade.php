@@ -5,7 +5,7 @@
 
     @push('scripts')
         <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
-        @vite('resources/js/book-calendly.js')
+        @include('partials.calendly-inline-init')
     @endpush
 @endif
 

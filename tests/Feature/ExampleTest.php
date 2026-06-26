@@ -35,7 +35,8 @@ class ExampleTest extends TestCase
             ->assertSee('Book a free 15-minute phone call')
             ->assertSee('hide_gdpr_banner=1', false)
             ->assertSee('rw-calendly-mount', false)
-            ->assertSee('assets.calendly.com/assets/external/widget.js', false);
+            ->assertSee('assets.calendly.com/assets/external/widget.js', false)
+            ->assertSee('initInlineWidget', false);
     }
 
     public function test_the_homepage_does_not_load_calendly_widget_script(): void
