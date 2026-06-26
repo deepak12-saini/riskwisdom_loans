@@ -7,6 +7,13 @@ return [
     'legal_name' => 'Risk Wisdom Loans Pty Ltd',
     'brand_name' => 'Riskwisdom Loans',
 
+    'calendly_url' => env('CALENDLY_URL', 'https://calendly.com/riskwisdomloans-info/15min'),
+
+    'lead_types' => [
+        'contact' => 'Contact form',
+        'borrowing_power' => 'Borrowing power calculator',
+    ],
+
     'loan_types' => [
         'home_purchase' => 'Home purchase',
         'refinance' => 'Refinance',

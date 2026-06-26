@@ -51,7 +51,7 @@ class AdminEnquiryController extends Controller
             $handle = fopen('php://output', 'w');
 
             fputcsv($handle, [
-                'ID', 'Date', 'First name', 'Last name', 'Phone', 'Email',
+                'ID', 'Date', 'Lead type', 'First name', 'Last name', 'Phone', 'Email',
                 'Loan type', 'Timeline', 'State', 'Source', 'Enquiry',
             ]);
 
@@ -60,6 +60,7 @@ class AdminEnquiryController extends Controller
                     fputcsv($handle, [
                         $enquiry->id,
                         $enquiry->created_at?->toDateTimeString(),
+                        $enquiry->lead_type,
                         $enquiry->first_name,
                         $enquiry->last_name,
                         $enquiry->phone,

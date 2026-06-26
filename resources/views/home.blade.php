@@ -88,7 +88,8 @@
                 </p>
 
                 <div class="rw-hero__actions">
-                    <a class="rw-button rw-button--solid" href="{{ contact_url() }}" data-cta="hero-primary">Get free loan review</a>
+                    @include('partials.book-chat-button', ['variant' => 'solid', 'cta' => 'hero-book-chat'])
+                    <a class="rw-button rw-button--ghost" href="{{ contact_url() }}" data-cta="hero-primary">Get free loan review</a>
                     <a class="rw-button rw-button--ghost" href="#solutions" data-cta="hero-secondary">See solutions</a>
                 </div>
             </div>
@@ -100,7 +101,7 @@
                     <span class="rw-section-label">Ready to move forward?</span>
                     <p>Book a free consultation and get clear next steps for your home loan, refinance, or finance enquiry.</p>
                 </div>
-                <a class="rw-button rw-button--solid" href="{{ contact_url() }}" data-cta="promo-primary">Request a free consultation</a>
+                <a class="rw-button rw-button--solid" href="{{ route('book') }}" data-cta="promo-primary">Book a call</a>
             </div>
         </section>
 
@@ -194,8 +195,8 @@
                         <h2>Explore lending options across home, investment, commercial, and asset finance.</h2>
                     </div>
                     <div class="rw-lenders__list">
-                        @foreach ($lenderLabels as $label)
-                            <span>{{ $label }}</span>
+                        @foreach ($lenderLabels as $lenderLabel)
+                            <span>{{ $lenderLabel }}</span>
                         @endforeach
                     </div>
                 </div>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Enquiry extends Model
 {
     protected $fillable = [
+        'lead_type',
         'first_name',
         'last_name',
         'phone',
@@ -15,6 +16,7 @@ class Enquiry extends Model
         'timeline',
         'state',
         'enquiry',
+        'metadata',
         'source',
         'utm_source',
         'utm_medium',
@@ -28,6 +30,7 @@ class Enquiry extends Model
     protected function casts(): array
     {
         return [
+            'metadata' => 'array',
             'email_sent_at' => 'datetime',
             'auto_reply_sent_at' => 'datetime',
         ];
@@ -44,6 +47,7 @@ class Enquiry extends Model
     public function toMailDetails(): array
     {
         return [
+            'lead_type' => $this->lead_type ?? 'contact',
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'phone' => $this->phone,

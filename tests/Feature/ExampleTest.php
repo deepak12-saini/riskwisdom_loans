@@ -22,7 +22,29 @@ class ExampleTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Riskwisdom Loans')
             ->assertSee('Smarter loan guidance')
-            ->assertSee('Get free loan review');
+            ->assertSee('Get free loan review')
+            ->assertSee('Book a call');
+    }
+
+    public function test_the_book_page_shows_calendly_embed(): void
+    {
+        $response = $this->get(route('book'));
+
+        $response
+            ->assertOk()
+            ->assertSee('Book a free 15-minute phone call')
+            ->assertSee('hide_gdpr_banner=1', false)
+            ->assertSee('rw-calendly-mount', false)
+            ->assertSee('assets.calendly.com/assets/external/widget.js', false);
+    }
+
+    public function test_the_homepage_does_not_load_calendly_widget_script(): void
+    {
+        $response = $this->get('/');
+
+        $response
+            ->assertOk()
+            ->assertDontSee('assets.calendly.com/assets/external/widget.js', false);
     }
 
     public function test_the_contact_form_accepts_a_valid_enquiry(): void
@@ -71,6 +93,98 @@ class ExampleTest extends TestCase
         $response->assertRedirect(route('thank-you'));
         $this->assertDatabaseCount('enquiries', 0);
         Mail::assertNothingSent();
+    }
+
+    public function test_the_borrowing_power_page_hides_results_until_lead_is_submitted(): void
+    {
+        $response = $this->get(route('tools.borrowing-power'));
+
+        $response
+            ->assertOk()
+            ->assertSee('See your estimated range')
+            ->assertSee('Continue to my estimate')
+            ->assertDontSee('Your estimated guide range');
+    }
+
+    public function test_the_borrowing_power_calculator_stores_a_lead_and_shows_results(): void
+    {
+        Mail::fake();
+
+        $response = $this->post(route('tools.borrowing-power.submit'), [
+            'first_name' => 'Alex',
+            'last_name' => 'Borrower',
+            'phone' => '0400000000',
+            'email' => 'alex@example.com',
+            'income' => 120000,
+            'expenses' => 3500,
+            'deposit' => 80000,
+            'rate' => 6.2,
+            'term' => 30,
+        ]);
+
+        $response
+            ->assertRedirect(route('tools.borrowing-power').'#bp-result')
+            ->assertSessionHas('borrowing_power_result');
+
+        $this->assertDatabaseHas('enquiries', [
+            'lead_type' => 'borrowing_power',
+            'email' => 'alex@example.com',
+            'first_name' => 'Alex',
+            'source' => 'borrowing_power_calculator',
+        ]);
+
+        Mail::assertSent(ContactEnquiryMail::class);
+        Mail::assertSent(ContactAutoReplyMail::class);
+
+        $followUp = $this->get(route('tools.borrowing-power'));
+        $followUp->assertSee('Your estimated guide range');
+    }
+
+    public function test_the_borrowing_power_calculator_rejects_honeypot_submissions(): void
+    {
+        Mail::fake();
+
+        $response = $this->post(route('tools.borrowing-power.submit'), [
+            '_gotcha' => 'http://spam.test',
+            'first_name' => 'Bot',
+            'last_name' => 'Spam',
+            'phone' => '0400000000',
+            'email' => 'spam@example.com',
+            'income' => 120000,
+            'expenses' => 3500,
+            'deposit' => 80000,
+            'rate' => 6.2,
+            'term' => 30,
+        ]);
+
+        $response->assertRedirect(route('tools.borrowing-power'));
+        $this->assertDatabaseCount('enquiries', 0);
+        Mail::assertNothingSent();
+    }
+
+    public function test_the_borrowing_power_calculator_shows_validation_errors(): void
+    {
+        $response = $this->from(route('tools.borrowing-power'))
+            ->post(route('tools.borrowing-power.submit'), [
+                'first_name' => '',
+                'last_name' => '',
+                'phone' => '',
+                'email' => 'not-an-email',
+                'income' => 120000,
+                'expenses' => 3500,
+                'deposit' => 80000,
+                'rate' => 6.2,
+                'term' => 30,
+            ]);
+
+        $response
+            ->assertRedirect(route('tools.borrowing-power').'#bp-lead-gate')
+            ->assertSessionHasErrors(['first_name', 'email']);
+
+        $this->get(route('tools.borrowing-power'))
+            ->assertOk()
+            ->assertSee('We could not show your estimate yet')
+            ->assertSee('Please enter your first name');
     }
 
     public function test_landing_pages_are_accessible(): void

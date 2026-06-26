@@ -10,7 +10,11 @@
                 <td style="padding:24px 28px; background:#132b55; color:#ffffff;">
                     <h1 style="margin:0; font-size:24px; line-height:1.2;">New website enquiry</h1>
                     <p style="margin:8px 0 0; color:#d6e5ff; font-size:14px; line-height:1.6;">
-                        A new contact form enquiry was submitted on the Riskwisdom Loans website.
+                        @if (($details['lead_type'] ?? 'contact') === 'borrowing_power')
+                            A new borrowing power calculator lead was submitted on the Riskwisdom Loans website.
+                        @else
+                            A new contact form enquiry was submitted on the Riskwisdom Loans website.
+                        @endif
                     </p>
                 </td>
             </tr>

@@ -31,6 +31,7 @@
         [
             'label' => 'Resources',
             'links' => [
+                ['title' => 'Book a call', 'href' => route('book')],
                 ['title' => 'Borrowing Power Calculator', 'href' => route('tools.borrowing-power')],
                 ['title' => 'Repayment Calculator', 'href' => route('tools.repayment-calculator')],
                 ['title' => 'Guides & Insights', 'href' => route('guides.index')],
@@ -41,7 +42,7 @@
             'links' => [
                 ['title' => 'Referral Partners', 'href' => route('pages.partners')],
                 ['title' => 'Client Experience', 'href' => route('home').'#community'],
-                ['title' => 'Book a Consultation', 'href' => contact_url()],
+                ['title' => 'Book a Consultation', 'href' => route('book')],
             ],
         ],
     ];
@@ -74,7 +75,14 @@
                 @endforeach
             </nav>
 
-            <a class="rw-button rw-button--outline" href="{{ contact_url() }}" data-cta="header-primary">Get free loan review</a>
+            <div class="rw-header__actions">
+                @include('partials.book-chat-button', [
+                    'variant' => 'solid',
+                    'cta' => 'header-book-chat',
+                    'extraClass' => 'rw-button--compact',
+                ])
+                <a class="rw-button rw-button--outline rw-button--compact" href="{{ contact_url() }}" data-cta="header-primary">Free review</a>
+            </div>
 
             <button
                 class="rw-mobile-toggle"
@@ -103,7 +111,8 @@
                 @endforeach
             </nav>
 
-            <a class="rw-button rw-button--solid rw-mobile-menu__cta" href="{{ contact_url() }}" data-cta="mobile-menu-primary">Get free loan review</a>
+            @include('partials.book-chat-button', ['variant' => 'solid', 'cta' => 'mobile-menu-book-chat', 'extraClass' => 'rw-mobile-menu__cta'])
+            <a class="rw-button rw-button--outline rw-mobile-menu__cta" href="{{ contact_url() }}" data-cta="mobile-menu-primary">Get free loan review</a>
         </div>
     </div>
 </header>

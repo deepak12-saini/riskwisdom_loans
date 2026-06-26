@@ -40,6 +40,7 @@
                 <thead>
                     <tr>
                         <th>Date</th>
+                        <th>Type</th>
                         <th>Name</th>
                         <th>Contact</th>
                         <th>Loan type</th>
@@ -53,6 +54,9 @@
                     @forelse ($enquiries as $enquiry)
                         <tr>
                             <td class="rw-admin-table__date">{{ $enquiry->created_at?->format('d M Y') }}<br><small>{{ $enquiry->created_at?->format('H:i') }}</small></td>
+                            <td>
+                                <span class="rw-admin-pill">{{ config('riskwisdom.lead_types')[$enquiry->lead_type] ?? $enquiry->lead_type }}</span>
+                            </td>
                             <td><strong>{{ $enquiry->full_name }}</strong></td>
                             <td class="rw-admin-table__contact">
                                 <a href="mailto:{{ $enquiry->email }}">{{ $enquiry->email }}</a>
@@ -72,7 +76,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="rw-admin-table__empty">No enquiries yet.</td>
+                            <td colspan="9" class="rw-admin-table__empty">No enquiries yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

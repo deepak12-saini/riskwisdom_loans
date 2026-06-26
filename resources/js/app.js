@@ -94,4 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { once: true });
         });
     }
+
+    document.querySelectorAll('.js-book-chat').forEach((element) => {
+        element.addEventListener('click', () => {
+            pushEvent('book_chat_click', {
+                cta_id: element.getAttribute('data-cta') ?? '',
+                destination: element.getAttribute('href') ?? '',
+            });
+        });
+    });
 });

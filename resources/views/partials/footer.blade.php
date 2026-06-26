@@ -38,6 +38,7 @@
                 <li><a href="{{ route('home').'#about' }}">About Us</a></li>
                 <li><a href="{{ route('guides.index') }}">Guides & Insights</a></li>
                 <li><a href="{{ route('tools.borrowing-power') }}">Calculators</a></li>
+                <li><a href="{{ route('book') }}">Book a call</a></li>
                 <li><a href="{{ contact_url() }}">Contact Us</a></li>
                 <li><a href="{{ route('pages.privacy') }}">Privacy Policy</a></li>
                 <li><a href="{{ route('pages.credit-guide') }}">Credit Guide</a></li>
@@ -47,6 +48,23 @@
         <div class="rw-footer__contact">
             <h3>Contact Us</h3>
             <ul>
+                @if (calendly_url())
+                    <li>
+                        <a
+                            class="rw-footer__contact-link js-book-chat"
+                            href="{{ route('book') }}"
+                            data-cta="footer-book-chat"
+                        >
+                            <span class="rw-footer__contact-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="5" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+                                    <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                            <span>Book a call</span>
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <a class="rw-footer__contact-link rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="footer-phone">
                         <span class="rw-footer__contact-icon" aria-hidden="true">

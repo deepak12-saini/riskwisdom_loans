@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ContactAutoReplyMail;
-use App\Mail\ContactEnquiryMail;
 use App\Models\Enquiry;
+use App\Services\EnquiryNotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
+    public function __construct(
+        private readonly EnquiryNotificationService $notifications,
+    ) {}
+
     public function store(Request $request): RedirectResponse
     {
         if ($request->filled('_gotcha')) {
@@ -52,30 +54,12 @@ class ContactController extends Controller
         $validated = $validator->validated();
 
         $enquiry = Enquiry::create([
+            'lead_type' => 'contact',
             ...$validated,
             'ip_address' => $request->ip(),
         ]);
 
-        $mailDetails = $enquiry->toMailDetails();
-        $contactTo = (string) env('CONTACT_TO_ADDRESS', (string) config('mail.from.address'));
-
-        try {
-            Mail::to($contactTo)->send(new ContactEnquiryMail($mailDetails));
-            $enquiry->update(['email_sent_at' => now()]);
-        } catch (\Throwable $exception) {
-            report($exception);
-
-            // Lead is already saved — do not block the user with a misleading form error.
-            return redirect()->route('thank-you')
-                ->with('mail_warning', true);
-        }
-
-        try {
-            Mail::to($enquiry->email)->send(new ContactAutoReplyMail($mailDetails));
-            $enquiry->update(['auto_reply_sent_at' => now()]);
-        } catch (\Throwable $exception) {
-            report($exception);
-        }
+        $this->notifications->sendAfterResponse($enquiry);
 
         return redirect()->route('thank-you');
     }
