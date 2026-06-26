@@ -4,12 +4,11 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactEnquiryMail extends Mailable
+class ContactAutoReplyMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -23,20 +22,15 @@ class ContactEnquiryMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $fullName = trim($this->details['first_name'].' '.$this->details['last_name']);
-
         return new Envelope(
-            subject: 'New Riskwisdom Loans enquiry from '.$fullName,
-            replyTo: [
-                new Address($this->details['email'], $fullName),
-            ],
+            subject: 'We received your enquiry – Riskwisdom Loans',
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact-enquiry',
+            view: 'emails.contact-auto-reply',
             with: [
                 'details' => $this->details,
             ],

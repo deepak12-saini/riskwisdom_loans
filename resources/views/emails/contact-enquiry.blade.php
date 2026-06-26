@@ -39,6 +39,28 @@
                                 </p>
                             </td>
                         </tr>
+                        @if (! empty($details['loan_type']))
+                        <tr>
+                            <td style="padding:0 0 18px; width:50%; vertical-align:top;">
+                                <p style="margin:0 0 6px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5e6f81;">Loan type</p>
+                                <p style="margin:0; font-size:16px; line-height:1.5;">{{ config('riskwisdom.loan_types')[$details['loan_type']] ?? $details['loan_type'] }}</p>
+                            </td>
+                            <td style="padding:0 0 18px; width:50%; vertical-align:top;">
+                                <p style="margin:0 0 6px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5e6f81;">Timeline</p>
+                                <p style="margin:0; font-size:16px; line-height:1.5;">{{ config('riskwisdom.timelines')[$details['timeline']] ?? $details['timeline'] }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 18px; width:50%; vertical-align:top;">
+                                <p style="margin:0 0 6px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5e6f81;">State</p>
+                                <p style="margin:0; font-size:16px; line-height:1.5;">{{ $details['state'] ?? '—' }}</p>
+                            </td>
+                            <td style="padding:0 0 18px; width:50%; vertical-align:top;">
+                                <p style="margin:0 0 6px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5e6f81;">Source / intent</p>
+                                <p style="margin:0; font-size:16px; line-height:1.5;">{{ $details['source'] ?: '—' }}</p>
+                            </td>
+                        </tr>
+                        @endif
                         <tr>
                             <td colspan="2" style="padding-top:8px;">
                                 <p style="margin:0 0 8px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5e6f81;">Enquiry</p>

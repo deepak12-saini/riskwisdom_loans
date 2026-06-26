@@ -1,0 +1,52 @@
+@extends('layouts.site')
+
+@section('title', 'Thank You | Riskwisdom Loans')
+@section('meta_description', 'Thank you for your enquiry. A Riskwisdom Loans broker will be in touch shortly.')
+@section('canonical', route('thank-you'))
+@section('meta_robots', 'noindex, follow')
+
+@section('body_class', 'rw-page-thank-you')
+
+@section('content')
+    <main class="rw-page">
+        <section class="rw-section rw-section--page">
+            <div class="container rw-page-card">
+                <span class="rw-section-label">Enquiry received</span>
+                <h1>Thank you — we have your details.</h1>
+                @if (session('mail_warning'))
+                    <p class="rw-form-alert rw-form-alert-error" style="margin-top: 1rem;">
+                        Your enquiry was received, but our automatic email notification could not be sent.
+                        We will still follow up using the details you provided.
+                    </p>
+                @endif
+                <p>
+                    A broker from Riskwisdom Loans will review your enquiry and contact you within 24 hours.
+                    If your matter is urgent, call us directly.
+                </p>
+
+                <div class="rw-page-actions">
+                    <a class="rw-button rw-button--solid rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="thank-you-call">
+                        Call {{ config('riskwisdom.phone') }}
+                    </a>
+                    <a class="rw-button rw-button--outline" href="{{ route('home') }}" data-cta="thank-you-home">Back to homepage</a>
+                </div>
+
+                <div class="rw-steps">
+                    <h2>What happens next</h2>
+                    <ol>
+                        <li><strong>We review your enquiry</strong> — loan type, timeline, and goals you shared.</li>
+                        <li><strong>A broker calls or emails you</strong> — to clarify your position and answer initial questions.</li>
+                        <li><strong>You receive clear next steps</strong> — whether that is pre-approval, refinance comparison, or a tailored plan.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+@endsection
+
+@push('scripts')
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'generate_lead', form_name: 'contact' });
+    </script>
+@endpush
