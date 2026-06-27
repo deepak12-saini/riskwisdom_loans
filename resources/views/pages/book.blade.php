@@ -16,6 +16,7 @@
 @section('canonical', route('book'))
 @section('body_class', 'rw-book-page')
 @section('header_class', 'rw-header--static')
+@section('sticky_variant', 'call-only')
 
 @section('content')
     <main class="rw-book">
@@ -26,6 +27,21 @@
                 <p class="rw-book__lead">
                     Pick a time below. We will call you, review your goals, and outline clear next steps for your home loan, refinance, or finance enquiry.
                 </p>
+
+                <ol class="rw-book__steps" aria-label="Booking steps">
+                    <li class="rw-book__steps-item is-active">
+                        <span class="rw-book__steps-num">1</span>
+                        <span>Pick a time</span>
+                    </li>
+                    <li class="rw-book__steps-item">
+                        <span class="rw-book__steps-num">2</span>
+                        <span>Confirm details</span>
+                    </li>
+                    <li class="rw-book__steps-item">
+                        <span class="rw-book__steps-num">3</span>
+                        <span>We call you</span>
+                    </li>
+                </ol>
             </div>
         </section>
 
@@ -36,15 +52,15 @@
                         <h2>What to expect</h2>
                         <ul class="rw-book__list">
                             <li>
-                                <span class="rw-book__list-icon" aria-hidden="true">📞</span>
+                                <span class="rw-book__list-icon rw-book__list-icon--phone" aria-hidden="true"></span>
                                 <span><strong>15 minutes</strong> — phone call with a broker</span>
                             </li>
                             <li>
-                                <span class="rw-book__list-icon" aria-hidden="true">🎯</span>
+                                <span class="rw-book__list-icon rw-book__list-icon--target" aria-hidden="true"></span>
                                 <span>Review your goals, timeline, and borrowing position</span>
                             </li>
                             <li>
-                                <span class="rw-book__list-icon" aria-hidden="true">✓</span>
+                                <span class="rw-book__list-icon rw-book__list-icon--check" aria-hidden="true"></span>
                                 <span>Clear next steps — no obligation, no pressure</span>
                             </li>
                         </ul>
@@ -53,22 +69,38 @@
                     <div class="rw-book__card rw-book__card--soft">
                         <h3>Prefer to talk now?</h3>
                         <p>Call us directly and we will help straight away.</p>
-                        <a class="rw-button rw-button--outline rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="book-page-phone">
-                            {{ config('riskwisdom.phone') }}
-                        </a>
+                        @include('partials.phone-link', [
+                            'variant' => 'button-solid',
+                            'label' => config('riskwisdom.phone'),
+                            'cta' => 'book-page-phone',
+                            'wide' => true,
+                        ])
                     </div>
 
-                    <p class="rw-book__note">
-                        Your booking is confirmed instantly and synced to our calendar. You will receive email reminders from Calendly.
-                    </p>
+                    <div class="rw-book__trust">
+                        <div class="rw-book__trust-item">
+                            <strong>Instant confirmation</strong>
+                            <span>Synced to our calendar</span>
+                        </div>
+                        <div class="rw-book__trust-item">
+                            <strong>Email reminders</strong>
+                            <span>Before your call</span>
+                        </div>
+                    </div>
                 </aside>
 
                 <div class="rw-book__scheduler">
                     @if (calendly_embed_url())
-                        <div class="rw-book__embed-wrap">
+                        <div @class([
+                            'rw-book__embed-wrap',
+                            'rw-book__embed-wrap--hide-brand' => calendly_hide_branding(),
+                        ])>
                             <div class="rw-book__embed-header">
-                                <h2>Select a date &amp; time</h2>
-                                <p>Times shown in your local timezone.</p>
+                                <div>
+                                    <h2>Select a date &amp; time</h2>
+                                    <p>Times shown in your local timezone.</p>
+                                </div>
+                                <span class="rw-book__embed-badge">Live availability</span>
                             </div>
 
                             <div
@@ -93,7 +125,7 @@
                             <h2>Online booking unavailable</h2>
                             <p>
                                 Please <a href="{{ contact_url() }}">contact us</a> or call
-                                <a class="rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}">{{ config('riskwisdom.phone') }}</a>.
+                                @include('partials.phone-link', ['variant' => 'text', 'cta' => 'book-page-phone-fallback']).
                             </p>
                         </div>
                     @endif

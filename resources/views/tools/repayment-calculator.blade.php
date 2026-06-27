@@ -1,69 +1,92 @@
-@extends('layouts.page')
+@extends('layouts.calculator', ['calculator' => 'repayment'])
 
 @section('title', 'Home Loan Repayment Calculator | Riskwisdom Loans')
 @section('meta_description', 'Calculate estimated monthly home loan repayments for Australian mortgages. Adjust loan amount, rate, and term.')
 @section('canonical', route('tools.repayment-calculator'))
 
-@section('page_content')
+@section('calculator_intro')
     <span class="rw-section-label">Calculator</span>
     <h1>Repayment calculator</h1>
     <p class="rw-page-lead">
         Model principal and interest repayments across different loan amounts, rates, and terms.
+        Results update instantly as you adjust the sliders.
     </p>
 
-    <div class="rw-calculator" id="repayment-calculator">
-        <div class="rw-calculator__grid">
-            <label>
-                <span>Loan amount</span>
-                <input type="number" id="rc-amount" min="0" step="1000" value="500000">
-            </label>
-            <label>
-                <span>Interest rate (% p.a.)</span>
-                <input type="number" id="rc-rate" min="0" max="20" step="0.1" value="6.2">
-            </label>
-            <label>
-                <span>Loan term (years)</span>
-                <input type="number" id="rc-term" min="1" max="30" step="1" value="30">
-            </label>
+    <ul class="rw-calculator-page__features">
+        <li>Live updates as you change inputs</li>
+        <li>Principal and interest modelling</li>
+        <li>Compare rate and term scenarios quickly</li>
+    </ul>
+
+    <div class="rw-calc-result is-visible" id="rc-result" hidden>
+        <span class="rw-calc-result__badge">Live estimate</span>
+        <p class="rw-calc-result__value" id="rc-monthly">$0</p>
+        <p class="rw-calc-result__label">Estimated monthly repayment</p>
+
+        <div class="rw-calc-result__stats">
+            <div class="rw-calc-result__stat">
+                <span>Total repayments</span>
+                <strong id="rc-total">$0</strong>
+            </div>
+            <div class="rw-calc-result__stat">
+                <span>Total interest</span>
+                <strong id="rc-interest">$0</strong>
+            </div>
         </div>
 
-        <button type="button" class="rw-button rw-button--solid" id="rc-calculate">Calculate repayment</button>
-
-        <div class="rw-calculator__result" id="rc-result" hidden>
-            <h2>Estimated monthly repayment</h2>
-            <p class="rw-calculator__amount" id="rc-monthly"></p>
-            <p class="rw-calculator__note" id="rc-total"></p>
-        </div>
-    </div>
-
-    <div class="rw-page-cta-band">
-        <h2>Compare refinance or purchase options</h2>
-        <p>See how a different rate or structure could affect your repayments with broker guidance.</p>
-        <a class="rw-button rw-button--solid" href="{{ contact_url('refinance') }}" data-cta="calculator-repayment">Get free loan review</a>
+        <p class="rw-calc-result__disclaimer">
+            Fixed-rate P&amp;I guide only — does not include fees, offset accounts, or rate changes.
+        </p>
     </div>
 @endsection
 
-@push('scripts')
-    <script>
-        document.getElementById('rc-calculate')?.addEventListener('click', () => {
-            const principal = Number(document.getElementById('rc-amount').value) || 0;
-            const annualRate = Number(document.getElementById('rc-rate').value) || 0;
-            const years = Number(document.getElementById('rc-term').value) || 30;
-            const monthlyRate = annualRate / 100 / 12;
-            const months = years * 12;
+@section('calculator_panel')
+    <div class="rw-calculator rw-calculator--interactive" id="repayment-calculator">
+        <div class="rw-calculator__stack">
+            <div class="rw-field">
+                <label class="rw-field__label" for="rc-amount">Loan amount</label>
+                <div class="rw-field__control rw-field__control--money">
+                    <span class="rw-field__prefix">$</span>
+                    <input type="number" id="rc-amount" min="50000" max="3000000" step="1000" value="500000">
+                </div>
+                <input type="range" class="rw-field__range" data-range-for="rc-amount" min="50000" max="2000000" step="10000" value="500000" aria-label="Adjust loan amount">
+            </div>
 
-            let monthly = 0;
-            if (monthlyRate === 0) {
-                monthly = principal / months;
-            } else {
-                monthly = principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-            }
+            <div class="rw-field">
+                <label class="rw-field__label" for="rc-rate">Interest rate (% p.a.)</label>
+                <div class="rw-field__control">
+                    <input type="number" id="rc-rate" min="0" max="20" step="0.1" value="6.2">
+                </div>
+                <input type="range" class="rw-field__range" data-range-for="rc-rate" min="2" max="12" step="0.1" value="6.2" aria-label="Adjust interest rate">
+            </div>
 
-            const total = monthly * months;
+            <div class="rw-field">
+                <label class="rw-field__label" for="rc-term">Loan term (years)</label>
+                <div class="rw-field__control">
+                    <input type="number" id="rc-term" min="1" max="30" step="1" value="30">
+                </div>
+                <input type="range" class="rw-field__range" data-range-for="rc-term" min="5" max="30" step="1" value="30" aria-label="Adjust loan term">
+            </div>
+        </div>
 
-            document.getElementById('rc-monthly').textContent = `$${Math.round(monthly).toLocaleString()} per month`;
-            document.getElementById('rc-total').textContent = `Total repayments over ${years} years: $${Math.round(total).toLocaleString()} (principal & interest)`;
-            document.getElementById('rc-result').hidden = false;
-        });
-    </script>
-@endpush
+        <button type="button" class="rw-button rw-button--solid rw-button--wide rw-calculator__submit" id="rc-calculate">
+            Recalculate repayment
+        </button>
+        <p class="rw-form-trust">Principal &amp; interest · Guide estimate only</p>
+    </div>
+@endsection
+
+@section('calculator_footer')
+    <div class="rw-page-cta-band rw-calculator-page__cta">
+        <h2>Compare refinance or purchase options</h2>
+        <p>See how a different rate or structure could affect your repayments with broker guidance.</p>
+        <div class="rw-page-actions">
+            <a class="rw-button rw-button--solid" href="{{ rate_review_url() }}" data-cta="calculator-repayment">Get free loan review</a>
+            @include('partials.phone-link', [
+                'variant' => 'button',
+                'label' => 'Call ' . config('riskwisdom.phone'),
+                'cta' => 'calculator-repayment-phone',
+            ])
+        </div>
+    </div>
+@endsection

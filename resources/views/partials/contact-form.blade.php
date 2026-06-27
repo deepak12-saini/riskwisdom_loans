@@ -116,7 +116,13 @@
 
         <div class="rw-form-actions">
             <button class="rw-button rw-button--solid rw-button--wide" type="submit" data-cta="form-submit">Book a discovery call</button>
-            <a class="rw-button rw-button--outline rw-button--wide rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="form-call">Call {{ config('riskwisdom.phone') }}</a>
+            @include('partials.phone-link', [
+                'variant' => 'button',
+                'label' => 'Call ' . config('riskwisdom.phone'),
+                'cta' => 'form-call',
+                'extraClass' => 'rw-button--wide',
+                'wide' => true,
+            ])
         </div>
 
         <p class="rw-form-trust">No obligation · Response within 24 hours · Australian borrowers only</p>

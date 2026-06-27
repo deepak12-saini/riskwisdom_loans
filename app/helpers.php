@@ -15,6 +15,13 @@ if (! function_exists('contact_url')) {
     }
 }
 
+if (! function_exists('rate_review_url')) {
+    function rate_review_url(): string
+    {
+        return route('rate-review');
+    }
+}
+
 if (! function_exists('calendly_url')) {
     function calendly_url(): ?string
     {
@@ -50,5 +57,16 @@ if (! function_exists('calendly_embed_url')) {
         $separator = str_contains($base, '?') ? '&' : '?';
 
         return $base.$separator.http_build_query($params);
+    }
+}
+
+if (! function_exists('calendly_hide_branding')) {
+    /**
+     * Whether to pass branding: false to Calendly embed JS.
+     * Requires Calendly Standard+ and "Use Calendly branding" off in account settings.
+     */
+    function calendly_hide_branding(): bool
+    {
+        return filter_var(config('riskwisdom.calendly_hide_branding', true), FILTER_VALIDATE_BOOL);
     }
 }

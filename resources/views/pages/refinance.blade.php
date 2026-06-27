@@ -5,6 +5,10 @@
     $heading = 'Refinance your home loan with clarity and confidence.';
     $lead = 'If you are an Australian mortgage holder reviewing your rate, features, or repayments, we help you compare refinance options and understand whether switching makes financial sense.';
     $intent = 'refinance';
+    $ctaHref = route('rate-review');
+    $ctaHeading = 'Am I on the right rate?';
+    $ctaCopy = 'Request a free rate review and we will call you back quickly to compare your current loan.';
+    $ctaLabel = 'Request free rate review';
     $bullets = [
         'Rate and feature comparison across multiple lenders',
         'Break cost and switching cost assessment',

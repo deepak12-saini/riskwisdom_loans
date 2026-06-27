@@ -32,8 +32,10 @@
             'label' => 'Resources',
             'links' => [
                 ['title' => 'Book a call', 'href' => route('book')],
+                ['title' => 'Free rate review', 'href' => route('rate-review')],
                 ['title' => 'Borrowing Power Calculator', 'href' => route('tools.borrowing-power')],
                 ['title' => 'Repayment Calculator', 'href' => route('tools.repayment-calculator')],
+                ['title' => 'Stamp Duty Calculator', 'href' => route('tools.stamp-duty')],
                 ['title' => 'Guides & Insights', 'href' => route('guides.index')],
             ],
         ],
@@ -81,20 +83,28 @@
                     'cta' => 'header-book-chat',
                     'extraClass' => 'rw-button--compact',
                 ])
-                <a class="rw-button rw-button--outline rw-button--compact" href="{{ contact_url() }}" data-cta="header-primary">Free review</a>
+                <a class="rw-button rw-button--outline rw-button--compact" href="{{ rate_review_url() }}" data-cta="header-primary">Free review</a>
             </div>
 
-            <button
-                class="rw-mobile-toggle"
-                type="button"
-                aria-label="Open menu"
-                aria-expanded="false"
-                aria-controls="rw-mobile-menu"
-            >
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="rw-header__mobile-actions">
+                @include('partials.phone-link', [
+                    'variant' => 'icon',
+                    'cta' => 'header-mobile-phone',
+                    'extraClass' => 'rw-header__phone',
+                ])
+
+                <button
+                    class="rw-mobile-toggle"
+                    type="button"
+                    aria-label="Open menu"
+                    aria-expanded="false"
+                    aria-controls="rw-mobile-menu"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
 
         <div class="rw-mobile-menu" id="rw-mobile-menu">
@@ -111,8 +121,15 @@
                 @endforeach
             </nav>
 
+            @include('partials.phone-link', [
+                'variant' => 'button',
+                'label' => 'Call ' . config('riskwisdom.phone'),
+                'cta' => 'mobile-menu-phone',
+                'extraClass' => 'rw-mobile-menu__cta',
+                'wide' => true,
+            ])
             @include('partials.book-chat-button', ['variant' => 'solid', 'cta' => 'mobile-menu-book-chat', 'extraClass' => 'rw-mobile-menu__cta'])
-            <a class="rw-button rw-button--outline rw-mobile-menu__cta" href="{{ contact_url() }}" data-cta="mobile-menu-primary">Get free loan review</a>
+            <a class="rw-button rw-button--outline rw-mobile-menu__cta" href="{{ rate_review_url() }}" data-cta="mobile-menu-primary">Get free loan review</a>
         </div>
     </div>
 </header>

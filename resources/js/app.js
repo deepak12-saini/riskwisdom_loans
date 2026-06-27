@@ -1,4 +1,5 @@
 import './bootstrap';
+import { initCalculatorTools } from './calculator-tools';
 
 const pushEvent = (event, params = {}) => {
     window.dataLayer = window.dataLayer || [];
@@ -52,9 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (stickyCta) {
+        const isHomePage = document.body.classList.contains('rw-theme') && document.querySelector('.rw-home');
+        const scrollThreshold = window.innerWidth <= 900 ? (isHomePage ? 150 : 0) : 500;
+
         const showSticky = () => {
-            const scrolled = window.scrollY > 500;
-            const contactVisible = contactSection
+            const scrolled = window.scrollY > scrollThreshold;
+            const contactVisible = contactSection && isHomePage
                 ? contactSection.getBoundingClientRect().top < window.innerHeight * 0.75
                 : false;
 
@@ -64,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showSticky();
         window.addEventListener('scroll', showSticky, { passive: true });
+        window.addEventListener('resize', showSticky, { passive: true });
     }
 
     document.querySelectorAll('[data-cta]').forEach((element) => {
@@ -103,4 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    initCalculatorTools();
 });

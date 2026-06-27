@@ -61,6 +61,8 @@ class ContactController extends Controller
 
         $this->notifications->sendAfterResponse($enquiry);
 
-        return redirect()->route('thank-you');
+        return redirect()->route('thank-you')
+            ->with('lead_type', 'contact')
+            ->with('enquiry_id', $enquiry->id);
     }
 }

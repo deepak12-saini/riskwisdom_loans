@@ -8,10 +8,16 @@ return [
     'brand_name' => 'Riskwisdom Loans',
 
     'calendly_url' => env('CALENDLY_URL', 'https://calendly.com/riskwisdomloans-info/30min'),
+    'calendly_hide_branding' => env('CALENDLY_HIDE_BRANDING', true),
 
     'lead_types' => [
         'contact' => 'Contact form',
         'borrowing_power' => 'Borrowing power calculator',
+        'rate_review' => 'Rate review',
+    ],
+
+    'rate_review' => [
+        'callback_promise' => 'Fast callback — we aim to call you within 2 business hours.',
     ],
 
     'loan_types' => [

@@ -8,26 +8,42 @@
 @section('body_class', 'rw-page-thank-you')
 
 @section('content')
+    @php
+        $enquiry = session('enquiry_id')
+            ? \App\Models\Enquiry::query()->find(session('enquiry_id'))
+            : null;
+        $mailFailed = $enquiry !== null && $enquiry->email_sent_at === null;
+    @endphp
     <main class="rw-page">
         <section class="rw-section rw-section--page">
             <div class="container rw-page-card">
                 <span class="rw-section-label">Enquiry received</span>
                 <h1>Thank you — we have your details.</h1>
-                @if (session('mail_warning'))
+                @if (session('mail_warning') || $mailFailed)
                     <p class="rw-form-alert rw-form-alert-error" style="margin-top: 1rem;">
-                        Your enquiry was received, but our automatic email notification could not be sent.
-                        We will still follow up using the details you provided.
+                        Your enquiry was saved, but our email notification could not be sent from the server.
+                        We will still follow up using the details you provided — or call us on
+                        @include('partials.phone-link', ['variant' => 'text', 'cta' => 'thank-you-call-inline']).
                     </p>
                 @endif
-                <p>
-                    A broker from Riskwisdom Loans will review your enquiry and contact you within 24 hours.
-                    If your matter is urgent, call us directly.
-                </p>
+                @if (session('lead_type') === 'rate_review')
+                    <p>
+                        Your rate review request is in. {{ config('riskwisdom.rate_review.callback_promise') }}
+                        If we miss you, we will email a summary of next steps.
+                    </p>
+                @else
+                    <p>
+                        A broker from Riskwisdom Loans will review your enquiry and contact you within 24 hours.
+                        If your matter is urgent, call us directly.
+                    </p>
+                @endif
 
                 <div class="rw-page-actions">
-                    <a class="rw-button rw-button--solid rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="thank-you-call">
-                        Call {{ config('riskwisdom.phone') }}
-                    </a>
+                    @include('partials.phone-link', [
+                        'variant' => 'button-solid',
+                        'label' => 'Call ' . config('riskwisdom.phone'),
+                        'cta' => 'thank-you-call',
+                    ])
                     <a class="rw-button rw-button--outline" href="{{ route('home') }}" data-cta="thank-you-home">Back to homepage</a>
                 </div>
 
@@ -47,6 +63,6 @@
 @push('scripts')
     <script>
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'generate_lead', form_name: 'contact' });
+        window.dataLayer.push({ event: 'generate_lead', form_name: @json(session('lead_type', 'contact')) });
     </script>
 @endpush

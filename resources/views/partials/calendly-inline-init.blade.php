@@ -1,5 +1,7 @@
 <script>
     (function () {
+        const hideBranding = @json(calendly_hide_branding());
+
         const hideLoader = (loader, mount) => {
             if (loader) {
                 loader.hidden = true;
@@ -17,11 +19,17 @@
                 return false;
             }
 
-            window.Calendly.initInlineWidget({
+            const options = {
                 url,
                 parentElement: mount,
                 resize: true,
-            });
+            };
+
+            if (hideBranding) {
+                options.branding = false;
+            }
+
+            window.Calendly.initInlineWidget(options);
 
             const onCalendlyMessage = (event) => {
                 if (!event.origin?.includes('calendly.com')) {
@@ -36,6 +44,7 @@
 
                 if (eventName === 'calendly.event_scheduled') {
                     mount.classList.add('is-scheduled');
+                    mount.closest('.rw-book__embed-wrap')?.classList.add('is-scheduled');
                 }
             };
 

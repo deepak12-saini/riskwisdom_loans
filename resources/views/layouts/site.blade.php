@@ -31,7 +31,9 @@
         @include('partials.header', ['headerClass' => $headerClass])
         @yield('content')
         @include('partials.footer')
-        @include('partials.sticky-cta')
+        @include('partials.sticky-cta', [
+            'stickyVariant' => trim($__env->yieldContent('sticky_variant')) ?: 'default',
+        ])
         @stack('scripts')
     </body>
 </html>

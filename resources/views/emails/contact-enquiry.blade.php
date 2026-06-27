@@ -12,6 +12,8 @@
                     <p style="margin:8px 0 0; color:#d6e5ff; font-size:14px; line-height:1.6;">
                         @if (($details['lead_type'] ?? 'contact') === 'borrowing_power')
                             A new borrowing power calculator lead was submitted on the Riskwisdom Loans website.
+                        @elseif (($details['lead_type'] ?? 'contact') === 'rate_review')
+                            A new rate review request was submitted — fast callback requested.
                         @else
                             A new contact form enquiry was submitted on the Riskwisdom Loans website.
                         @endif

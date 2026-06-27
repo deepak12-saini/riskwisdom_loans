@@ -26,6 +26,29 @@ class ExampleTest extends TestCase
             ->assertSee('Book a call');
     }
 
+    public function test_click_to_call_links_are_present_on_key_pages(): void
+    {
+        $phoneTel = config('riskwisdom.phone_tel');
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('tel:'.$phoneTel, false)
+            ->assertSee('header-mobile-phone', false)
+            ->assertSee('sticky-mobile-phone', false)
+            ->assertSee('footer-phone', false);
+
+        $this->get(route('book'))
+            ->assertOk()
+            ->assertSee('tel:'.$phoneTel, false)
+            ->assertSee('rw-sticky-cta--call-only', false)
+            ->assertSee('sticky-mobile-phone', false);
+
+        $this->get(route('rate-review'))
+            ->assertOk()
+            ->assertSee('tel:'.$phoneTel, false)
+            ->assertSee('rw-sticky-cta--call-only', false);
+    }
+
     public function test_the_book_page_shows_calendly_embed(): void
     {
         $response = $this->get(route('book'));
@@ -36,7 +59,8 @@ class ExampleTest extends TestCase
             ->assertSee('hide_gdpr_banner=1', false)
             ->assertSee('rw-calendly-mount', false)
             ->assertSee('assets.calendly.com/assets/external/widget.js', false)
-            ->assertSee('initInlineWidget', false);
+            ->assertSee('initInlineWidget', false)
+            ->assertSee('options.branding = false', false);
     }
 
     public function test_the_homepage_does_not_load_calendly_widget_script(): void
@@ -138,7 +162,7 @@ class ExampleTest extends TestCase
         Mail::assertSent(ContactAutoReplyMail::class);
 
         $followUp = $this->get(route('tools.borrowing-power'));
-        $followUp->assertSee('Your estimated guide range');
+        $followUp->assertSee('Your guide range');
     }
 
     public function test_the_borrowing_power_calculator_rejects_honeypot_submissions(): void
@@ -188,10 +212,100 @@ class ExampleTest extends TestCase
             ->assertSee('Please enter your first name');
     }
 
+    public function test_the_stamp_duty_page_is_accessible(): void
+    {
+        $response = $this->get(route('tools.stamp-duty'));
+
+        $response
+            ->assertOk()
+            ->assertSee('Stamp duty estimator')
+            ->assertSee('Calculate stamp duty');
+    }
+
+    public function test_the_stamp_duty_calculator_returns_an_estimate(): void
+    {
+        $response = $this->from(route('tools.stamp-duty'))
+            ->post(route('tools.stamp-duty.calculate'), [
+                'state' => 'NSW',
+                'property_value' => 650000,
+                'first_home_buyer' => '1',
+            ]);
+
+        $response
+            ->assertRedirect(route('tools.stamp-duty').'#sd-result')
+            ->assertSessionHas('stamp_duty_result');
+
+        $this->get(route('tools.stamp-duty'))
+            ->assertOk()
+            ->assertSee('Estimated total government charges');
+    }
+
+    public function test_the_rate_review_page_is_accessible(): void
+    {
+        $response = $this->get(route('rate-review'));
+
+        $response
+            ->assertOk()
+            ->assertSee('Am I on the right rate?')
+            ->assertSee('Request my free rate review')
+            ->assertSee(config('riskwisdom.rate_review.callback_promise'));
+    }
+
+    public function test_the_rate_review_form_stores_a_lead_and_redirects(): void
+    {
+        Mail::fake();
+
+        $response = $this->from(route('rate-review'))
+            ->post(route('rate-review.submit'), [
+                'first_name' => 'Sam',
+                'last_name' => 'Reviewer',
+                'phone' => '0400111222',
+                'email' => 'sam@example.com',
+                'current_rate' => 6.49,
+                'loan_balance' => 420000,
+                'lender' => 'CBA',
+            ]);
+
+        $response
+            ->assertRedirect(route('thank-you'))
+            ->assertSessionHas('lead_type', 'rate_review');
+
+        $this->assertDatabaseHas('enquiries', [
+            'lead_type' => 'rate_review',
+            'email' => 'sam@example.com',
+            'first_name' => 'Sam',
+            'source' => 'rate_review_form',
+            'timeline' => 'ready_now',
+        ]);
+
+        Mail::assertSent(ContactEnquiryMail::class);
+        Mail::assertSent(ContactAutoReplyMail::class);
+    }
+
+    public function test_the_rate_review_form_rejects_honeypot_submissions(): void
+    {
+        Mail::fake();
+
+        $response = $this->post(route('rate-review.submit'), [
+            '_gotcha' => 'spam',
+            'first_name' => 'Bot',
+            'last_name' => 'Spam',
+            'phone' => '0400000000',
+            'email' => 'spam@example.com',
+            'current_rate' => 6,
+        ]);
+
+        $response->assertRedirect(route('rate-review'));
+        $this->assertDatabaseCount('enquiries', 0);
+        Mail::assertNothingSent();
+    }
+
     public function test_landing_pages_are_accessible(): void
     {
         $this->get(route('pages.refinance'))->assertOk()->assertSee('Refinance');
+        $this->get(route('rate-review'))->assertOk()->assertSee('Am I on the right rate?');
         $this->get(route('tools.borrowing-power'))->assertOk()->assertSee('Borrowing power');
+        $this->get(route('tools.stamp-duty'))->assertOk()->assertSee('Stamp duty');
         $this->get(route('guides.index'))->assertOk()->assertSee('Guides');
     }
 

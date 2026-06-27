@@ -66,14 +66,11 @@
                     </li>
                 @endif
                 <li>
-                    <a class="rw-footer__contact-link rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="footer-phone">
-                        <span class="rw-footer__contact-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.3.56 3.52.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.3 21 3 13.7 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.22.19 2.4.56 3.52a1 1 0 0 1-.24 1.02l-2.2 2.25Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                        <span>{{ config('riskwisdom.phone') }}</span>
-                    </a>
+                    @include('partials.phone-link', [
+                        'variant' => 'footer',
+                        'cta' => 'footer-phone',
+                        'extraClass' => 'rw-footer__contact-link',
+                    ])
                 </li>
                 <li>
                     <a class="rw-footer__contact-link" href="mailto:{{ config('riskwisdom.email') }}">

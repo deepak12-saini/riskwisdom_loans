@@ -48,6 +48,7 @@
             ['title' => 'Borrowing Power', 'copy' => 'Estimate borrowing capacity, review repayments, and plan your next property or finance move with more confidence.', 'cta' => 'Use calculator', 'href' => route('tools.borrowing-power')],
             ['title' => 'News & Insights', 'copy' => 'Practical updates on interest rates, lending trends, and borrower tips that help you make better finance decisions.', 'cta' => 'Read insights', 'href' => route('guides.index')],
             ['title' => 'Repayment Calculator', 'copy' => 'Model monthly repayments across loan amounts, rates, and terms before you speak with a broker.', 'cta' => 'Calculate repayments', 'href' => route('tools.repayment-calculator')],
+            ['title' => 'Stamp Duty Calculator', 'copy' => 'Estimate transfer duty and government charges by state before you commit to a purchase price.', 'cta' => 'Estimate stamp duty', 'href' => route('tools.stamp-duty')],
         ];
 
         $serviceHighlights = [
@@ -89,7 +90,12 @@
 
                 <div class="rw-hero__actions">
                     @include('partials.book-chat-button', ['variant' => 'solid', 'cta' => 'hero-book-chat'])
-                    <a class="rw-button rw-button--ghost" href="{{ contact_url() }}" data-cta="hero-primary">Get free loan review</a>
+                    @include('partials.phone-link', [
+                        'variant' => 'ghost',
+                        'label' => 'Call ' . config('riskwisdom.phone'),
+                        'cta' => 'hero-phone',
+                    ])
+                    <a class="rw-button rw-button--ghost" href="{{ rate_review_url() }}" data-cta="hero-primary">Get free loan review</a>
                     <a class="rw-button rw-button--ghost" href="#solutions" data-cta="hero-secondary">See solutions</a>
                 </div>
             </div>
@@ -121,7 +127,7 @@
                     </p>
                     <div class="rw-solution__actions">
                         <a class="rw-button rw-button--solid" href="#solutions" data-cta="about-solutions">Find out more</a>
-                        <a class="rw-button rw-button--text" href="{{ contact_url() }}" data-cta="about-contact">Get free loan review</a>
+                        <a class="rw-button rw-button--text" href="{{ rate_review_url() }}" data-cta="about-contact">Get free loan review</a>
                     </div>
                 </div>
 
@@ -309,7 +315,7 @@
                         borrowing goals.
                     </p>
                     <div class="rw-contact__details">
-                        <a class="rw-track-phone" href="tel:{{ config('riskwisdom.phone_tel') }}" data-cta="contact-phone">{{ config('riskwisdom.phone') }}</a>
+                        @include('partials.phone-link', ['variant' => 'text', 'cta' => 'contact-phone'])
                         <a href="mailto:{{ config('riskwisdom.email') }}">{{ config('riskwisdom.email') }}</a>
                         <a href="https://www.riskwisdomloans.com.au" target="_blank" rel="noreferrer">www.riskwisdomloans.com.au</a>
                     </div>

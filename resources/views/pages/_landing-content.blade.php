@@ -25,5 +25,12 @@
 <div class="rw-page-cta-band">
     <h2>{{ $ctaHeading ?? 'Ready for a free loan review?' }}</h2>
     <p>{{ $ctaCopy ?? 'Share your details and we will follow up with guidance tailored to your borrowing goals.' }}</p>
-    <a class="rw-button rw-button--solid" href="{{ contact_url($intent ?? null) }}" data-cta="landing-primary">{{ $ctaLabel ?? 'Get free loan review' }}</a>
+    <div class="rw-page-actions">
+        <a class="rw-button rw-button--solid" href="{{ $ctaHref ?? contact_url($intent ?? null) }}" data-cta="landing-primary">{{ $ctaLabel ?? 'Get free loan review' }}</a>
+        @include('partials.phone-link', [
+            'variant' => 'button',
+            'label' => 'Or call ' . config('riskwisdom.phone'),
+            'cta' => 'landing-phone',
+        ])
+    </div>
 </div>
