@@ -9,6 +9,7 @@ use App\Http\Controllers\BorrowingPowerController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DocuSignWebhookController;
 use App\Http\Controllers\RateReviewController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\StampDutyController;
 use App\Http\Controllers\GuideController;
 use Illuminate\Support\Facades\Route;
@@ -86,48 +87,4 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('/clients/{client}/documents/{document}', [AdminClientDocumentController::class, 'destroy'])->name('clients.documents.destroy');
 });
 
-Route::get('/sitemap.xml', function () {
-    $urls = [
-        ['loc' => route('home'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'weekly', 'priority' => '1.0'],
-        ['loc' => route('book'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.9'],
-        ['loc' => route('rate-review'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.9'],
-        ['loc' => route('pages.home-loans'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.9'],
-        ['loc' => route('pages.refinance'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.9'],
-        ['loc' => route('pages.refinance-rates'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.85'],
-        ['loc' => route('pages.refinance-calculator'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.85'],
-        ['loc' => route('pages.refinance-cashback'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.85'],
-        ['loc' => route('pages.investment'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.9'],
-        ['loc' => route('pages.first-home-buyer'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.9'],
-        ['loc' => route('pages.commercial'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.8'],
-        ['loc' => route('tools.borrowing-power'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.8'],
-        ['loc' => route('tools.repayment-calculator'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.8'],
-        ['loc' => route('tools.stamp-duty'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.8'],
-        ['loc' => route('guides.index'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'weekly', 'priority' => '0.8'],
-        ['loc' => route('pages.partners'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'monthly', 'priority' => '0.7'],
-        ['loc' => route('pages.privacy'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'yearly', 'priority' => '0.3'],
-        ['loc' => route('pages.credit-guide'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'yearly', 'priority' => '0.3'],
-        ['loc' => route('thank-you'), 'lastmod' => now()->toAtomString(), 'changefreq' => 'yearly', 'priority' => '0.2'],
-    ];
-
-    $guideSlugs = [
-        'when-to-refinance-home-loan-australia',
-        'first-home-buyer-checklist-australia',
-        'fixed-vs-variable-home-loans-australia',
-        'how-much-can-i-borrow-australia',
-        'refinance-readiness-checklist',
-        'investment-property-loan-basics-australia',
-    ];
-
-    foreach ($guideSlugs as $slug) {
-        $urls[] = [
-            'loc' => route('guides.show', $slug),
-            'lastmod' => now()->toAtomString(),
-            'changefreq' => 'monthly',
-            'priority' => '0.7',
-        ];
-    }
-
-    return response()
-        ->view('sitemap', compact('urls'))
-        ->header('Content-Type', 'application/xml');
-})->name('sitemap');
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');

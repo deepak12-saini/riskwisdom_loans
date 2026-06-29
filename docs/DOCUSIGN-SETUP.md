@@ -2,11 +2,51 @@
 
 DocuSign sends PDFs for digital signature and stores signed copies on each **client file** in admin.
 
+**Website status:** Admin DocuSign UI is built. Keep `DOCUSIGN_ENABLED=false` until API keys are added.
+
 ## 1. Create DocuSign developer account
 
-1. Go to [developers.docusign.com](https://developers.docusign.com/)
-2. Create a **developer / sandbox** account (free for testing)
+### Option A — Kal / business (recommended for production)
+
+Kal should create the account under **Riskwisdom Loans**:
+
+- Email: `info@riskwisdomloans.com.au`
+- Country: **Australia**
+- Company: **Riskwisdom Loans**
+
+For **live** client signatures, a paid DocuSign plan with API access is required. For **testing**, use the free developer sandbox (Option B).
+
+### Option B — Developer sandbox (free, for API testing)
+
+1. Go to [developers.docusign.com](https://developers.docusign.com/) or [docusign.com/developers/sandbox](https://www.docusign.com/developers/sandbox)
+2. Create a **developer / sandbox** account
 3. Note your **Account ID** and **User ID** (GUID)
+
+### Signup error: “Your request cannot be completed”
+
+This is a **DocuSign-side block** (not a website bug). Common causes:
+
+- Email already registered → try [account-d.docusign.com](https://account-d.docusign.com) → **Log in** or **Forgot password**
+- VPN, corporate firewall, or repeated signup attempts
+- DocuSign “service protection” blocking some regions (often needs manual review)
+
+**Try in order:**
+
+1. Incognito window, no VPN, different browser (Chrome / Edge)
+2. Mobile hotspot instead of office Wi‑Fi
+3. Different email (e.g. `info@riskwisdomloans.com.au` if Kal has access)
+4. Direct sandbox link: [docusign.com/developers/sandbox](https://www.docusign.com/developers/sandbox)
+
+**If it still fails — open a support case (no login required):**
+
+1. [support.docusign.com](https://support.docusign.com)
+2. Choose **“I can’t access my account”**
+3. Explain: cannot create free developer sandbox; error *“Your request cannot be completed”*
+4. Include email, country, and that you need API integration for a business app
+
+**Workaround:** Ask **Kal** to create the DocuSign account (Australia + business email). You only need the API keys in `.env` — any authorised DocuSign admin can generate them.
+
+Until keys exist, tasks and client files in admin still work; only **Send via DocuSign** stays disabled.
 
 ## 2. Create integration (JWT app)
 

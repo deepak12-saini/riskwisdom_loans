@@ -80,7 +80,7 @@ Lead saved → Admin → Enquiries
   https://riskwisdomloans.com.au/first-home-buyer?utm_source=google&utm_medium=cpc&utm_campaign=fhb
   ```
 
-**Conversion tracking:** Import GA4 `generate_lead` event into Google Ads after GTM is live.
+**Conversion tracking:** Import GA4 `generate_lead` event into Google Ads after GTM is live. Setup: [`docs/GSC-GTM-SETUP.md`](GSC-GTM-SETUP.md).
 
 ---
 

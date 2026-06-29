@@ -532,6 +532,18 @@ class ExampleTest extends TestCase
             ->assertSee('cashback', false);
     }
 
+    public function test_sitemap_returns_xml_with_seo_urls(): void
+    {
+        $response = $this->get(route('sitemap'));
+
+        $response
+            ->assertOk()
+            ->assertHeader('content-type', 'application/xml')
+            ->assertSee('refinance-home-loan-rates', false)
+            ->assertSee('home-loans', false)
+            ->assertSee('/refinance</loc>', false);
+    }
+
     public function test_ad_landing_url_builds_utm_query_string(): void
     {
         $url = ad_landing_url('refinance_rates', [

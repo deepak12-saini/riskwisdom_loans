@@ -125,15 +125,17 @@ See [`docs/SEO-FUNNELS-ADS.md`](SEO-FUNNELS-ADS.md) for full keyword and campaig
 
 ## Phase A checklist (Deepak — no billing required)
 
+**Step-by-step:** [`docs/GSC-GTM-SETUP.md`](GSC-GTM-SETUP.md) (GSC sitemap + GTM publish + GA4 conversion)
+
 | Step | Done? |
 |------|-------|
-| Create GTM container → copy `GTM-XXXXXXX` | |
-| Create GA4 property → copy `G-XXXXXXXXXX` | |
-| Add `GOOGLE_TAG_MANAGER_ID` to production `.env` | |
-| Publish GTM tags (GA4 config + `generate_lead` event) | |
-| Mark `generate_lead` as conversion in GA4 | |
-| GSC: verify domain + submit sitemap | |
-| Test: submit form → check GA4 Realtime | |
+| Create GTM container → `GTM-N65TM293` | ✓ |
+| Create GA4 property → `G-N0BBL44LY1` | ✓ |
+| Add `GOOGLE_TAG_MANAGER_ID` to production `.env` | ✓ |
+| Publish GTM tags (GA4 config + `generate_lead` event) | → GSC-GTM-SETUP.md Part 3 |
+| Mark `generate_lead` as conversion in GA4 | → GSC-GTM-SETUP.md Part 4 |
+| GSC: verify domain + submit sitemap | → GSC-GTM-SETUP.md Part 2 |
+| Test: submit form → check GA4 Realtime | → GSC-GTM-SETUP.md Part 5 |
 
 Google Ads and billing can wait until Kal approves ad budget.
 
