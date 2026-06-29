@@ -4,6 +4,7 @@ return [
     'phone' => '+61 421 670 636',
     'phone_tel' => '+61421670636',
     'email' => 'info@riskwisdomloans.com.au',
+    'contact_to_address' => env('CONTACT_TO_ADDRESS', 'info@riskwisdomloans.com.au'),
     'legal_name' => 'Risk Wisdom Loans Pty Ltd',
     'brand_name' => 'Riskwisdom Loans',
 

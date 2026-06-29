@@ -115,7 +115,12 @@
         </div>
 
         <div class="rw-form-actions">
-            <button class="rw-button rw-button--solid rw-button--wide" type="submit" data-cta="form-submit">Book a discovery call</button>
+            <button
+                class="rw-button rw-button--solid rw-button--wide"
+                type="submit"
+                data-cta="form-submit"
+                data-loading-text="Sending your enquiry…"
+            >Book a discovery call</button>
             @include('partials.phone-link', [
                 'variant' => 'button',
                 'label' => 'Call ' . config('riskwisdom.phone'),
@@ -125,7 +130,7 @@
             ])
         </div>
 
-        <p class="rw-form-trust">No obligation · Response within 24 hours · Australian borrowers only</p>
+        <p class="rw-form-trust">No obligation · Response within 24 hours · Confirmation email sent to you · Australian borrowers only</p>
     </form>
 
     <div class="rw-contact__benefits">

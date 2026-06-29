@@ -198,7 +198,12 @@
                 </div>
             </div>
 
-            <button type="submit" class="rw-button rw-button--solid rw-button--wide rw-calculator__submit" data-cta="borrowing-power-submit">
+            <button
+                type="submit"
+                class="rw-button rw-button--solid rw-button--wide rw-calculator__submit"
+                data-cta="borrowing-power-submit"
+                data-loading-text="Calculating…"
+            >
                 Show my estimate
             </button>
             <p class="rw-form-trust">Assumes ~30% of gross income available for repayments after expenses. Not a pre-approval or lender offer.</p>

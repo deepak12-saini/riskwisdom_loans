@@ -1639,6 +1639,37 @@ body.rw-book-page {
     gap: 1rem;
 }
 
+form.is-submitting {
+    pointer-events: none;
+}
+
+form.is-submitting button[type="submit"] {
+    cursor: wait;
+    opacity: 0.92;
+    position: relative;
+    padding-left: 2.6rem;
+}
+
+form.is-submitting button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    left: 1.15rem;
+    top: 50%;
+    width: 0.95rem;
+    height: 0.95rem;
+    margin-top: -0.475rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: rw-form-spin 0.65s linear infinite;
+}
+
+@keyframes rw-form-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .rw-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3227,9 +3258,58 @@ body.rw-admin-login-page {
 }
 
 .rw-admin-table__enquiry {
-    max-width: 18rem;
+    max-width: 14rem;
+    min-width: 9rem;
     color: var(--rw-text-soft);
-    line-height: 1.55;
+    line-height: 1.5;
+}
+
+.rw-admin-enquiry-details {
+    margin: 0;
+}
+
+.rw-admin-enquiry-details summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.rw-admin-enquiry-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.rw-admin-enquiry-details__preview {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.rw-admin-enquiry-details[open] .rw-admin-enquiry-details__preview {
+    display: none;
+}
+
+.rw-admin-enquiry-details__toggle {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.rw-admin-enquiry-details__toggle::before {
+    content: attr(data-label-more);
+}
+
+.rw-admin-enquiry-details[open] .rw-admin-enquiry-details__toggle::before {
+    content: attr(data-label-less);
+}
+
+.rw-admin-enquiry-details__full {
+    margin: 0.5rem 0 0;
+    white-space: pre-line;
+    word-break: break-word;
+    color: var(--text);
 }
 
 .rw-admin-table__empty {

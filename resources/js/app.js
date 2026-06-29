@@ -110,10 +110,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('[data-track-form]').forEach((form) => {
-        form.addEventListener('submit', () => {
+        form.addEventListener('submit', (event) => {
+            if (form.dataset.submitting === 'true') {
+                event.preventDefault();
+
+                return;
+            }
+
             pushEvent('form_submit', {
                 form_name: form.getAttribute('data-track-form') ?? 'unknown',
             });
+
+            form.dataset.submitting = 'true';
+            form.classList.add('is-submitting');
+            form.setAttribute('aria-busy', 'true');
+
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.setAttribute('aria-busy', 'true');
+
+                if (!submitButton.dataset.submitLabel) {
+                    submitButton.dataset.submitLabel = submitButton.textContent.trim();
+                }
+
+                const loadingText = submitButton.dataset.loadingText ?? 'Sending…';
+                submitButton.textContent = loadingText;
+            }
         });
     });
 

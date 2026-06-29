@@ -13,7 +13,7 @@ class EnquiryNotificationService
     {
         $enquiryId = $enquiry->id;
         $mailDetails = $enquiry->toMailDetails();
-        $contactTo = (string) env('CONTACT_TO_ADDRESS', (string) config('mail.from.address'));
+        $contactTo = (string) config('riskwisdom.contact_to_address', config('mail.from.address'));
 
         dispatch(function () use ($enquiryId, $mailDetails, $contactTo): void {
             $enquiry = Enquiry::query()->find($enquiryId);

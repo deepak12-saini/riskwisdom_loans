@@ -152,7 +152,12 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="rw-button rw-button--solid rw-button--wide" data-cta="rate-review-submit">
+                        <button
+                            type="submit"
+                            class="rw-button rw-button--solid rw-button--wide"
+                            data-cta="rate-review-submit"
+                            data-loading-text="Submitting rate review…"
+                        >
                             Request my free rate review
                         </button>
                         <p class="rw-form-trust">{{ config('riskwisdom.rate_review.callback_promise') }} · No obligation</p>

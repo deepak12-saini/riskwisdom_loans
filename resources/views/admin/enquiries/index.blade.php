@@ -93,7 +93,21 @@
                                     —
                                 @endif
                             </td>
-                            <td class="rw-admin-table__enquiry">{{ $enquiry->enquiry }}</td>
+                            <td class="rw-admin-table__enquiry">
+                                @if ($enquiry->enquiry && strlen($enquiry->enquiry) > 100)
+                                    <details class="rw-admin-enquiry-details">
+                                        <summary>
+                                            <span class="rw-admin-enquiry-details__preview">{{ \Illuminate\Support\Str::limit($enquiry->enquiry, 100) }}</span>
+                                            <span class="rw-admin-enquiry-details__toggle" data-label-more="Show more" data-label-less="Show less"></span>
+                                        </summary>
+                                        <p class="rw-admin-enquiry-details__full">{{ $enquiry->enquiry }}</p>
+                                    </details>
+                                @elseif ($enquiry->enquiry)
+                                    <span class="rw-admin-enquiry-details__preview" title="{{ $enquiry->enquiry }}">{{ $enquiry->enquiry }}</span>
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td>
                                 @if ($enquiry->client)
                                     <a class="rw-admin-link" href="{{ route('admin.clients.show', $enquiry->client) }}">View file</a>
