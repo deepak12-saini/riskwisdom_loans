@@ -23,4 +23,10 @@
     @case('logout')
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 7V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-2M7 12H3m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         @break
+    @case('clients')
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 11a3 3 0 1 0-6 0 3 3 0 0 0 6 0ZM4 20a4 4 0 0 1 8 0M16 14a4 4 0 0 1 4 4M19 8v6m3-3h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        @break
+    @case('tasks')
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 11l2 2 4-4M7 3h10a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        @break
 @endswitch

@@ -27,6 +27,8 @@
             <ul>
                 <li><a href="{{ route('pages.home-loans') }}">Home Loans</a></li>
                 <li><a href="{{ route('pages.refinance') }}">Refinance Loans</a></li>
+                <li><a href="{{ route('pages.refinance-rates') }}">Refinance Rates</a></li>
+                <li><a href="{{ route('rate-review') }}">Free Rate Review</a></li>
                 <li><a href="{{ route('pages.commercial') }}">Commercial Loans</a></li>
                 <li><a href="{{ route('pages.investment') }}">Investment Loans</a></li>
             </ul>

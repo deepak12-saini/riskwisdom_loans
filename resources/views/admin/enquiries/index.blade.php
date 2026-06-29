@@ -25,6 +25,10 @@
             <span>Today</span>
             <strong>{{ number_format($stats['today']) }}</strong>
         </article>
+        <article class="rw-admin-stat">
+            <span>Paid (CPC)</span>
+            <strong>{{ number_format($stats['paid'] ?? 0) }}</strong>
+        </article>
     </div>
 
     <section class="rw-admin-card">
@@ -32,6 +36,11 @@
             <div>
                 <h2>{{ $pageHeading ?? 'All enquiries' }}</h2>
                 <p>Leads submitted through the website contact form.</p>
+            </div>
+            <div class="rw-admin-filter-tabs">
+                <a href="{{ route('admin.enquiries.index') }}" class="@if ($filter === 'all') is-active @endif">All</a>
+                <a href="{{ route('admin.enquiries.index', ['filter' => 'ready_now']) }}" class="@if ($filter === 'ready_now') is-active @endif">Ready now</a>
+                <a href="{{ route('admin.enquiries.index', ['filter' => 'paid']) }}" class="@if ($filter === 'paid') is-active @endif">Paid ads</a>
             </div>
         </div>
 
@@ -47,7 +56,9 @@
                         <th>Timeline</th>
                         <th>State</th>
                         <th>Source</th>
+                        <th>UTM</th>
                         <th>Enquiry</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,11 +83,31 @@
                             </td>
                             <td>{{ $enquiry->state }}</td>
                             <td>{{ $enquiry->source ?: '—' }}</td>
+                            <td class="rw-admin-table__utm">
+                                @if ($enquiry->utm_source || $enquiry->utm_campaign)
+                                    <small>{{ $enquiry->utm_source ?: '—' }} / {{ $enquiry->utm_medium ?: '—' }}</small>
+                                    @if ($enquiry->utm_campaign)
+                                        <br><small>{{ $enquiry->utm_campaign }}</small>
+                                    @endif
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td class="rw-admin-table__enquiry">{{ $enquiry->enquiry }}</td>
+                            <td>
+                                @if ($enquiry->client)
+                                    <a class="rw-admin-link" href="{{ route('admin.clients.show', $enquiry->client) }}">View file</a>
+                                @else
+                                    <form method="post" action="{{ route('admin.enquiries.convert', $enquiry) }}" class="rw-admin-inline-form">
+                                        @csrf
+                                        <button class="rw-admin-link" type="submit">Create file</button>
+                                    </form>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="rw-admin-table__empty">No enquiries yet.</td>
+                            <td colspan="11" class="rw-admin-table__empty">No enquiries yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

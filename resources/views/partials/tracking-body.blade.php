@@ -1,6 +1,6 @@
-@if (env('GOOGLE_TAG_MANAGER_ID'))
+@if (config('riskwisdom.google_tag_manager_id'))
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ env('GOOGLE_TAG_MANAGER_ID') }}"
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ config('riskwisdom.google_tag_manager_id') }}"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 @endif

@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminAuthenticate::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/docusign',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

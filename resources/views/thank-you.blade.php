@@ -13,6 +13,7 @@
             ? \App\Models\Enquiry::query()->find(session('enquiry_id'))
             : null;
         $mailFailed = $enquiry !== null && $enquiry->email_sent_at === null;
+        $leadType = session('lead_type', 'contact');
     @endphp
     <main class="rw-page">
         <section class="rw-section rw-section--page">
@@ -26,10 +27,14 @@
                         @include('partials.phone-link', ['variant' => 'text', 'cta' => 'thank-you-call-inline']).
                     </p>
                 @endif
-                @if (session('lead_type') === 'rate_review')
+                @if ($leadType === 'rate_review')
                     <p>
                         Your rate review request is in. {{ config('riskwisdom.rate_review.callback_promise') }}
                         If we miss you, we will email a summary of next steps.
+                    </p>
+                @elseif ($leadType === 'borrowing_power')
+                    <p>
+                        Your borrowing power enquiry is in. A broker will review your estimate and contact you to discuss next steps.
                     </p>
                 @else
                     <p>
@@ -44,6 +49,7 @@
                         'label' => 'Call ' . config('riskwisdom.phone'),
                         'cta' => 'thank-you-call',
                     ])
+                    <a class="rw-button rw-button--solid" href="{{ route('book') }}" data-cta="thank-you-book">Book a call</a>
                     <a class="rw-button rw-button--outline" href="{{ route('home') }}" data-cta="thank-you-home">Back to homepage</a>
                 </div>
 
@@ -63,6 +69,12 @@
 @push('scripts')
     <script>
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'generate_lead', form_name: @json(session('lead_type', 'contact')) });
+        window.dataLayer.push({
+            event: 'generate_lead',
+            lead_type: @json($leadType),
+            utm_source: @json(session('utm_source')),
+            utm_medium: @json(session('utm_medium')),
+            utm_campaign: @json(session('utm_campaign')),
+        });
     </script>
 @endpush

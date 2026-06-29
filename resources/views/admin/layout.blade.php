@@ -28,6 +28,7 @@
             </header>
 
             <main class="rw-admin-content">
+                @include('admin.partials.flash')
                 @yield('content')
             </main>
         </div>
@@ -37,5 +38,6 @@
                 document.body.classList.toggle('rw-admin-sidebar-open');
             });
         </script>
+        @stack('scripts')
     </body>
 </html>

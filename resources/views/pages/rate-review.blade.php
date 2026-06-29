@@ -68,7 +68,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('rate-review.submit') }}" method="post" class="rw-rate-review__form">
+                    <form action="{{ route('rate-review.submit') }}" method="post" class="rw-rate-review__form" data-track-form="rate_review">
                         @csrf
 
                         <input type="text" name="_gotcha" value="" tabindex="-1" autocomplete="off" class="rw-form-honeypot" aria-hidden="true">

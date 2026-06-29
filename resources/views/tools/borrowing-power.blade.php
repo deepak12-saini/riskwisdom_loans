@@ -1,7 +1,7 @@
 @extends('layouts.calculator', ['calculator' => 'borrowing-power'])
 
-@section('title', 'Borrowing Power Calculator | Riskwisdom Loans')
-@section('meta_description', 'Estimate your borrowing capacity with this simple Australian home loan calculator. Enter your details to see your guide range, then speak with a broker for an accurate assessment.')
+@section('title', 'Borrowing Power Calculator Australia | Riskwisdom Loans')
+@section('meta_description', 'Free Australian borrowing power calculator. Estimate how much you could borrow for a home loan, then speak with a broker for an accurate assessment.')
 @section('canonical', route('tools.borrowing-power'))
 
 @section('calculator_intro')
@@ -24,7 +24,7 @@
     </ul>
 
     @if ($result)
-        <div class="rw-calc-result is-visible" id="bp-result">
+        <div class="rw-calc-result is-visible" id="bp-result" data-lead-conversion="borrowing_power">
             <span class="rw-calc-result__badge">Your guide range</span>
             <p class="rw-calc-result__value">{{ $result['range_label'] }}</p>
             <p class="rw-calc-result__label">
@@ -83,6 +83,7 @@
         method="post"
         class="rw-calculator rw-calculator--interactive"
         id="borrowing-power-form"
+        data-track-form="borrowing_power"
     >
         @csrf
 

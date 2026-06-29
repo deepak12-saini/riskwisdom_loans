@@ -1,7 +1,7 @@
 @extends('layouts.calculator', ['calculator' => 'repayment'])
 
-@section('title', 'Home Loan Repayment Calculator | Riskwisdom Loans')
-@section('meta_description', 'Calculate estimated monthly home loan repayments for Australian mortgages. Adjust loan amount, rate, and term.')
+@section('title', 'Home Loan Repayment Calculator Australia | Riskwisdom Loans')
+@section('meta_description', 'Refinance home loan calculator for Australian mortgages. Model monthly repayments, total interest, and compare rate scenarios instantly.')
 @section('canonical', route('tools.repayment-calculator'))
 
 @section('calculator_intro')

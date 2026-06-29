@@ -8,6 +8,7 @@ use App\Models\Enquiry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -326,5 +327,236 @@ class ExampleTest extends TestCase
 
         $response->assertRedirect(route('admin.enquiries.index'));
         $this->assertAuthenticated();
+    }
+
+    public function test_admin_can_convert_enquiry_to_client_file(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        $enquiry = Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'Jane',
+            'last_name' => 'Borrower',
+            'phone' => '0400111222',
+            'email' => 'jane@example.com',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'Looking for a home loan',
+            'status' => 'new',
+        ]);
+
+        $response = $this->actingAs($admin)->post(route('admin.enquiries.convert', $enquiry));
+
+        $response
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('clients', [
+            'enquiry_id' => $enquiry->id,
+            'email' => 'jane@example.com',
+            'first_name' => 'Jane',
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_admin_can_create_tasks_and_close_them(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        $client = \App\Models\Client::query()->create([
+            'first_name' => 'Kal',
+            'last_name' => 'Client',
+            'email' => 'kal@example.com',
+            'phone' => '0400333444',
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.clients.tasks.store', $client), [
+                'title' => 'Upload payslips',
+                'description' => 'Last 2 payslips required',
+                'owner' => 'client',
+                'status' => 'open',
+                'priority' => 'high',
+                'due_date' => now()->addDays(3)->format('Y-m-d'),
+            ])
+            ->assertRedirect(route('admin.clients.show', $client));
+
+        $task = \App\Models\Task::query()->first();
+        $this->assertNotNull($task);
+        $this->assertSame('open', $task->status);
+
+        $this->actingAs($admin)
+            ->patch(route('admin.clients.tasks.close', [$client, $task]))
+            ->assertRedirect(route('admin.clients.show', $client));
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'status' => 'done',
+        ]);
+
+        $this->assertNotNull($task->fresh()->closed_at);
+    }
+
+    public function test_admin_tasks_index_requires_authentication(): void
+    {
+        $this->get(route('admin.tasks.index'))->assertRedirect(route('admin.login'));
+    }
+
+    public function test_admin_can_store_document_draft_without_docusign(): void
+    {
+        Storage::fake('local');
+
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        $client = \App\Models\Client::query()->create([
+            'first_name' => 'Jane',
+            'last_name' => 'Signer',
+            'email' => 'jane@example.com',
+            'status' => 'active',
+        ]);
+
+        config([
+            'docusign.enabled' => false,
+            'docusign.document_types' => [
+                'privacy_consent' => 'Privacy consent',
+                'credit_guide' => 'Credit guide acknowledgment',
+                'authority_to_act' => 'Authority to act',
+                'other' => 'Other document',
+            ],
+        ]);
+
+        $response = $this->actingAs($admin)->post(route('admin.clients.documents.store', $client), [
+            'document_type' => 'privacy_consent',
+            'title' => 'Privacy consent',
+            'signer_name' => 'Jane Signer',
+            'signer_email' => 'jane@example.com',
+            'pdf' => \Illuminate\Http\UploadedFile::fake()->create('privacy.pdf', 50, 'application/pdf'),
+        ]);
+
+        $response
+            ->assertRedirect(route('admin.clients.show', $client))
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('client_documents', [
+            'client_id' => $client->id,
+            'title' => 'Privacy consent',
+            'status' => 'draft',
+            'signer_email' => 'jane@example.com',
+        ]);
+    }
+
+    public function test_docusign_webhook_marks_document_signed(): void
+    {
+        Storage::fake('local');
+
+        $client = \App\Models\Client::query()->create([
+            'first_name' => 'Jane',
+            'last_name' => 'Signer',
+            'email' => 'jane@example.com',
+            'status' => 'active',
+        ]);
+
+        $document = \App\Models\ClientDocument::query()->create([
+            'client_id' => $client->id,
+            'document_type' => 'privacy_consent',
+            'title' => 'Privacy consent',
+            'envelope_id' => 'env-test-123',
+            'status' => 'sent',
+            'signer_name' => 'Jane Signer',
+            'signer_email' => 'jane@example.com',
+            'original_disk' => 'local',
+            'original_path' => 'clients/1/documents/original/test.pdf',
+            'sent_at' => now(),
+        ]);
+
+        Storage::disk('local')->put('clients/1/documents/original/test.pdf', '%PDF-1.4 test');
+
+        $this->mock(\App\Services\DocuSignService::class, function ($mock) use ($document): void {
+            $mock->shouldReceive('verifyWebhookSignature')->once()->andReturn(true);
+            $mock->shouldReceive('handleWebhookPayload')->once()->with(\Mockery::type('array'))
+                ->andReturnUsing(function () use ($document): void {
+                    $disk = 'local';
+                    $path = sprintf('clients/%d/documents/%d-signed.pdf', $document->client_id, $document->id);
+                    Storage::disk($disk)->put($path, '%PDF-1.4 signed');
+                    $document->update([
+                        'status' => 'signed',
+                        'signed_disk' => $disk,
+                        'signed_path' => $path,
+                        'signed_at' => now(),
+                    ]);
+                });
+        });
+
+        $this->postJson(route('webhooks.docusign'), [
+            'data' => [
+                'envelopeId' => 'env-test-123',
+                'envelopeSummary' => [
+                    'status' => 'completed',
+                ],
+            ],
+        ])->assertOk();
+
+        $document->refresh();
+
+        $this->assertSame('signed', $document->status);
+        $this->assertNotNull($document->signed_path);
+        Storage::disk('local')->assertExists($document->signed_path);
+    }
+
+    public function test_seo_refinance_landing_pages_are_accessible(): void
+    {
+        $this->get(route('pages.refinance-rates'))
+            ->assertOk()
+            ->assertSee('Refinance home loan rates', false);
+
+        $this->get(route('pages.refinance-calculator'))
+            ->assertOk()
+            ->assertSee('Refinance home loan calculator', false);
+
+        $this->get(route('pages.refinance-cashback'))
+            ->assertOk()
+            ->assertSee('cashback', false);
+    }
+
+    public function test_ad_landing_url_builds_utm_query_string(): void
+    {
+        $url = ad_landing_url('refinance_rates', [
+            'utm_source' => 'google',
+            'utm_medium' => 'cpc',
+            'utm_campaign' => 'refinance_rates',
+        ]);
+
+        $this->assertStringContainsString('/refinance-home-loan-rates', $url);
+        $this->assertStringContainsString('utm_source=google', $url);
+        $this->assertStringContainsString('utm_medium=cpc', $url);
+    }
+
+    public function test_thank_you_page_fires_generate_lead_script(): void
+    {
+        $response = $this->withSession([
+            'lead_type' => 'rate_review',
+            'utm_source' => 'google',
+            'utm_medium' => 'cpc',
+            'utm_campaign' => 'refinance_rates',
+        ])->get(route('thank-you'));
+
+        $response
+            ->assertOk()
+            ->assertSee('generate_lead', false)
+            ->assertSee('Book a call', false);
     }
 }

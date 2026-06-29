@@ -109,5 +109,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.querySelectorAll('[data-track-form]').forEach((form) => {
+        form.addEventListener('submit', () => {
+            pushEvent('form_submit', {
+                form_name: form.getAttribute('data-track-form') ?? 'unknown',
+            });
+        });
+    });
+
+    if (document.querySelector('[data-lead-conversion]')) {
+        const conversion = document.querySelector('[data-lead-conversion]');
+        pushEvent('form_submit', {
+            form_name: conversion.getAttribute('data-lead-conversion') ?? 'calculator',
+        });
+    }
+
     initCalculatorTools();
 });

@@ -70,3 +70,36 @@ if (! function_exists('calendly_hide_branding')) {
         return filter_var(config('riskwisdom.calendly_hide_branding', true), FILTER_VALIDATE_BOOL);
     }
 }
+
+if (! function_exists('docusign_configured')) {
+    function docusign_configured(): bool
+    {
+        return app(\App\Services\DocuSignService::class)->isConfigured();
+    }
+}
+
+if (! function_exists('ad_landing_url')) {
+    /**
+     * Build a landing page URL with UTM parameters for paid campaigns.
+     *
+     * @param  array<string, string>  $utm
+     */
+    function ad_landing_url(string $page, array $utm = []): string
+    {
+        $routeName = config('riskwisdom.ad_landing_pages.'.$page);
+
+        if (! is_string($routeName) || $routeName === '') {
+            return route('home');
+        }
+
+        $defaults = [
+            'utm_source' => 'google',
+            'utm_medium' => 'cpc',
+            'utm_campaign' => $page,
+        ];
+
+        $query = array_filter(array_merge($defaults, $utm), fn ($value) => $value !== null && $value !== '');
+
+        return route($routeName).'?'.http_build_query($query);
+    }
+}

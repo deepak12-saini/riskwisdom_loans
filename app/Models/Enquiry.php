@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Enquiry extends Model
 {
@@ -36,9 +37,19 @@ class Enquiry extends Model
         ];
     }
 
+    public function client(): HasOne
+    {
+        return $this->hasOne(Client::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim($this->first_name.' '.$this->last_name);
+    }
+
+    public function hasClientFile(): bool
+    {
+        return $this->client()->exists();
     }
 
     /**

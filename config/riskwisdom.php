@@ -10,6 +10,10 @@ return [
     'calendly_url' => env('CALENDLY_URL', 'https://calendly.com/riskwisdomloans-info/30min'),
     'calendly_hide_branding' => env('CALENDLY_HIDE_BRANDING', true),
 
+    'google_tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID'),
+    'google_analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+    'microsoft_clarity_id' => env('MICROSOFT_CLARITY_ID'),
+
     'lead_types' => [
         'contact' => 'Contact form',
         'borrowing_power' => 'Borrowing power calculator',
@@ -18,6 +22,20 @@ return [
 
     'rate_review' => [
         'callback_promise' => 'Fast callback — we aim to call you within 2 business hours.',
+    ],
+
+    'ad_landing_pages' => [
+        'refinance' => 'pages.refinance',
+        'refinance_rates' => 'pages.refinance-rates',
+        'refinance_calculator' => 'pages.refinance-calculator',
+        'refinance_cashback' => 'pages.refinance-cashback',
+        'home_loans' => 'pages.home-loans',
+        'first_home_buyer' => 'pages.first-home-buyer',
+        'borrowing_power' => 'tools.borrowing-power',
+        'repayment_calculator' => 'tools.repayment-calculator',
+        'stamp_duty' => 'tools.stamp-duty',
+        'rate_review' => 'rate-review',
+        'book' => 'book',
     ],
 
     'loan_types' => [
@@ -44,6 +62,28 @@ return [
         'TAS' => 'TAS',
         'ACT' => 'ACT',
         'NT' => 'NT',
+    ],
+
+    'client_statuses' => [
+        'active' => 'Active',
+        'archived' => 'Archived',
+    ],
+
+    'task_statuses' => [
+        'open' => 'Open',
+        'in_progress' => 'In progress',
+        'done' => 'Done',
+    ],
+
+    'task_owners' => [
+        'client' => 'Client',
+        'broker' => 'Broker',
+    ],
+
+    'task_priorities' => [
+        'low' => 'Low',
+        'normal' => 'Normal',
+        'high' => 'High',
     ],
 
     'intent_map' => [

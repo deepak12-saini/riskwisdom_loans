@@ -2,8 +2,10 @@
     $logoUrl = asset('images/risk-wisdom-loans-logo.png');
     $user = auth()->user();
     $filter = request()->query('filter', 'all');
+    $clientFilter = request()->query('filter', 'active');
+    $taskFilter = request()->routeIs('admin.tasks.*') ? request()->query('filter', 'open') : 'open';
 
-    $menuItems = [
+    $leadItems = [
         [
             'label' => 'All leads',
             'href' => route('admin.enquiries.index'),
@@ -14,19 +16,46 @@
             'label' => 'Ready now',
             'href' => route('admin.enquiries.index', ['filter' => 'ready_now']),
             'icon' => 'urgent',
-            'active' => $filter === 'ready_now',
+            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'ready_now',
         ],
         [
             'label' => 'This week',
             'href' => route('admin.enquiries.index', ['filter' => 'this_week']),
             'icon' => 'week',
-            'active' => $filter === 'this_week',
+            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'this_week',
         ],
         [
             'label' => 'Today',
             'href' => route('admin.enquiries.index', ['filter' => 'today']),
             'icon' => 'today',
-            'active' => $filter === 'today',
+            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'today',
+        ],
+        [
+            'label' => 'Paid ads',
+            'href' => route('admin.enquiries.index', ['filter' => 'paid']),
+            'icon' => 'urgent',
+            'active' => $filter === 'paid',
+        ],
+    ];
+
+    $clientItems = [
+        [
+            'label' => 'Client files',
+            'href' => route('admin.clients.index'),
+            'icon' => 'clients',
+            'active' => request()->routeIs('admin.clients.*'),
+        ],
+        [
+            'label' => 'Open tasks',
+            'href' => route('admin.tasks.index', ['filter' => 'open']),
+            'icon' => 'tasks',
+            'active' => request()->routeIs('admin.tasks.index') && $taskFilter === 'open',
+        ],
+        [
+            'label' => 'Overdue tasks',
+            'href' => route('admin.tasks.index', ['filter' => 'overdue']),
+            'icon' => 'urgent',
+            'active' => request()->routeIs('admin.tasks.index') && $taskFilter === 'overdue',
         ],
     ];
 
@@ -56,7 +85,19 @@
 
     <nav class="rw-admin-sidebar__nav" aria-label="Admin navigation">
         <p class="rw-admin-sidebar__section">Leads</p>
-        @foreach ($menuItems as $item)
+        @foreach ($leadItems as $item)
+            <a
+                class="rw-admin-sidebar__link @if ($item['active']) is-active @endif"
+                href="{{ $item['href'] }}"
+                title="{{ $item['label'] }}"
+            >
+                @include('admin.partials.sidebar-icon', ['icon' => $item['icon']])
+                <span>{{ $item['label'] }}</span>
+            </a>
+        @endforeach
+
+        <p class="rw-admin-sidebar__section">Clients</p>
+        @foreach ($clientItems as $item)
             <a
                 class="rw-admin-sidebar__link @if ($item['active']) is-active @endif"
                 href="{{ $item['href'] }}"

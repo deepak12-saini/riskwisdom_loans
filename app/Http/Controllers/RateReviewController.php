@@ -91,6 +91,9 @@ class RateReviewController extends Controller
         return redirect()
             ->route('thank-you')
             ->with('lead_type', 'rate_review')
-            ->with('enquiry_id', $enquiry->id);
+            ->with('enquiry_id', $enquiry->id)
+            ->with('utm_source', $validated['utm_source'] ?? null)
+            ->with('utm_medium', $validated['utm_medium'] ?? null)
+            ->with('utm_campaign', $validated['utm_campaign'] ?? null);
     }
 }

@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form action="{{ route('contact.submit') }}" method="post" class="rw-form" id="contact-form">
+    <form action="{{ route('contact.submit') }}" method="post" class="rw-form" id="contact-form" data-track-form="contact">
         @csrf
 
         <input type="text" name="_gotcha" value="" tabindex="-1" autocomplete="off" class="rw-form-honeypot" aria-hidden="true">
