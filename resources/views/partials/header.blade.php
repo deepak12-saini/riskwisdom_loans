@@ -1,5 +1,7 @@
 @php
     $logoUrl = asset('images/risk-wisdom-loans-logo.png');
+    $faviconUrl = asset('images/favicon.png');
+
 
     $navigation = [
         [

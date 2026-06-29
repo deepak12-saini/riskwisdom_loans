@@ -7,7 +7,7 @@
         <meta name="description" content="@yield('meta_description', 'Risk Wisdom Loans helps Australian borrowers with home loans, refinancing, investment lending, commercial finance, and asset finance.')">
         <meta name="robots" content="@yield('meta_robots', 'index, follow')">
         <link rel="canonical" href="@yield('canonical', url('/'))">
-        <link rel="icon" href="{{ asset('images/risk-wisdom-loans-logo.png') }}" type="image/png">
+        <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
         <meta property="og:type" content="website">
         <meta property="og:title" content="@yield('og_title', 'Risk Wisdom Loans | Riskwisdom Loans')">
         <meta property="og:description" content="@yield('og_description', 'Clear lending guidance for home loans, refinancing, investment, commercial, and asset finance across Australia.')">
