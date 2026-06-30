@@ -1,4 +1,4 @@
-<label class="rw-calculator__checkbox rw-form-consent @if ($errors->has('marketing_consent')) is-invalid @endif">
+<label class="rw-marketing-consent @if ($errors->has('marketing_consent')) is-invalid @endif">
     <input
         type="checkbox"
         name="marketing_consent"
