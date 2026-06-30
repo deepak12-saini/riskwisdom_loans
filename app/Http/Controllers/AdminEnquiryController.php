@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Enquiry;
+use App\Services\MailchimpService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -48,7 +49,7 @@ class AdminEnquiryController extends Controller
         return view('admin.enquiries.index', compact('enquiries', 'stats', 'filter', 'pageHeading'));
     }
 
-    public function convert(Enquiry $enquiry): RedirectResponse
+    public function convert(Enquiry $enquiry, MailchimpService $mailchimp): RedirectResponse
     {
         $existing = Client::query()->where('enquiry_id', $enquiry->id)->first();
 
@@ -59,6 +60,14 @@ class AdminEnquiryController extends Controller
         }
 
         $client = Client::query()->create(Client::fromEnquiry($enquiry));
+
+        if ($enquiry->mailchimp_synced_at && $mailchimp->isConfigured()) {
+            try {
+                $mailchimp->addTags($enquiry->email, ['client']);
+            } catch (\Throwable $exception) {
+                report($exception);
+            }
+        }
 
         return redirect()
             ->route('admin.clients.show', $client)

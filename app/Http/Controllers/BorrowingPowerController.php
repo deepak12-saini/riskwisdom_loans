@@ -85,6 +85,7 @@ class BorrowingPowerController extends Controller
             'utm_medium' => $validated['utm_medium'] ?? null,
             'utm_campaign' => $validated['utm_campaign'] ?? null,
             'ip_address' => $request->ip(),
+            'marketing_consent' => $request->boolean('marketing_consent'),
         ]);
 
         $this->notifications->sendAfterResponse($enquiry);

@@ -56,6 +56,7 @@ class ContactController extends Controller
         $enquiry = Enquiry::create([
             'lead_type' => 'contact',
             ...$validated,
+            'marketing_consent' => $request->boolean('marketing_consent'),
             'ip_address' => $request->ip(),
         ]);
 

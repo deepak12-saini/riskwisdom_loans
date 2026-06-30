@@ -114,6 +114,10 @@
             </label>
         </div>
 
+        <div class="rw-form-full">
+            @include('partials.marketing-consent')
+        </div>
+
         <div class="rw-form-actions">
             <button
                 class="rw-button rw-button--solid rw-button--wide"

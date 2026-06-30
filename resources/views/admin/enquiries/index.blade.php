@@ -57,6 +57,8 @@
                         <th>State</th>
                         <th>Source</th>
                         <th>UTM</th>
+                        <th>Marketing</th>
+                        <th>Mailchimp</th>
                         <th>Enquiry</th>
                         <th></th>
                     </tr>
@@ -93,6 +95,24 @@
                                     —
                                 @endif
                             </td>
+                            <td>
+                                @if ($enquiry->marketing_consent)
+                                    <span class="rw-admin-pill rw-admin-pill--accent">Opt-in</span>
+                                @else
+                                    <span class="rw-admin-pill rw-admin-pill--muted">No</span>
+                                @endif
+                            </td>
+                            <td class="rw-admin-table__mailchimp">
+                                @if ($enquiry->mailchimp_synced_at)
+                                    <span class="rw-admin-pill rw-admin-pill--accent" title="{{ $enquiry->mailchimp_synced_at->format('d M Y H:i') }}">Synced</span>
+                                @elseif ($enquiry->marketing_consent && $enquiry->mailchimp_sync_error)
+                                    <span class="rw-admin-pill rw-admin-pill--urgent" title="{{ $enquiry->mailchimp_sync_error }}">Error</span>
+                                @elseif ($enquiry->marketing_consent)
+                                    <span class="rw-admin-pill rw-admin-pill--muted">Pending</span>
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td class="rw-admin-table__enquiry">
                                 @if ($enquiry->enquiry && strlen($enquiry->enquiry) > 100)
                                     <details class="rw-admin-enquiry-details">
@@ -121,7 +141,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="11" class="rw-admin-table__empty">No enquiries yet.</td>
+                            <td colspan="13" class="rw-admin-table__empty">No enquiries yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

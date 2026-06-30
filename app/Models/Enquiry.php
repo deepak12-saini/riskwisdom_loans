@@ -26,6 +26,9 @@ class Enquiry extends Model
         'status',
         'email_sent_at',
         'auto_reply_sent_at',
+        'marketing_consent',
+        'mailchimp_synced_at',
+        'mailchimp_sync_error',
     ];
 
     protected function casts(): array
@@ -34,6 +37,8 @@ class Enquiry extends Model
             'metadata' => 'array',
             'email_sent_at' => 'datetime',
             'auto_reply_sent_at' => 'datetime',
+            'marketing_consent' => 'boolean',
+            'mailchimp_synced_at' => 'datetime',
         ];
     }
 

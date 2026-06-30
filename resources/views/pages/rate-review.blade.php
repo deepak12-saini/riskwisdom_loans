@@ -152,6 +152,10 @@
                             </div>
                         </div>
 
+                        <div class="rw-field rw-field--full">
+                            @include('partials.marketing-consent')
+                        </div>
+
                         <button
                             type="submit"
                             class="rw-button rw-button--solid rw-button--wide"

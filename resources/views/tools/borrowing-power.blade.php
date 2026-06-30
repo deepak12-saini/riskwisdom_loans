@@ -198,6 +198,10 @@
                 </div>
             </div>
 
+            <div class="rw-form-full">
+                @include('partials.marketing-consent')
+            </div>
+
             <button
                 type="submit"
                 class="rw-button rw-button--solid rw-button--wide rw-calculator__submit"

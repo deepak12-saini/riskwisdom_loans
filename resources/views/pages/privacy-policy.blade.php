@@ -20,7 +20,11 @@
             <li>To assess lending options with lenders on your behalf</li>
             <li>To comply with legal and regulatory obligations</li>
             <li>To improve our website and client experience</li>
+            <li>With your consent, to send email updates about home loans and rates via our marketing platform (Mailchimp). You can unsubscribe at any time using the link in those emails.</li>
         </ul>
+
+        <h2>Marketing communications</h2>
+        <p>Our website forms include an optional checkbox to receive rate updates and home loan tips by email. We only add you to our Mailchimp mailing list if you tick that box. Transactional emails (such as confirming we received your enquiry) are separate and do not require marketing consent.</p>
 
         <h2>Disclosure</h2>
         <p>We may disclose your information to lenders, aggregators, valuers, insurers, and professional advisers as required to provide broking services. We do not sell your personal information.</p>

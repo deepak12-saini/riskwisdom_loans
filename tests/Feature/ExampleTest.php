@@ -7,6 +7,7 @@ use App\Mail\ContactEnquiryMail;
 use App\Models\Enquiry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -570,5 +571,132 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertSee('generate_lead', false)
             ->assertSee('Book a call', false);
+    }
+
+    public function test_contact_form_syncs_to_mailchimp_when_marketing_opt_in(): void
+    {
+        Mail::fake();
+
+        config([
+            'mailchimp.enabled' => true,
+            'mailchimp.api_key' => 'test-key-us11',
+            'mailchimp.server_prefix' => 'us11',
+            'mailchimp.audience_id' => 'list123',
+        ]);
+
+        Http::fake([
+            'https://us11.api.mailchimp.com/3.0/*' => Http::response(['id' => 'member-1'], 200),
+        ]);
+
+        $response = $this->post('/contact', [
+            'first_name' => 'Kal',
+            'last_name' => 'Example',
+            'phone' => '0400000000',
+            'email' => 'lead@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'I want to refinance.',
+            'marketing_consent' => '1',
+        ]);
+
+        $response->assertRedirect(route('thank-you'));
+
+        $this->assertDatabaseHas('enquiries', [
+            'email' => 'lead@example.com',
+            'marketing_consent' => true,
+        ]);
+
+        Http::assertSentCount(2);
+
+        $enquiry = Enquiry::query()->where('email', 'lead@example.com')->first();
+        $this->assertNotNull($enquiry?->mailchimp_synced_at);
+        $this->assertNull($enquiry->mailchimp_sync_error);
+    }
+
+    public function test_contact_form_skips_mailchimp_without_marketing_opt_in(): void
+    {
+        Mail::fake();
+
+        config([
+            'mailchimp.enabled' => true,
+            'mailchimp.api_key' => 'test-key-us11',
+            'mailchimp.server_prefix' => 'us11',
+            'mailchimp.audience_id' => 'list123',
+        ]);
+
+        Http::fake();
+
+        $this->post('/contact', [
+            'first_name' => 'Kal',
+            'last_name' => 'Example',
+            'phone' => '0400000000',
+            'email' => 'noope@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'No marketing please.',
+        ])->assertRedirect(route('thank-you'));
+
+        Http::assertNothingSent();
+
+        $this->assertDatabaseHas('enquiries', [
+            'email' => 'noope@example.com',
+            'marketing_consent' => false,
+            'mailchimp_synced_at' => null,
+        ]);
+    }
+
+    public function test_contact_form_still_saves_when_mailchimp_fails(): void
+    {
+        Mail::fake();
+
+        config([
+            'mailchimp.enabled' => true,
+            'mailchimp.api_key' => 'test-key-us11',
+            'mailchimp.server_prefix' => 'us11',
+            'mailchimp.audience_id' => 'list123',
+        ]);
+
+        Http::fake([
+            'https://us11.api.mailchimp.com/3.0/*' => Http::response(['detail' => 'error'], 500),
+        ]);
+
+        $this->post('/contact', [
+            'first_name' => 'Kal',
+            'last_name' => 'Example',
+            'phone' => '0400000000',
+            'email' => 'fail@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'Please still save me.',
+            'marketing_consent' => '1',
+        ])->assertRedirect(route('thank-you'));
+
+        $enquiry = Enquiry::query()->where('email', 'fail@example.com')->first();
+        $this->assertNotNull($enquiry);
+        $this->assertNull($enquiry->mailchimp_synced_at);
+        $this->assertNotNull($enquiry->mailchimp_sync_error);
+    }
+
+    public function test_mailchimp_sync_enquiries_command_dry_run_lists_pending_opt_ins(): void
+    {
+        Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'A',
+            'last_name' => 'B',
+            'phone' => '0400000000',
+            'email' => 'pending@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'Test',
+            'marketing_consent' => true,
+        ]);
+
+        $this->artisan('mailchimp:sync-enquiries', ['--dry-run' => true])
+            ->expectsOutputToContain('pending@example.com')
+            ->assertSuccessful();
     }
 }
