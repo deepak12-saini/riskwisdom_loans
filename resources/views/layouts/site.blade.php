@@ -31,6 +31,7 @@
         @include('partials.header', ['headerClass' => $headerClass])
         @yield('content')
         @include('partials.footer')
+        @include('partials.after-hours-chat')
         @include('partials.sticky-cta', [
             'stickyVariant' => trim($__env->yieldContent('sticky_variant')) ?: 'default',
         ])

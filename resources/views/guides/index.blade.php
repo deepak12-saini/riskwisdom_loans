@@ -9,6 +9,17 @@
     <h1>Finance guides for Australian borrowers</h1>
     <p class="rw-page-lead">Practical articles to help property owners and buyers make clearer lending decisions.</p>
 
+    <div class="rw-grid rw-grid--guides" style="margin-bottom: 1.5rem;">
+        @foreach (config('riskwisdom.download_guides') as $slug => $guide)
+            <article class="rw-card rw-card--guide">
+                <span class="rw-card__tag">Downloadable guide</span>
+                <h2><a href="{{ route('guides.download.show', $slug) }}">{{ $guide['title'] }}</a></h2>
+                <p>{{ $guide['description'] }}</p>
+                <a class="rw-link-arrow" href="{{ route('guides.download.show', $slug) }}">Get guide</a>
+            </article>
+        @endforeach
+    </div>
+
     <div class="rw-grid rw-grid--guides">
         @foreach ($posts as $post)
             <article class="rw-card rw-card--guide">

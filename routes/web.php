@@ -6,12 +6,15 @@ use App\Http\Controllers\AdminClientDocumentController;
 use App\Http\Controllers\AdminEnquiryController;
 use App\Http\Controllers\AdminTaskController;
 use App\Http\Controllers\BorrowingPowerController;
+use App\Http\Controllers\ChatLeadController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DocuSignWebhookController;
+use App\Http\Controllers\GuideDownloadController;
 use App\Http\Controllers\RateReviewController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\StampDutyController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\NewsletterSignupController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
@@ -23,6 +26,7 @@ Route::post('/contact', [ContactController::class, 'store'])
     ->name('contact.submit');
 
 Route::view('/book', 'pages.book')->name('book');
+Route::view('/about', 'pages.about')->name('pages.about');
 
 Route::view('/rate-review', 'pages.rate-review')->name('rate-review');
 Route::post('/rate-review', [RateReviewController::class, 'store'])
@@ -50,6 +54,16 @@ Route::post('/tools/stamp-duty', [StampDutyController::class, 'calculate'])
 
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 Route::get('/guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
+Route::get('/download-guides/{slug}', [GuideDownloadController::class, 'show'])->name('guides.download.show');
+Route::post('/download-guides/{slug}', [GuideDownloadController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('guides.download.store');
+Route::post('/newsletter-signup', NewsletterSignupController::class)
+    ->middleware('throttle:5,1')
+    ->name('newsletter.signup');
+Route::post('/after-hours-chat', ChatLeadController::class)
+    ->middleware('throttle:5,1')
+    ->name('chat.capture');
 
 Route::view('/privacy-policy', 'pages.privacy-policy')->name('pages.privacy');
 Route::view('/credit-guide', 'pages.credit-guide')->name('pages.credit-guide');

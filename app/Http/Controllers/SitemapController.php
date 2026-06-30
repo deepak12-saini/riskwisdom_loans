@@ -13,6 +13,7 @@ class SitemapController extends Controller
         $paths = [
             ['path' => '/', 'changefreq' => 'weekly', 'priority' => '1.0'],
             ['path' => '/book', 'changefreq' => 'monthly', 'priority' => '0.9'],
+            ['path' => '/about', 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['path' => '/rate-review', 'changefreq' => 'monthly', 'priority' => '0.9'],
             ['path' => '/home-loans', 'changefreq' => 'monthly', 'priority' => '0.9'],
             ['path' => '/refinance', 'changefreq' => 'monthly', 'priority' => '0.9'],
@@ -44,6 +45,14 @@ class SitemapController extends Controller
         foreach ($guideSlugs as $slug) {
             $paths[] = [
                 'path' => '/guides/'.$slug,
+                'changefreq' => 'monthly',
+                'priority' => '0.7',
+            ];
+        }
+
+        foreach (array_keys(config('riskwisdom.download_guides', [])) as $slug) {
+            $paths[] = [
+                'path' => '/download-guides/'.$slug,
                 'changefreq' => 'monthly',
                 'priority' => '0.7',
             ];

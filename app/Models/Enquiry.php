@@ -62,6 +62,8 @@ class Enquiry extends Model
      */
     public function toMailDetails(): array
     {
+        $metadata = is_array($this->metadata) ? $this->metadata : [];
+
         return [
             'lead_type' => $this->lead_type ?? 'contact',
             'first_name' => $this->first_name,
@@ -76,6 +78,9 @@ class Enquiry extends Model
             'utm_source' => $this->utm_source ?? '',
             'utm_medium' => $this->utm_medium ?? '',
             'utm_campaign' => $this->utm_campaign ?? '',
+            'guide_slug' => (string) ($metadata['guide_slug'] ?? ''),
+            'guide_title' => (string) ($metadata['guide_title'] ?? ''),
+            'guide_download_url' => (string) ($metadata['guide_download_url'] ?? ''),
         ];
     }
 }

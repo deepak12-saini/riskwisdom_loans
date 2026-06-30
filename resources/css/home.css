@@ -2053,13 +2053,34 @@ body.has-sticky-cta {
 }
 
 .rw-page-card {
-    max-width: 48rem;
+    max-width: min(56rem, 100%);
     margin: 0 auto;
     padding: 2rem;
     border-radius: 1.5rem;
     background: var(--rw-surface);
     border: 1px solid var(--rw-line);
     box-shadow: var(--rw-shadow);
+}
+
+.rw-page-card .rw-reviews,
+.rw-page-card .rw-lender-strip {
+    margin-top: 2.25rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rw-line);
+}
+
+.rw-page-card .rw-reviews__intro h2,
+.rw-page-card .rw-lender-strip__copy h2,
+.rw-page-card .rw-faq > h2 {
+    color: var(--rw-text);
+}
+
+.rw-page-card .rw-reviews__meta span {
+    color: var(--rw-text-soft);
+}
+
+.rw-page-card .rw-review-card strong {
+    color: var(--rw-text);
 }
 
 .rw-page-lead {
@@ -2089,6 +2110,7 @@ body.has-sticky-cta {
 .rw-page-related h2 {
     margin: 0 0 0.75rem;
     font-size: 1.05rem;
+    color: var(--rw-text);
 }
 
 .rw-page-related a {
@@ -2099,6 +2121,69 @@ body.has-sticky-cta {
 
 .rw-page-related a:hover {
     text-decoration: underline;
+}
+
+.rw-guide-form {
+    margin-top: 1.75rem;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(17, 39, 61, 0.08);
+    background: linear-gradient(180deg, #fbfdff 0%, #f5f9fd 100%);
+    box-shadow: 0 20px 45px rgba(8, 27, 48, 0.06);
+}
+
+.rw-guide-form__intro {
+    margin-bottom: 1rem;
+}
+
+.rw-guide-form__intro h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+    color: var(--rw-text);
+}
+
+.rw-guide-form__intro p {
+    margin: 0;
+    color: var(--rw-text-soft);
+    line-height: 1.6;
+}
+
+.rw-guide-form__grid span {
+    color: var(--rw-text);
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.rw-guide-form__grid input,
+.rw-guide-form__grid select,
+.rw-guide-form__grid textarea {
+    width: 100%;
+    min-height: 3.15rem;
+    border: 1px solid rgba(17, 39, 61, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+    color: var(--rw-text);
+    padding: 0.95rem 1rem;
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(8, 27, 48, 0.03);
+}
+
+.rw-guide-form__grid input::placeholder,
+.rw-guide-form__grid textarea::placeholder {
+    color: #8393a4;
+}
+
+.rw-guide-form__grid input:focus,
+.rw-guide-form__grid select:focus,
+.rw-guide-form__grid textarea:focus {
+    border-color: rgba(27, 99, 200, 0.45);
+    box-shadow: 0 0 0 4px rgba(27, 99, 200, 0.12);
+}
+
+.rw-guide-form .rw-form-trust {
+    margin: 1rem 0 1.1rem;
+    text-align: left;
+    color: var(--rw-text-soft);
 }
 
 .rw-page-cta-band {
@@ -2120,6 +2205,7 @@ body.has-sticky-cta {
 .rw-page-cta-band h2 {
     margin: 0 0 0.5rem;
     font-size: 1.35rem;
+    color: var(--rw-text);
 }
 
 .rw-page-cta-band p {
@@ -2147,6 +2233,12 @@ body.has-sticky-cta {
 /* FAQ */
 .rw-faq {
     margin-top: 2rem;
+}
+
+.rw-faq > h2 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+    color: var(--rw-text);
 }
 
 .rw-faq__item {
@@ -2321,6 +2413,321 @@ body.has-sticky-cta {
 
 .rw-contact__card .rw-form-trust {
     color: rgba(215, 233, 255, 0.72);
+}
+
+.rw-reviews {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.rw-reviews__intro,
+.rw-reviews__panel,
+.rw-newsletter,
+.rw-chat-widget__panel {
+    border: 1px solid var(--rw-line);
+    border-radius: 1.35rem;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--rw-shadow);
+}
+
+.rw-reviews__intro {
+    padding: 1.5rem;
+}
+
+.rw-reviews__intro h2,
+.rw-newsletter h2,
+.rw-lender-strip__copy h2 {
+    margin: 0.6rem 0 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.15;
+    color: var(--rw-text);
+}
+
+.rw-reviews__intro p,
+.rw-newsletter p,
+.rw-chat-widget__header p,
+.rw-lender-strip__copy p {
+    margin: 0;
+    color: var(--rw-text-soft);
+    line-height: 1.65;
+}
+
+.rw-reviews__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0 1.1rem;
+    align-items: baseline;
+}
+
+.rw-reviews__meta strong {
+    font-size: 1.35rem;
+    color: var(--rw-primary-deep);
+}
+
+.rw-reviews__panel {
+    display: grid;
+    gap: 1rem;
+    padding: 1.35rem;
+}
+
+.rw-review-card {
+    padding: 1.1rem 1.15rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+    border: 1px solid rgba(17, 39, 61, 0.08);
+}
+
+.rw-review-card p {
+    margin: 0.55rem 0 0.65rem;
+    line-height: 1.7;
+}
+
+.rw-review-card__stars {
+    color: #f3b447;
+    letter-spacing: 0.12em;
+    font-size: 1rem;
+}
+
+.rw-lender-strip {
+    display: grid;
+    gap: 1rem;
+}
+
+.rw-lender-strip__copy {
+    max-width: 48rem;
+}
+
+.rw-lender-strip__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.rw-lender-strip__item {
+    display: grid;
+    place-items: center;
+    min-height: 4rem;
+    padding: 0.85rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(17, 39, 61, 0.1);
+    background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+    color: var(--rw-primary-deep);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.rw-section--band .rw-lender-strip__copy h2 {
+    color: #fff;
+}
+
+.rw-section--band .rw-lender-strip__copy .rw-section-label {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    color: #d8e9ff;
+}
+
+.rw-section--band .rw-lender-strip__item {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(245, 248, 251, 0.92);
+    box-shadow: none;
+}
+
+.rw-newsletter {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.45rem;
+    margin-top: 1.5rem;
+    margin-bottom: 5rem;
+    color: var(--rw-text);
+}
+
+.rw-footer .rw-newsletter {
+    margin-bottom: 5.5rem;
+}
+
+.rw-newsletter h2 {
+    color: var(--rw-text);
+}
+
+.rw-newsletter__form {
+    display: grid;
+    grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 1fr) auto;
+    gap: 0.75rem;
+    align-items: end;
+}
+
+.rw-newsletter__form label {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.rw-newsletter__form span {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--rw-text);
+}
+
+.rw-newsletter__form input {
+    width: 100%;
+    min-height: 2.9rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(17, 39, 61, 0.12);
+    background: #fff;
+    color: var(--rw-text);
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(8, 27, 48, 0.03);
+}
+
+.rw-newsletter__form input::placeholder {
+    color: #8393a4;
+}
+
+.rw-newsletter__form input:focus {
+    border-color: rgba(27, 99, 200, 0.45);
+    box-shadow: 0 0 0 4px rgba(27, 99, 200, 0.12);
+}
+
+.rw-newsletter__form .rw-button {
+    min-height: 2.9rem;
+    align-self: end;
+    white-space: nowrap;
+}
+
+.rw-newsletter__form small,
+.rw-chat-widget__form small {
+    color: #c0392b;
+    font-size: 0.8rem;
+}
+
+.rw-newsletter__status {
+    margin-top: 0.85rem;
+    color: var(--rw-primary-deep);
+    font-weight: 600;
+}
+
+.rw-chat-widget {
+    position: fixed;
+    right: 1rem;
+    bottom: 5.75rem;
+    z-index: 35;
+    display: grid;
+    justify-items: end;
+    gap: 0.65rem;
+}
+
+.rw-chat-widget__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 27, 48, 0.24);
+    backdrop-filter: blur(2px);
+    z-index: 34;
+}
+
+.rw-chat-widget__toggle {
+    min-height: 3.1rem;
+    padding: 0.8rem 1.1rem;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-deep));
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    box-shadow: 0 18px 30px rgba(15, 77, 157, 0.26);
+    cursor: pointer;
+}
+
+.rw-chat-widget__panel {
+    position: fixed;
+    right: 1rem;
+    bottom: 10rem;
+    width: min(24rem, calc(100vw - 2rem));
+    max-height: min(70vh, 42rem);
+    overflow-y: auto;
+    padding: 1rem;
+    z-index: 35;
+}
+
+.rw-chat-widget__header strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+}
+
+.rw-chat-widget__header {
+    position: relative;
+    padding-right: 2rem;
+}
+
+.rw-chat-widget__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(17, 39, 61, 0.08);
+    color: var(--rw-text-soft);
+    font: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.rw-chat-widget__close:hover {
+    background: rgba(17, 39, 61, 0.14);
+    color: var(--rw-text);
+}
+
+.rw-chat-widget__form {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 0.9rem;
+}
+
+.rw-chat-widget__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.rw-chat-widget__grid label {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.rw-chat-widget__grid span {
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.rw-chat-widget__grid input,
+.rw-chat-widget__grid select,
+.rw-chat-widget__grid textarea {
+    width: 100%;
+    min-height: 2.65rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--rw-line);
+    font: inherit;
+}
+
+.rw-chat-widget__grid textarea {
+    min-height: auto;
+    resize: vertical;
+}
+
+.rw-chat-widget__full {
+    grid-column: 1 / -1;
 }
 
 .rw-calculator__amount {
@@ -4052,6 +4459,44 @@ body.rw-admin-login-page {
 }
 
 @media (max-width: 900px) {
+    .rw-reviews,
+    .rw-newsletter {
+        grid-template-columns: 1fr;
+    }
+
+    .rw-newsletter {
+        margin-bottom: 6.5rem;
+    }
+
+    .rw-newsletter__form,
+    .rw-lender-strip__list,
+    .rw-chat-widget__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rw-newsletter__form .rw-button {
+        width: 100%;
+    }
+
+    .rw-chat-widget {
+        right: 0.75rem;
+        left: 0.75rem;
+        justify-items: stretch;
+        bottom: 5.5rem;
+    }
+
+    .rw-chat-widget__toggle {
+        width: 100%;
+    }
+
+    .rw-chat-widget__panel {
+        right: 0.75rem;
+        left: 0.75rem;
+        bottom: 8.5rem;
+        width: auto;
+        max-height: min(68vh, 36rem);
+    }
+
     .rw-sticky-cta__mobile {
         display: flex;
     }

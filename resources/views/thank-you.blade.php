@@ -14,6 +14,8 @@
             : null;
         $mailFailed = $enquiry !== null && $enquiry->email_sent_at === null;
         $leadType = session('lead_type', 'contact');
+        $guideDownloadUrl = is_array($enquiry?->metadata ?? null) ? ($enquiry->metadata['guide_download_url'] ?? null) : null;
+        $guideTitle = is_array($enquiry?->metadata ?? null) ? ($enquiry->metadata['guide_title'] ?? null) : null;
     @endphp
     <main class="rw-page">
         <section class="rw-section rw-section--page">
@@ -36,6 +38,14 @@
                     <p>
                         Your borrowing power enquiry is in. A broker will review your estimate and contact you to discuss next steps.
                     </p>
+                @elseif ($leadType === 'guide_download')
+                    <p>
+                        Your guide is ready. Use the download button below now, and we will also send a copy to your email.
+                    </p>
+                @elseif ($leadType === 'chat_widget')
+                    <p>
+                        Thanks for your after-hours message. We will review it and follow up on the next business day.
+                    </p>
                 @else
                     <p>
                         A broker from Riskwisdom Loans will review your enquiry and contact you within 24 hours.
@@ -44,6 +54,11 @@
                 @endif
 
                 <div class="rw-page-actions">
+                    @if ($leadType === 'guide_download' && $guideDownloadUrl)
+                        <a class="rw-button rw-button--solid" href="{{ $guideDownloadUrl }}" target="_blank" rel="noreferrer" download>
+                            Download {{ $guideTitle ?: 'your guide' }}
+                        </a>
+                    @endif
                     @include('partials.phone-link', [
                         'variant' => 'button-solid',
                         'label' => 'Call ' . config('riskwisdom.phone'),

@@ -37,7 +37,7 @@
         <div>
             <h3>Information</h3>
             <ul>
-                <li><a href="{{ route('home').'#about' }}">About Us</a></li>
+                <li><a href="{{ route('pages.about') }}">About Us</a></li>
                 <li><a href="{{ route('guides.index') }}">Guides & Insights</a></li>
                 <li><a href="{{ route('tools.borrowing-power') }}">Calculators</a></li>
                 <li><a href="{{ route('book') }}">Book a call</a></li>
@@ -87,6 +87,10 @@
                 </li>
             </ul>
         </div>
+    </div>
+
+    <div class="container">
+        @include('partials.newsletter-signup')
     </div>
 
     <div class="container rw-footer__bottom">

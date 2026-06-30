@@ -46,6 +46,8 @@
 
         $resourceCards = [
             ['title' => 'Borrowing Power', 'copy' => 'Estimate borrowing capacity, review repayments, and plan your next property or finance move with more confidence.', 'cta' => 'Use calculator', 'href' => route('tools.borrowing-power')],
+            ['title' => 'First Home Buyer\'s Guide', 'copy' => 'Download a practical guide covering deposits, pre-approval, grants, and what to do before you make an offer.', 'cta' => 'Download guide', 'href' => route('guides.download.show', 'first-home-buyers-guide')],
+            ['title' => 'Construction Finance Guide', 'copy' => 'Get a simple overview of progress payments, buffers, and the finance structure behind knockdown-rebuild projects.', 'cta' => 'Download guide', 'href' => route('guides.download.show', 'construction-knockdown-rebuild-finance-guide')],
             ['title' => 'News & Insights', 'copy' => 'Practical updates on interest rates, lending trends, and borrower tips that help you make better finance decisions.', 'cta' => 'Read insights', 'href' => route('guides.index')],
             ['title' => 'Repayment Calculator', 'copy' => 'Model monthly repayments across loan amounts, rates, and terms before you speak with a broker.', 'cta' => 'Calculate repayments', 'href' => route('tools.repayment-calculator')],
             ['title' => 'Stamp Duty Calculator', 'copy' => 'Estimate transfer duty and government charges by state before you commit to a purchase price.', 'cta' => 'Estimate stamp duty', 'href' => route('tools.stamp-duty')],
@@ -68,8 +70,6 @@
             'Compare suitable options and explain each pathway clearly',
             'Guide the application, documents, and lender communication',
         ];
-
-        $lenderLabels = ['Home Loan Options', 'Refinance Strategies', 'Investment Lending', 'Commercial Property', 'Business Finance', 'Asset & Equipment'];
 
         $consultationBenefits = ['Free consultation', 'Plan to move forward'];
     @endphp
@@ -127,6 +127,7 @@
                     </p>
                     <div class="rw-solution__actions">
                         <a class="rw-button rw-button--solid" href="#solutions" data-cta="about-solutions">Find out more</a>
+                        <a class="rw-button rw-button--outline" href="{{ route('pages.about') }}" data-cta="about-page">Read our story</a>
                         <a class="rw-button rw-button--text" href="{{ rate_review_url() }}" data-cta="about-contact">Get free loan review</a>
                     </div>
                 </div>
@@ -143,6 +144,12 @@
                         <li>A clear path from enquiry through to approval and settlement</li>
                     </ul>
                 </div>
+            </div>
+        </section>
+
+        <section class="rw-section rw-section--light">
+            <div class="container">
+                @include('partials.google-reviews')
             </div>
         </section>
 
@@ -195,17 +202,7 @@
 
         <section class="rw-section rw-section--band">
             <div class="container">
-                <div class="rw-lenders">
-                    <div class="rw-lenders__heading">
-                        <span class="rw-section-label">Finance pathways that fit real goals</span>
-                        <h2>Explore lending options across home, investment, commercial, and asset finance.</h2>
-                    </div>
-                    <div class="rw-lenders__list">
-                        @foreach ($lenderLabels as $lenderLabel)
-                            <span>{{ $lenderLabel }}</span>
-                        @endforeach
-                    </div>
-                </div>
+                @include('partials.lender-logos')
             </div>
         </section>
 

@@ -33,6 +33,9 @@
     </div>
 @endif
 
+@include('partials.google-reviews')
+@include('partials.lender-logos')
+
 <div class="rw-page-cta-band">
     <h2>{{ $ctaHeading ?? 'Ready for a free loan review?' }}</h2>
     <p>{{ $ctaCopy ?? 'Share your details and we will follow up with guidance tailored to your borrowing goals.' }}</p>

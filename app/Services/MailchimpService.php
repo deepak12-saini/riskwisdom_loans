@@ -26,22 +26,40 @@ class MailchimpService
             return;
         }
 
+        $this->subscribeContact(
+            $enquiry->email,
+            [
+                'FNAME' => $enquiry->first_name,
+                'LNAME' => $enquiry->last_name,
+                'PHONE' => $enquiry->phone,
+            ],
+            $this->tagsForEnquiry($enquiry)
+        );
+
+        $enquiry->update([
+            'mailchimp_synced_at' => now(),
+            'mailchimp_sync_error' => null,
+        ]);
+    }
+
+    /**
+     * @param  array<string, string|null>  $mergeFields
+     * @param  list<string>  $tags
+     */
+    public function subscribeContact(string $email, array $mergeFields = [], array $tags = []): void
+    {
         $this->ensureConfigured();
 
-        $email = strtolower(trim($enquiry->email));
-        $subscriberHash = $this->subscriberHash($email);
+        $normalizedEmail = strtolower(trim($email));
+        $subscriberHash = $this->subscriberHash($normalizedEmail);
 
         $response = $this->api()->put(
             '/lists/'.config('mailchimp.audience_id').'/members/'.$subscriberHash,
             [
-                'email_address' => $email,
+                'email_address' => $normalizedEmail,
                 'status_if_new' => 'subscribed',
                 'status' => 'subscribed',
-                'merge_fields' => [
-                    'FNAME' => $enquiry->first_name,
-                    'LNAME' => $enquiry->last_name,
-                    'PHONE' => $enquiry->phone,
-                ],
+                'merge_fields' => array_filter($mergeFields, fn ($value) => filled($value)),
             ]
         );
 
@@ -51,30 +69,9 @@ class MailchimpService
             );
         }
 
-        $tags = $this->tagsForEnquiry($enquiry);
-
         if ($tags !== []) {
-            $tagResponse = $this->api()->post(
-                '/lists/'.config('mailchimp.audience_id').'/members/'.$subscriberHash.'/tags',
-                [
-                    'tags' => array_map(
-                        fn (string $name): array => ['name' => $name, 'status' => 'active'],
-                        $tags
-                    ),
-                ]
-            );
-
-            if ($tagResponse->failed()) {
-                throw new RuntimeException(
-                    'Mailchimp tag update failed: '.$tagResponse->body()
-                );
-            }
+            $this->addTags($normalizedEmail, $tags);
         }
-
-        $enquiry->update([
-            'mailchimp_synced_at' => now(),
-            'mailchimp_sync_error' => null,
-        ]);
     }
 
     /**
@@ -116,6 +113,7 @@ class MailchimpService
     public function tagsForEnquiry(Enquiry $enquiry): array
     {
         $tags = ['website-lead'];
+        $metadata = is_array($enquiry->metadata) ? $enquiry->metadata : [];
 
         if (filled($enquiry->lead_type)) {
             $tags[] = $enquiry->lead_type;
@@ -135,6 +133,10 @@ class MailchimpService
 
         if (filled($enquiry->utm_campaign)) {
             $tags[] = 'utm-'.Str::slug($enquiry->utm_campaign, '_');
+        }
+
+        if (($metadata['guide_tag'] ?? null) && is_string($metadata['guide_tag'])) {
+            $tags[] = $metadata['guide_tag'];
         }
 
         return array_values(array_unique($tags));

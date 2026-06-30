@@ -699,4 +699,145 @@ class ExampleTest extends TestCase
             ->expectsOutputToContain('pending@example.com')
             ->assertSuccessful();
     }
+
+    public function test_homepage_includes_reviews_and_download_guides(): void
+    {
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Google Reviews')
+            ->assertSee('First Home Buyer&#039;s Guide', false)
+            ->assertSee('After-hours help');
+    }
+
+    public function test_landing_pages_show_lender_panel_on_light_surface(): void
+    {
+        $landingRoutes = [
+            'pages.first-home-buyer',
+            'pages.home-loans',
+            'pages.refinance',
+            'pages.investment',
+            'pages.commercial',
+        ];
+
+        foreach ($landingRoutes as $routeName) {
+            $this->get(route($routeName))
+                ->assertOk()
+                ->assertSee('Lender Panel')
+                ->assertSee('Macquarie')
+                ->assertSee('Bankwest')
+                ->assertSee('rw-lender-strip__item', false);
+        }
+    }
+
+    public function test_about_page_is_accessible(): void
+    {
+        $this->get(route('pages.about'))
+            ->assertOk()
+            ->assertSee('About Riskwisdom Loans')
+            ->assertSee('Practical lending guidance');
+    }
+
+    public function test_download_guide_page_is_accessible(): void
+    {
+        $this->get(route('guides.download.show', 'first-home-buyers-guide'))
+            ->assertOk()
+            ->assertSee('Download the First Home Buyer&#039;s Guide', false)
+            ->assertSee('Get the guide');
+    }
+
+    public function test_guide_download_creates_enquiry_and_shows_download_button(): void
+    {
+        Mail::fake();
+
+        config([
+            'mailchimp.enabled' => true,
+            'mailchimp.api_key' => 'test-key-us11',
+            'mailchimp.server_prefix' => 'us11',
+            'mailchimp.audience_id' => 'list123',
+        ]);
+
+        Http::fake([
+            'https://us11.api.mailchimp.com/3.0/*' => Http::response(['id' => 'member-1'], 200),
+        ]);
+
+        $response = $this->post(route('guides.download.store', 'first-home-buyers-guide'), [
+            'first_name' => 'Guide',
+            'last_name' => 'User',
+            'email' => 'guide@example.com',
+            'phone' => '0400000000',
+            'state' => 'NSW',
+        ]);
+
+        $response
+            ->assertRedirect(route('thank-you'))
+            ->assertSessionHas('lead_type', 'guide_download');
+
+        $this->assertDatabaseHas('enquiries', [
+            'lead_type' => 'guide_download',
+            'email' => 'guide@example.com',
+            'source' => 'guide_download',
+            'marketing_consent' => true,
+        ]);
+
+        $this->get(route('thank-you'))
+            ->assertOk()
+            ->assertSee('Download First Home Buyer&#039;s Guide', false);
+
+        Mail::assertSent(ContactAutoReplyMail::class);
+        Http::assertSent(function ($request) {
+            return str_contains($request->url(), '/members/')
+                && $request->method() === 'PUT';
+        });
+        Http::assertSent(function ($request) {
+            return str_contains($request->url(), '/tags')
+                && $request->method() === 'POST';
+        });
+    }
+
+    public function test_newsletter_signup_stores_contact_and_syncs_to_mailchimp(): void
+    {
+        config([
+            'mailchimp.enabled' => true,
+            'mailchimp.api_key' => 'test-key-us11',
+            'mailchimp.server_prefix' => 'us11',
+            'mailchimp.audience_id' => 'list123',
+        ]);
+
+        Http::fake([
+            'https://us11.api.mailchimp.com/3.0/*' => Http::response(['id' => 'member-1'], 200),
+        ]);
+
+        $this->post(route('newsletter.signup'), [
+            'first_name' => 'Newsletter',
+            'email' => 'newsletter@example.com',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('newsletter_signups', [
+            'email' => 'newsletter@example.com',
+            'first_name' => 'Newsletter',
+        ]);
+
+        Http::assertSentCount(2);
+    }
+
+    public function test_after_hours_chat_creates_enquiry(): void
+    {
+        Mail::fake();
+
+        $this->post(route('chat.capture'), [
+            'first_name' => 'Night',
+            'last_name' => 'Visitor',
+            'email' => 'night@example.com',
+            'phone' => '0400999888',
+            'loan_type' => 'refinance',
+            'enquiry' => 'Need help after hours.',
+            'marketing_consent' => '1',
+        ])->assertRedirect(route('thank-you'));
+
+        $this->assertDatabaseHas('enquiries', [
+            'lead_type' => 'chat_widget',
+            'email' => 'night@example.com',
+            'source' => 'after_hours_chat',
+        ]);
+    }
 }

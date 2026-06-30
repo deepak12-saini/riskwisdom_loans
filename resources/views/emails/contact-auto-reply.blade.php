@@ -12,10 +12,19 @@
                     <p style="margin:0 0 18px; font-size:16px; line-height:1.7;">
                         @if (($details['lead_type'] ?? 'contact') === 'rate_review')
                             We have received your rate review request. {{ config('riskwisdom.rate_review.callback_promise') }}
+                        @elseif (($details['lead_type'] ?? 'contact') === 'guide_download')
+                            Thanks for requesting <strong>{{ $details['guide_title'] ?: 'your guide' }}</strong>. Use the link below to access it right away.
+                        @elseif (($details['lead_type'] ?? 'contact') === 'chat_widget')
+                            We received your after-hours message and will follow up on the next business day.
                         @else
                             We have received your enquiry and a broker from Riskwisdom Loans will contact you within 24 hours.
                         @endif
                     </p>
+                    @if (($details['lead_type'] ?? 'contact') === 'guide_download' && ! empty($details['guide_download_url']))
+                        <p style="margin:0 0 18px; font-size:16px; line-height:1.7;">
+                            <a href="{{ $details['guide_download_url'] }}" style="display:inline-block; padding:12px 18px; border-radius:10px; background:#1b63c8; color:#ffffff; text-decoration:none;">Download your guide</a>
+                        </p>
+                    @endif
                     <p style="margin:0 0 18px; font-size:16px; line-height:1.7;">
                         If your matter is urgent, call us on <a href="tel:{{ config('riskwisdom.phone_tel') }}" style="color:#1b63c8;">{{ config('riskwisdom.phone') }}</a>.
                     </p>

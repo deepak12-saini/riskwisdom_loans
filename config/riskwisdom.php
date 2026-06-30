@@ -19,10 +19,92 @@ return [
         'contact' => 'Contact form',
         'borrowing_power' => 'Borrowing power calculator',
         'rate_review' => 'Rate review',
+        'guide_download' => 'Guide download',
+        'chat_widget' => 'After-hours chat',
     ],
 
     'rate_review' => [
         'callback_promise' => 'Fast callback — we aim to call you within 2 business hours.',
+    ],
+
+    'google_reviews' => [
+        'rating' => 5.0,
+        'count' => 18,
+        'profile_url' => 'https://www.google.com/search?q=Riskwisdom+Loans+reviews',
+        'widget_embed' => env('GOOGLE_REVIEWS_WIDGET_EMBED'),
+        'highlights' => [
+            [
+                'quote' => 'Clear guidance, fast follow-up, and a smoother loan process from enquiry through to settlement.',
+                'author' => 'Recent borrower review',
+            ],
+            [
+                'quote' => 'Professional advice with practical explanations that made refinancing far easier to understand.',
+                'author' => 'Recent refinance client',
+            ],
+        ],
+    ],
+
+    'lender_panel' => [
+        'title' => 'Trusted across major banks, challenger lenders, and specialist finance providers.',
+        'items' => [
+            'ANZ',
+            'CBA',
+            'Westpac',
+            'NAB',
+            'Macquarie',
+            'ING',
+            'Suncorp',
+            'Bankwest',
+        ],
+    ],
+
+    'about' => [
+        'eyebrow' => 'About Riskwisdom Loans',
+        'heading' => 'Practical lending guidance built around real borrower decisions.',
+        'story' => [
+            'Riskwisdom Loans was built around a simple belief: borrowers make better decisions when the advice is clear, practical, and aligned to their real goals.',
+            'Whether the next step is a first purchase, refinance, investment loan, or business finance conversation, the focus is on understanding the client first and matching that to lender strategy second.',
+        ],
+        'principles' => [
+            'Explain lending structures clearly, without jargon or pressure.',
+            'Tailor the finance pathway to the borrower’s timing, risk profile, and goals.',
+            'Stay responsive through documents, lender communication, and settlement.',
+        ],
+    ],
+
+    'download_guides' => [
+        'first-home-buyers-guide' => [
+            'title' => 'First Home Buyer\'s Guide',
+            'heading' => 'Download the First Home Buyer\'s Guide',
+            'description' => 'A practical guide to deposits, grants, pre-approval, documents, and what to expect before you make an offer.',
+            'cta' => 'Get the guide',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'researching',
+            'file' => 'guides/first-home-buyers-guide.html',
+            'tag' => 'guide-fhb',
+        ],
+        'construction-knockdown-rebuild-finance-guide' => [
+            'title' => 'Construction & Knockdown-Rebuild Finance Guide',
+            'heading' => 'Download the Construction & Knockdown-Rebuild Finance Guide',
+            'description' => 'Understand progress payments, lender stages, equity, buffers, and how construction finance differs from a standard home loan.',
+            'cta' => 'Get the construction guide',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'researching',
+            'file' => 'guides/construction-knockdown-rebuild-finance-guide.html',
+            'tag' => 'guide-construction',
+        ],
+    ],
+
+    'newsletter' => [
+        'tag' => 'newsletter',
+        'title' => 'Get rate updates and practical mortgage tips',
+        'description' => 'Receive useful home loan updates, refinance tips, and borrower guidance from Riskwisdom Loans.',
+    ],
+
+    'chat_widget' => [
+        'title' => 'Questions after hours?',
+        'message' => 'Leave your details and a short message. We will follow up on the next business day.',
+        'button_label' => 'After-hours help',
     ],
 
     'ad_landing_pages' => [
