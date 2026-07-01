@@ -27,10 +27,14 @@
         <input type="hidden" name="utm_campaign" value="{{ old('utm_campaign', request()->query('utm_campaign')) }}">
 
         <div class="rw-conversion-form__top">
-            <span class="rw-conversion-form__pill">Free · No obligation</span>
+            @if ($landing['form_show_pill'] ?? true)
+                <span class="rw-conversion-form__pill">Free assessment</span>
+            @endif
             <div class="rw-conversion-form__header">
                 <h2>{{ $landing['form_headline'] }}</h2>
-                <p>{{ $landing['form_intro'] }}</p>
+                @if (! empty($landing['form_intro']))
+                    <p>{{ $landing['form_intro'] }}</p>
+                @endif
             </div>
         </div>
 
@@ -42,7 +46,7 @@
                     <div class="rw-field @if ($errors->has('first_name')) is-invalid @endif">
                         <label class="rw-field__label" for="{{ $formIdPrefix }}-first-name">First name</label>
                         <div class="rw-field__control">
-                            <input type="text" name="first_name" id="{{ $formIdPrefix }}-first-name" value="{{ old('first_name') }}" placeholder="Jane" required autocomplete="given-name">
+                            <input type="text" name="first_name" id="{{ $formIdPrefix }}-first-name" value="{{ old('first_name') }}" placeholder="Your first name" required autocomplete="given-name">
                         </div>
                         @error('first_name')
                             <small class="rw-field__error">{{ $message }}</small>
@@ -52,7 +56,7 @@
                     <div class="rw-field @if ($errors->has('last_name')) is-invalid @endif">
                         <label class="rw-field__label" for="{{ $formIdPrefix }}-last-name">Last name</label>
                         <div class="rw-field__control">
-                            <input type="text" name="last_name" id="{{ $formIdPrefix }}-last-name" value="{{ old('last_name') }}" placeholder="Smith" required autocomplete="family-name">
+                            <input type="text" name="last_name" id="{{ $formIdPrefix }}-last-name" value="{{ old('last_name') }}" placeholder="Your last name" required autocomplete="family-name">
                         </div>
                         @error('last_name')
                             <small class="rw-field__error">{{ $message }}</small>
@@ -73,7 +77,7 @@
                 <div class="rw-field @if ($errors->has('email')) is-invalid @endif">
                     <label class="rw-field__label" for="{{ $formIdPrefix }}-email">Email</label>
                     <div class="rw-field__control">
-                        <input type="email" name="email" id="{{ $formIdPrefix }}-email" value="{{ old('email') }}" placeholder="you@email.com" required autocomplete="email">
+                        <input type="email" name="email" id="{{ $formIdPrefix }}-email" value="{{ old('email') }}" placeholder="your@email.com" required autocomplete="email">
                     </div>
                     @error('email')
                         <small class="rw-field__error">{{ $message }}</small>
@@ -132,13 +136,13 @@
                 </div>
 
                 <div class="rw-field @if ($errors->has('enquiry')) is-invalid @endif">
-                    <label class="rw-field__label" for="{{ $formIdPrefix }}-enquiry">Tell us what you need</label>
+                    <label class="rw-field__label" for="{{ $formIdPrefix }}-enquiry">Tell us about your situation</label>
                     <div class="rw-field__control">
                         <textarea
                             name="enquiry"
                             id="{{ $formIdPrefix }}-enquiry"
                             rows="3"
-                            placeholder="Example: I want to refinance a $480k loan and lower my repayments."
+                            placeholder="Tell us about your situation..."
                             required
                         >{{ old('enquiry') }}</textarea>
                     </div>
@@ -160,7 +164,7 @@
                 data-cta="conversion-submit"
                 data-loading-text="Sending your enquiry…"
             >
-                {{ $landing['form_cta'] }}
+                Send message
             </button>
 
             <p class="rw-form-trust rw-conversion-form__trust">

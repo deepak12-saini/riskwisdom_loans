@@ -580,8 +580,9 @@ class ExampleTest extends TestCase
 
         $this->get(route('enquire.campaign', ['campaign' => 'refinance']))
             ->assertOk()
-            ->assertSee('Could you be paying less on your home loan?')
-            ->assertSee('Start your refinance enquiry')
+            ->assertSee('Refinance Mortgage Broker')
+            ->assertSee('Get in touch')
+            ->assertSee('An expert will call you back')
             ->assertSee('data-track-form="conversion"', false);
     }
 

@@ -19,7 +19,7 @@
     </head>
     <body class="site-body rw-theme rw-body--conversion">
         @include('partials.tracking-body')
-        @include('partials.conversion-header')
+        @include('partials.header', ['headerClass' => 'rw-header--static rw-header--conversion'])
         @yield('content')
         @include('partials.conversion-footer')
         @include('partials.sticky-cta', ['stickyVariant' => 'call-only'])
