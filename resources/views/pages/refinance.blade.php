@@ -1,10 +1,15 @@
-@extends('layouts.page')
+@extends('layouts.landing')
 
 @php
     $eyebrow = 'Refinance';
-    $heading = 'Refinance home loan Australia — compare rates and switching options.';
-    $lead = 'If you are reviewing your mortgage rate, features, or repayments, we help Australian homeowners compare refinance home loan options and understand whether switching lenders makes financial sense.';
+    $heading = 'Refinance home loan Australia';
+    $lead = 'Expert guidance to compare refinance rates, switching costs, and lender features so you can decide if moving your mortgage makes financial sense.';
     $intent = 'refinance';
+    $heroImage = 'images/landing/refinance-advisor.jpg';
+    $heroImageAlt = 'Homeowners reviewing refinance home loan options with a broker';
+    $whyChooseHeading = 'Why choose us?';
+    $whyChooseIntro = 'Reviewing your rate, consolidating debt, or wanting better loan features? We can help.';
+    $whyChooseListTitle = 'A Riskwisdom refinance review includes:';
     $ctaHref = route('rate-review');
     $ctaHeading = 'Am I on the right rate?';
     $ctaCopy = 'Request a free rate review and we will call you back quickly to compare your current loan against today\'s refinance home loan rates.';
@@ -17,12 +22,13 @@
         ['href' => route('pages.refinance-cashback'), 'label' => 'Refinance cashback offers'],
         ['href' => route('guides.show', 'when-to-refinance-home-loan-australia'), 'label' => 'When to refinance guide'],
     ];
-    $bullets = [
-        'Compare refinance home loan rates and features across multiple lenders',
+    $whyChooseBullets = [
+        'Comparison of refinance home loan rates and features across multiple lenders',
         'Break cost and switching cost assessment before you move',
         'Debt consolidation and cash-out refinance guidance',
         'Support for homeowners wanting lower repayments or better flexibility',
     ];
+    $bullets = $whyChooseBullets;
     $faqs = [
         ['question' => 'What does refinance home loan mean?', 'answer' => 'Refinancing means replacing your existing mortgage with a new loan — often with a different lender — to secure a better rate, features, or structure.'],
         ['question' => 'When is refinancing worth it?', 'answer' => 'It depends on your current rate, remaining loan term, break costs, and goals. A small rate reduction on a large loan can save thousands, but fees and lost features matter too.'],
@@ -37,7 +43,7 @@
 @section('canonical', route('pages.refinance'))
 
 @section('page_content')
-    @include('pages._landing-content')
+    @include('pages._landing-content-body')
 @endsection
 
 @push('head')

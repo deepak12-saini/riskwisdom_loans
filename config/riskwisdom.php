@@ -58,6 +58,33 @@ return [
         ],
     ],
 
+    'how_it_works' => [
+        'eyebrow' => 'How it works',
+        'heading' => 'Contact our mortgage specialist now to start your savings journey.',
+        'steps' => [
+            [
+                'image' => 'images/process/step-01-contact.svg',
+                'title' => 'Contact us to get started!',
+                'description' => 'Complete an enquiry form and our mortgage specialist will be automatically notified. It is that <strong>easy!</strong>',
+            ],
+            [
+                'image' => 'images/process/step-02-advice.svg',
+                'title' => 'Your best interest in mind',
+                'description' => 'Our mortgage specialist will identify your key needs and advise on mortgage products that <strong>best suit your interests.</strong>',
+            ],
+            [
+                'image' => 'images/process/step-03-documents.svg',
+                'title' => 'Digital collection',
+                'description' => 'A secure link will be sent to obtain details and documentation. <strong>No pesky printing required!</strong>',
+            ],
+            [
+                'image' => 'images/process/step-04-settlement.svg',
+                'title' => 'Application submission',
+                'description' => 'In less than 24 hours your application can be submitted with <strong>market leading rates.</strong>',
+            ],
+        ],
+    ],
+
     'about' => [
         'eyebrow' => 'About Riskwisdom Loans',
         'heading' => 'Practical lending guidance built around real borrower decisions.',
@@ -80,7 +107,7 @@ return [
             'cta' => 'Get the guide',
             'loan_type' => 'home_purchase',
             'timeline' => 'researching',
-            'file' => 'guides/first-home-buyers-guide.html',
+            'file' => 'guide-files/first-home-buyers-guide.html',
             'tag' => 'guide-fhb',
         ],
         'construction-knockdown-rebuild-finance-guide' => [
@@ -90,7 +117,7 @@ return [
             'cta' => 'Get the construction guide',
             'loan_type' => 'home_purchase',
             'timeline' => 'researching',
-            'file' => 'guides/construction-knockdown-rebuild-finance-guide.html',
+            'file' => 'guide-files/construction-knockdown-rebuild-finance-guide.html',
             'tag' => 'guide-construction',
         ],
     ],

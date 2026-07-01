@@ -705,8 +705,54 @@ class ExampleTest extends TestCase
         $this->get(route('home'))
             ->assertOk()
             ->assertSee('Google Reviews')
+            ->assertSee('How it works')
+            ->assertSee('Contact us to get started!')
+            ->assertSee('images/process/step-01-contact.svg', false)
             ->assertSee('First Home Buyer&#039;s Guide', false)
             ->assertSee('After-hours help');
+    }
+
+    public function test_home_loans_page_uses_full_width_landing_layout(): void
+    {
+        $this->get(route('pages.home-loans'))
+            ->assertOk()
+            ->assertSee('rw-landing-hero', false)
+            ->assertSee('rw-landing-why', false)
+            ->assertSee('Why choose us?')
+            ->assertSee('images/landing/home-loans-advisor.jpg', false)
+            ->assertSee('Home loans Australia')
+            ->assertSee('rw-landing-faq', false);
+    }
+
+    public function test_partners_page_uses_full_width_landing_layout(): void
+    {
+        $this->get(route('pages.partners'))
+            ->assertOk()
+            ->assertSee('rw-landing-hero', false)
+            ->assertSee('Partner with Riskwisdom Loans')
+            ->assertSee('images/landing/partners-referral.jpg', false)
+            ->assertSee('rw-landing-faq', false)
+            ->assertSee('Discuss partnership');
+    }
+
+    public function test_service_landing_pages_use_full_width_layout_and_footer_faq(): void
+    {
+        $pages = [
+            ['route' => 'pages.refinance', 'heading' => 'Refinance home loan Australia', 'image' => 'refinance-advisor.jpg'],
+            ['route' => 'pages.commercial', 'heading' => 'Commercial finance Australia', 'image' => 'commercial-finance-advisor.jpg'],
+            ['route' => 'pages.investment', 'heading' => 'Investment property loans Australia', 'image' => 'investment-property-advisor.jpg'],
+        ];
+
+        foreach ($pages as $page) {
+            $this->get(route($page['route']))
+                ->assertOk()
+                ->assertSee('rw-landing-hero', false)
+                ->assertSee('rw-landing-why', false)
+                ->assertSee($page['heading'])
+                ->assertSee('images/landing/'.$page['image'], false)
+                ->assertSee('rw-landing-faq', false)
+                ->assertSee('rw-faq__toggle', false);
+        }
     }
 
     public function test_landing_pages_show_lender_panel_on_light_surface(): void

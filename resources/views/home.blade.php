@@ -147,6 +147,12 @@
             </div>
         </section>
 
+        <section class="rw-section rw-section--process" id="how-it-works">
+            <div class="container">
+                @include('partials.how-it-works')
+            </div>
+        </section>
+
         <section class="rw-section rw-section--light">
             <div class="container">
                 @include('partials.google-reviews')

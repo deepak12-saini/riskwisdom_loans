@@ -1,15 +1,3 @@
-<span class="rw-section-label">{{ $eyebrow }}</span>
-<h1>{{ $heading }}</h1>
-<p class="rw-page-lead">{{ $lead }}</p>
-
-@if (! empty($bullets))
-    <ul class="rw-page-bullets">
-        @foreach ($bullets as $bullet)
-            <li>{{ $bullet }}</li>
-        @endforeach
-    </ul>
-@endif
-
 @if (! empty($relatedLinks))
     <div class="rw-page-related">
         <h2>Related tools &amp; guides</h2>
@@ -40,9 +28,3 @@
         ])
     </div>
 </div>
-
-@if (! empty($faqs))
-    <div class="rw-page-faq-wrap">
-        @include('pages._landing-faq', ['faqFullWidth' => false])
-    </div>
-@endif
