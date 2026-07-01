@@ -134,6 +134,37 @@ Open [tagmanager.google.com](https://tagmanager.google.com) → container **GTM-
 
 ---
 
-## For Google Ads (later)
+## Part 6 — Meta Pixel (Facebook / Instagram ads)
+
+When running Meta ads, add the pixel ID to production `.env`:
+
+```env
+META_PIXEL_ID=your_pixel_id_here
+```
+
+The site will automatically:
+
+- Fire **PageView** on every page
+- Fire **Lead** on thank-you page (after form submit)
+- Fire **Schedule** when someone books on `/book` (Calendly)
+
+**Verify:** Meta Events Manager → Test events → browse site and submit a test enquiry.
+
+**Optional in GTM:** You can also add the pixel via GTM instead of `.env` — use one method only to avoid duplicate events.
+
+---
+
+## Part 7 — Ad landing pages + tracking map
+
+| Traffic source | Landing URL | Lead in admin | GTM event |
+|----------------|-------------|---------------|-----------|
+| Google Ads refinance | `/enquire/refinance?utm_...` | `conversion` + Paid ads filter | `form_submit` → `generate_lead` |
+| Google Ads FHB | `/enquire/first-home-buyer?utm_...` | same | same |
+| Organic SEO | `/refinance`, `/home-loans` | contact / rate_review | `generate_lead` |
+| Book a call | `/book` | Calendly (not in enquiries) | `book_appointment` |
+
+**PHP helper for ad URLs:** `conversion_landing_url('refinance')`
+
+---
 
 When Kal approves budget: **Google Ads** → **Goals** → **Import** → select GA4 `generate_lead` conversion.

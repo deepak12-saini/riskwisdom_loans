@@ -14,6 +14,7 @@ return [
     'google_tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID'),
     'google_analytics_id' => env('GOOGLE_ANALYTICS_ID'),
     'microsoft_clarity_id' => env('MICROSOFT_CLARITY_ID'),
+    'meta_pixel_id' => env('META_PIXEL_ID'),
 
     'lead_types' => [
         'contact' => 'Contact form',

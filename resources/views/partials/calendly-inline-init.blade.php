@@ -45,6 +45,17 @@
                 if (eventName === 'calendly.event_scheduled') {
                     mount.classList.add('is-scheduled');
                     mount.closest('.rw-book__embed-wrap')?.classList.add('is-scheduled');
+
+                    if (typeof window.rwPushEvent === 'function') {
+                        window.rwPushEvent('book_appointment', { lead_type: 'calendly' });
+                    } else {
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({ event: 'book_appointment', lead_type: 'calendly' });
+                    }
+
+                    if (typeof window.fbq === 'function') {
+                        window.fbq('track', 'Schedule');
+                    }
                 }
             };
 

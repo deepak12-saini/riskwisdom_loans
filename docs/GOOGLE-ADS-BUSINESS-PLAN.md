@@ -16,7 +16,7 @@ Riskwisdom Loans can run **Google Search Ads** to generate enquiries from people
 | Item | Recommendation |
 |------|----------------|
 | First campaign | Rate review / refinance |
-| Landing page | `/rate-review` |
+| Landing page | `/enquire/refinance` (conversion landing) |
 | Daily budget | **A$20–25/day** (~A$600–750/month) |
 | Test period | 2 weeks, then review before scaling |
 | Expected cost per lead | A$60–100 (estimate; varies by market) |
@@ -48,7 +48,7 @@ Leads are captured on the website and visible in **Admin → Enquiries** (filter
 
 - Launch **one** Search campaign: **Rate Review / Refinance**
 - Budget: **A$20–25/day**
-- Landing page: `https://riskwisdomloans.com.au/rate-review`
+- Landing page: `https://riskwisdomloans.com.au/enquire/refinance`
 - Track leads in admin with **Paid ads** filter
 - Review: spend, clicks, leads, cost per lead
 
@@ -93,7 +93,7 @@ Only if cost per lead is acceptable:
 **Final URL (with tracking):**
 
 ```
-https://riskwisdomloans.com.au/rate-review?utm_source=google&utm_medium=cpc&utm_campaign=rate_review
+https://riskwisdomloans.com.au/enquire/refinance?utm_source=google&utm_medium=cpc&utm_campaign=refinance
 ```
 
 ### Campaign 2 — First home buyer (Week 5+)
@@ -184,6 +184,7 @@ first home buyer pre approval
 
 | User search intent | Landing page | Primary CTA |
 |--------------------|--------------|-------------|
+| Refinance / general enquiry (ads) | `/enquire/refinance` | Pre-qual enquiry form |
 | Rate review / am I on right rate? | `/rate-review` | Rate review form |
 | Refinance general | `/refinance` | Rate review / contact |
 | Refinance rates | `/refinance-home-loan-rates` | Rate review |
@@ -337,7 +338,7 @@ Before switching ads live, confirm:
 - [ ] Kal approves **A$20–25/day** test budget for 14 days  
 - [ ] Google Ads account created under Riskwisdom Loans business  
 - [ ] Billing card added  
-- [ ] First campaign: Rate Review → `/rate-review` with UTM URL  
+- [ ] First campaign: Refinance → `/enquire/refinance` with UTM URL  
 - [ ] Conversion tracking tested (form submit → thank-you → `generate_lead`)  
 - [ ] Kal receives campaign summary for final sign-off before publish  
 
@@ -359,12 +360,12 @@ Before switching ads live, confirm:
 ```
 GOOGLE ADS PLAN — RISKWISDOM LOANS
 
-Strategy: Google Search → refinance/rate review intent → /rate-review form → admin leads → fast callback
+Strategy: Google Search → refinance intent → /enquire/refinance form → admin leads → fast callback
 
-Keywords: refinance home loan, home loan rate review, mortgage broker australia
+Keywords: refinance home loan, home loan broker australia, compare home loan rates
 Negatives: jobs, salary, career, free download
 
-Landing page (first): riskwisdomloans.com.au/rate-review?utm_source=google&utm_medium=cpc&utm_campaign=rate_review
+Landing page (first): riskwisdomloans.com.au/enquire/refinance?utm_source=google&utm_medium=cpc&utm_campaign=refinance
 
 Budget: A$20–25/day (~A$140–175/week) for 2 weeks, then review
 Expected: ~6–10 leads/month at ~A$60–100 per lead (estimate)

@@ -8,6 +8,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 @endif
 
+@include('partials.meta-pixel')
+
 @if (config('riskwisdom.microsoft_clarity_id'))
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){

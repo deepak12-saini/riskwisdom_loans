@@ -6,6 +6,8 @@ const pushEvent = (event, params = {}) => {
     window.dataLayer.push({ event, ...params });
 };
 
+window.rwPushEvent = pushEvent;
+
 document.addEventListener('DOMContentLoaded', () => {
     const headerWrap = document.querySelector('.rw-header__wrap');
     const toggle = document.querySelector('.rw-mobile-toggle');

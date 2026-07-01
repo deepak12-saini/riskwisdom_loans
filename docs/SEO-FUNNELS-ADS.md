@@ -126,7 +126,20 @@ Lead saved → Admin → Enquiries
 
 - **All leads:** `/admin/enquiries`
 - **Paid ad leads:** filter **Paid ads** (utm_medium = cpc)
+- **Conversion landing leads:** lead type **Ad / conversion landing**
 - **Export CSV** for monthly review
+
+## Tracking tools (deploy checklist)
+
+| Tool | Env variable | What it tracks |
+|------|----------------|----------------|
+| **Google Tag Manager** | `GOOGLE_TAG_MANAGER_ID` | All events via dataLayer |
+| **GA4** | Configure inside GTM (`G-N0BBL44LY1`) | Page views, `generate_lead` conversion |
+| **Meta Pixel** | `META_PIXEL_ID` | PageView, Lead (forms), Schedule (book) |
+| **Microsoft Clarity** | `MICROSOFT_CLARITY_ID` (optional) | Heatmaps / recordings |
+| **Admin UTMs** | Built-in | Source/campaign per lead |
+
+Setup steps: [`docs/GSC-GTM-SETUP.md`](GSC-GTM-SETUP.md)
 
 ---
 

@@ -91,5 +91,13 @@
             utm_medium: @json(session('utm_medium')),
             utm_campaign: @json(session('utm_campaign')),
         });
+
+        if (typeof window.fbq === 'function') {
+            window.fbq('track', 'Lead', {
+                content_name: @json($leadType),
+                utm_source: @json(session('utm_source')),
+                utm_campaign: @json(session('utm_campaign')),
+            });
+        }
     </script>
 @endpush
