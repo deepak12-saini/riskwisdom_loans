@@ -779,8 +779,12 @@ class ExampleTest extends TestCase
     {
         $this->get(route('pages.about'))
             ->assertOk()
+            ->assertSee('rw-landing-hero', false)
             ->assertSee('About Riskwisdom Loans')
-            ->assertSee('Practical lending guidance');
+            ->assertSee('Take the next step in under a minute')
+            ->assertSee('Book a free call')
+            ->assertSee('images/landing/about-broker-team.jpg', false)
+            ->assertSee('rw-landing-faq', false);
     }
 
     public function test_download_guide_page_is_accessible(): void
