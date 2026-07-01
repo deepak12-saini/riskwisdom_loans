@@ -31,6 +31,29 @@ The website now has:
 | stamp duty calculator | `/tools/stamp-duty` | Calculator + contact |
 | am I on the right rate | `/rate-review` | Rate review form |
 
+### Paid ads — conversion landing pages (recommended)
+
+Minimal-distraction pages with headline + pre-qual enquiry form. Use these for **Google Ads** and **Meta ads** instead of the homepage.
+
+| Campaign | URL | Pre-filled loan type |
+|----------|-----|----------------------|
+| Generic | `/enquire` | User selects |
+| Refinance | `/enquire/refinance` | Refinance |
+| Home loans | `/enquire/home-loans` | Home purchase |
+| First home buyer | `/enquire/first-home-buyer` | Home purchase |
+| Investment | `/enquire/investment` | Investment property |
+| Commercial | `/enquire/commercial` | Commercial |
+
+**Example Google Ads URL:**
+
+```
+https://riskwisdomloans.com.au/enquire/refinance?utm_source=google&utm_medium=cpc&utm_campaign=refinance
+```
+
+Or in PHP: `conversion_landing_url('refinance')`
+
+Form captures: name, phone, email, **what they need**, timeline, state, and free-text requirement. Leads appear in admin as **Ad / conversion landing** with UTM tags.
+
 ---
 
 ## Funnel flow
@@ -52,6 +75,8 @@ Lead saved → Admin → Enquiries
 ## Google Search campaigns (recommended start)
 
 **Test budget:** $30–50/day (~$1,000/month) for 4–6 weeks.
+
+**Full business plan for approval:** [`docs/GOOGLE-ADS-BUSINESS-PLAN.md`](GOOGLE-ADS-BUSINESS-PLAN.md)
 
 ### Campaign 1 — Refinance
 

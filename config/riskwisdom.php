@@ -21,6 +21,7 @@ return [
         'rate_review' => 'Rate review',
         'guide_download' => 'Guide download',
         'chat_widget' => 'After-hours chat',
+        'conversion' => 'Ad / conversion landing',
     ],
 
     'rate_review' => [
@@ -146,6 +147,160 @@ return [
         'stamp_duty' => 'tools.stamp-duty',
         'rate_review' => 'rate-review',
         'book' => 'book',
+        'enquire' => 'enquire.show',
+        'enquire_refinance' => ['enquire.campaign', ['campaign' => 'refinance']],
+        'enquire_home_loans' => ['enquire.campaign', ['campaign' => 'home-loans']],
+        'enquire_fhb' => ['enquire.campaign', ['campaign' => 'first-home-buyer']],
+        'enquire_investment' => ['enquire.campaign', ['campaign' => 'investment']],
+        'enquire_commercial' => ['enquire.campaign', ['campaign' => 'commercial']],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Conversion landing pages (Google Ads, Meta, paid campaigns)
+    |--------------------------------------------------------------------------
+    | Minimal-distraction pages with headline + pre-qual enquiry form.
+    | URLs: /enquire, /enquire/refinance, /enquire/home-loans, etc.
+    */
+    'conversion_landings' => [
+        'default' => [
+            'title' => 'Free Loan Enquiry | Riskwisdom Loans',
+            'meta_description' => 'Tell us what you need and a Riskwisdom Loans broker will call you back with clear, no-obligation guidance for Australian borrowers.',
+            'eyebrow' => 'Free loan enquiry',
+            'headline' => 'Get clear home loan advice — without the runaround.',
+            'subheadline' => 'Tell us what you are looking for and a broker will call you back with practical next steps. No pressure, no jargon.',
+            'default_loan_type' => null,
+            'image' => 'images/landing/home-loans-advisor.jpg',
+            'image_alt' => 'Mortgage broker consulting with a client',
+            'benefits' => [
+                'Compare options across major banks and specialist lenders',
+                'Fast callback — we aim to call within 2 business hours',
+                'Australian borrowers only · No obligation',
+            ],
+            'trust_badges' => [
+                ['label' => '5.0 Google rating', 'value' => '18+ reviews'],
+                ['label' => 'Fast callback', 'value' => '2 business hours'],
+                ['label' => 'No cost to you', 'value' => 'Broker service'],
+            ],
+            'form_headline' => 'Tell us what you need',
+            'form_intro' => 'Takes about 60 seconds. We will call the number you provide.',
+            'form_cta' => 'Get my free callback',
+        ],
+        'refinance' => [
+            'title' => 'Refinance Home Loan Enquiry | Riskwisdom Loans',
+            'meta_description' => 'Thinking about refinancing? Tell us your goals and get a free, no-obligation callback from an Australian mortgage broker.',
+            'eyebrow' => 'Refinance enquiry',
+            'headline' => 'Could you be paying less on your home loan?',
+            'subheadline' => 'Share what you are looking for and we will check whether refinancing could save you money — clear advice, no obligation.',
+            'default_loan_type' => 'refinance',
+            'image' => 'images/landing/refinance-advisor.jpg',
+            'image_alt' => 'Broker reviewing refinance options with a homeowner',
+            'benefits' => [
+                'Compare your rate against current lender offers',
+                'Understand break costs before you switch',
+                'Cash-out and debt consolidation options explained clearly',
+            ],
+            'trust_badges' => [
+                ['label' => 'Rate review', 'value' => 'Free & no obligation'],
+                ['label' => 'Multi-lender', 'value' => 'Panel access'],
+                ['label' => 'Australian', 'value' => 'Licensed broker'],
+            ],
+            'form_headline' => 'Start your refinance enquiry',
+            'form_intro' => 'Tell us what you want to achieve and we will call you back quickly.',
+            'form_cta' => 'Request my free refinance review',
+        ],
+        'home-loans' => [
+            'title' => 'Home Loan Enquiry | Riskwisdom Loans',
+            'meta_description' => 'Buying or upgrading your home? Tell us what you need and get a free callback from a Riskwisdom Loans broker.',
+            'eyebrow' => 'Home loan enquiry',
+            'headline' => 'Find the right home loan — with a broker on your side.',
+            'subheadline' => 'Whether you are buying, upgrading, or reviewing your loan, tell us your goals and we will outline clear next steps.',
+            'default_loan_type' => 'home_purchase',
+            'image' => 'images/landing/home-loans-advisor.jpg',
+            'image_alt' => 'Home loan advisor helping a borrower',
+            'benefits' => [
+                'Owner-occupier loans tailored to your situation',
+                'Pre-approval guidance before you make an offer',
+                'Compare lenders without applying everywhere yourself',
+            ],
+            'trust_badges' => [
+                ['label' => 'First purchase', 'value' => 'Step-by-step help'],
+                ['label' => 'Pre-approval', 'value' => 'Guidance included'],
+                ['label' => 'No pressure', 'value' => 'Clear advice'],
+            ],
+            'form_headline' => 'Tell us about your home loan goals',
+            'form_intro' => 'What are you looking for? We will match you with the right conversation.',
+            'form_cta' => 'Get my free home loan callback',
+        ],
+        'first-home-buyer' => [
+            'title' => 'First Home Buyer Enquiry | Riskwisdom Loans',
+            'meta_description' => 'Buying your first home in Australia? Tell us where you are up to and get practical, no-pressure guidance from a mortgage broker.',
+            'eyebrow' => 'First home buyer',
+            'headline' => 'Your first home — explained clearly, step by step.',
+            'subheadline' => 'Grants, deposits, pre-approval, and lender choice can feel overwhelming. Tell us your situation and we will help you understand the path ahead.',
+            'default_loan_type' => 'home_purchase',
+            'image' => 'images/landing/home-loans-advisor.jpg',
+            'image_alt' => 'First home buyer receiving broker guidance',
+            'benefits' => [
+                'Understand borrowing capacity and deposit requirements',
+                'Grants and stamp duty concessions explained in plain English',
+                'Support from enquiry through to settlement',
+            ],
+            'trust_badges' => [
+                ['label' => 'First home', 'value' => 'Specialist guidance'],
+                ['label' => 'Grants & schemes', 'value' => 'Explained clearly'],
+                ['label' => 'No obligation', 'value' => 'Free consult'],
+            ],
+            'form_headline' => 'Tell us where you are up to',
+            'form_intro' => 'Share your goals and timeline — we will call you back with practical next steps.',
+            'form_cta' => 'Get my first home buyer callback',
+        ],
+        'investment' => [
+            'title' => 'Investment Property Loan Enquiry | Riskwisdom Loans',
+            'meta_description' => 'Building or growing your property portfolio? Tell us your investment goals and speak with a broker who understands investor lending.',
+            'eyebrow' => 'Investment property',
+            'headline' => 'Investment property finance — structured for your portfolio.',
+            'subheadline' => 'Tell us what you are looking to do and we will outline lender options, structuring considerations, and clear next steps.',
+            'default_loan_type' => 'investment',
+            'image' => 'images/landing/investment-property-advisor.jpg',
+            'image_alt' => 'Investment property finance consultation',
+            'benefits' => [
+                'Interest-only and portfolio lending options',
+                'Equity release and next-purchase strategy',
+                'Lender policy matched to your investor profile',
+            ],
+            'trust_badges' => [
+                ['label' => 'Investors', 'value' => 'Specialist focus'],
+                ['label' => 'Portfolio', 'value' => 'Growth strategies'],
+                ['label' => 'Multi-lender', 'value' => 'Panel access'],
+            ],
+            'form_headline' => 'Tell us about your investment goals',
+            'form_intro' => 'What property finance do you need? We will call you back to discuss options.',
+            'form_cta' => 'Get my investment loan callback',
+        ],
+        'commercial' => [
+            'title' => 'Commercial Finance Enquiry | Riskwisdom Loans',
+            'meta_description' => 'Business or commercial property finance enquiry. Tell us what you need and get a callback from a Riskwisdom Loans broker.',
+            'eyebrow' => 'Commercial finance',
+            'headline' => 'Commercial finance — clear advice for business owners.',
+            'subheadline' => 'From commercial property to business lending, tell us what you are trying to achieve and we will outline realistic finance pathways.',
+            'default_loan_type' => 'commercial',
+            'image' => 'images/landing/commercial-finance-advisor.jpg',
+            'image_alt' => 'Commercial finance broker consultation',
+            'benefits' => [
+                'Commercial property and business lending guidance',
+                'Construction and specialist finance conversations',
+                'Responsive support through approval and settlement',
+            ],
+            'trust_badges' => [
+                ['label' => 'Business owners', 'value' => 'Tailored advice'],
+                ['label' => 'Specialist', 'value' => 'Lender access'],
+                ['label' => 'Fast follow-up', 'value' => '2 business hours'],
+            ],
+            'form_headline' => 'Tell us about your finance needs',
+            'form_intro' => 'Describe what you are looking for and we will call you back.',
+            'form_cta' => 'Get my commercial finance callback',
+        ],
     ],
 
     'loan_types' => [

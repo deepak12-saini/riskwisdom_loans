@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminTaskController;
 use App\Http\Controllers\BorrowingPowerController;
 use App\Http\Controllers\ChatLeadController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ConversionLandingController;
 use App\Http\Controllers\DocuSignWebhookController;
 use App\Http\Controllers\GuideDownloadController;
 use App\Http\Controllers\RateReviewController;
@@ -27,6 +28,18 @@ Route::post('/contact', [ContactController::class, 'store'])
 
 Route::view('/book', 'pages.book')->name('book');
 Route::view('/about', 'pages.about')->name('pages.about');
+
+Route::get('/enquire', [ConversionLandingController::class, 'show'])->name('enquire.show');
+Route::post('/enquire', [ConversionLandingController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('enquire.submit');
+Route::get('/enquire/{campaign}', [ConversionLandingController::class, 'show'])
+    ->where('campaign', 'refinance|home-loans|first-home-buyer|investment|commercial')
+    ->name('enquire.campaign');
+Route::post('/enquire/{campaign}', [ConversionLandingController::class, 'store'])
+    ->where('campaign', 'refinance|home-loans|first-home-buyer|investment|commercial')
+    ->middleware('throttle:5,1')
+    ->name('enquire.campaign.submit');
 
 Route::view('/rate-review', 'pages.rate-review')->name('rate-review');
 Route::post('/rate-review', [RateReviewController::class, 'store'])

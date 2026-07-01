@@ -558,6 +558,72 @@ class ExampleTest extends TestCase
         $this->assertStringContainsString('utm_medium=cpc', $url);
     }
 
+    public function test_conversion_landing_url_builds_campaign_urls(): void
+    {
+        $url = conversion_landing_url('refinance', [
+            'utm_source' => 'google',
+            'utm_medium' => 'cpc',
+            'utm_campaign' => 'refinance',
+        ]);
+
+        $this->assertStringContainsString('/enquire/refinance', $url);
+        $this->assertStringContainsString('utm_medium=cpc', $url);
+    }
+
+    public function test_conversion_landing_pages_are_accessible(): void
+    {
+        $this->get(route('enquire.show'))
+            ->assertOk()
+            ->assertSee('rw-conversion', false)
+            ->assertSee('Loan type')
+            ->assertDontSee('rw-footer__grid', false);
+
+        $this->get(route('enquire.campaign', ['campaign' => 'refinance']))
+            ->assertOk()
+            ->assertSee('Could you be paying less on your home loan?')
+            ->assertSee('Start your refinance enquiry')
+            ->assertSee('data-track-form="conversion"', false);
+    }
+
+    public function test_conversion_form_stores_qualified_lead(): void
+    {
+        Mail::fake();
+
+        $response = $this->from(route('enquire.campaign', ['campaign' => 'refinance']))
+            ->post(route('enquire.campaign.submit', ['campaign' => 'refinance']), [
+                'first_name' => 'Jane',
+                'last_name' => 'Borrower',
+                'phone' => '0400000000',
+                'email' => 'jane@example.com',
+                'loan_type' => 'refinance',
+                'timeline' => 'ready_now',
+                'state' => 'NSW',
+                'enquiry' => 'Want to lower my rate on a $500k loan.',
+                'utm_source' => 'google',
+                'utm_medium' => 'cpc',
+                'utm_campaign' => 'refinance',
+            ]);
+
+        $response
+            ->assertRedirect(route('thank-you'))
+            ->assertSessionHas('lead_type', 'conversion');
+
+        $this->assertDatabaseHas('enquiries', [
+            'lead_type' => 'conversion',
+            'email' => 'jane@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'source' => 'conversion_refinance',
+            'utm_medium' => 'cpc',
+        ]);
+    }
+
+    public function test_unknown_conversion_campaign_returns_not_found(): void
+    {
+        $this->get('/enquire/unknown-campaign')->assertNotFound();
+    }
+
     public function test_thank_you_page_fires_generate_lead_script(): void
     {
         $response = $this->withSession([

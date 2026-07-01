@@ -86,10 +86,17 @@ if (! function_exists('ad_landing_url')) {
      */
     function ad_landing_url(string $page, array $utm = []): string
     {
-        $routeName = config('riskwisdom.ad_landing_pages.'.$page);
+        $routeConfig = config('riskwisdom.ad_landing_pages.'.$page);
 
-        if (! is_string($routeName) || $routeName === '') {
+        if ($routeConfig === null || $routeConfig === '') {
             return route('home');
+        }
+
+        if (is_array($routeConfig)) {
+            [$routeName, $params] = $routeConfig;
+            $baseUrl = route($routeName, $params);
+        } else {
+            $baseUrl = route($routeConfig);
         }
 
         $defaults = [
@@ -100,6 +107,27 @@ if (! function_exists('ad_landing_url')) {
 
         $query = array_filter(array_merge($defaults, $utm), fn ($value) => $value !== null && $value !== '');
 
-        return route($routeName).'?'.http_build_query($query);
+        return $baseUrl.'?'.http_build_query($query);
+    }
+}
+
+if (! function_exists('conversion_landing_url')) {
+    /**
+     * Build a conversion landing page URL with UTM parameters.
+     *
+     * @param  array<string, string>  $utm
+     */
+    function conversion_landing_url(string $campaign = 'default', array $utm = []): string
+    {
+        $map = [
+            'default' => 'enquire',
+            'refinance' => 'enquire_refinance',
+            'home-loans' => 'enquire_home_loans',
+            'first-home-buyer' => 'enquire_fhb',
+            'investment' => 'enquire_investment',
+            'commercial' => 'enquire_commercial',
+        ];
+
+        return ad_landing_url($map[$campaign] ?? 'enquire', $utm);
     }
 }
