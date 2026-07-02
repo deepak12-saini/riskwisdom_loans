@@ -173,6 +173,10 @@ class AnnatureService implements DocumentSigningServiceContract
             'sha256='.hash_hmac('sha256', $payload, $secret),
             hash_hmac('md5', $payload, $secret),
             'md5='.hash_hmac('md5', $payload, $secret),
+            base64_encode(hash_hmac('sha256', $payload, $secret, true)),
+            'sha256='.base64_encode(hash_hmac('sha256', $payload, $secret, true)),
+            base64_encode(hash_hmac('md5', $payload, $secret, true)),
+            'md5='.base64_encode(hash_hmac('md5', $payload, $secret, true)),
         ];
 
         foreach ($candidates as $candidate) {
@@ -180,6 +184,20 @@ class AnnatureService implements DocumentSigningServiceContract
                 return true;
             }
         }
+
+        Log::warning('Annature webhook signature mismatch', [
+            'received_signature' => $signature,
+            'received_signature_length' => strlen($signature),
+            'payload_length' => strlen($payload),
+            'expected_sha256_hex' => $candidates[0],
+            'expected_sha256_prefixed' => $candidates[1],
+            'expected_md5_hex' => $candidates[2],
+            'expected_md5_prefixed' => $candidates[3],
+            'expected_sha256_base64' => $candidates[4],
+            'expected_sha256_prefixed_base64' => $candidates[5],
+            'expected_md5_base64' => $candidates[6],
+            'expected_md5_prefixed_base64' => $candidates[7],
+        ]);
 
         return false;
     }
