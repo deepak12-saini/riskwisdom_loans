@@ -37,7 +37,7 @@ class GuideDownloadController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'max:120'],
             'last_name' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => lead_email_rules(),
             'phone' => ['required', 'string', 'max:50'],
             'state' => ['nullable', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.states')))],
         ], [

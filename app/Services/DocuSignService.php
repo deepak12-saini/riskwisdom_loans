@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\DocumentSigningService as DocumentSigningServiceContract;
 use App\Models\ClientDocument;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -9,8 +10,18 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
-class DocuSignService
+class DocuSignService implements DocumentSigningServiceContract
 {
+    public function provider(): string
+    {
+        return 'docusign';
+    }
+
+    public function providerLabel(): string
+    {
+        return 'DocuSign';
+    }
+
     public function isConfigured(): bool
     {
         if (! config('docusign.enabled')) {

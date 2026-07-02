@@ -9,6 +9,7 @@ use App\Http\Controllers\BorrowingPowerController;
 use App\Http\Controllers\ChatLeadController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ConversionLandingController;
+use App\Http\Controllers\AnnatureWebhookController;
 use App\Http\Controllers\DocuSignWebhookController;
 use App\Http\Controllers\GuideDownloadController;
 use App\Http\Controllers\RateReviewController;
@@ -83,6 +84,7 @@ Route::view('/credit-guide', 'pages.credit-guide')->name('pages.credit-guide');
 Route::view('/partners', 'pages.partners')->name('pages.partners');
 
 Route::post('/webhooks/docusign', DocuSignWebhookController::class)->name('webhooks.docusign');
+Route::post('/webhooks/annature', AnnatureWebhookController::class)->name('webhooks.annature');
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
@@ -91,6 +93,8 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/enquiries', [AdminEnquiryController::class, 'index'])->name('enquiries.index');
     Route::get('/enquiries/export', [AdminEnquiryController::class, 'export'])->name('enquiries.export');
+    Route::get('/enquiries/{enquiry}', [AdminEnquiryController::class, 'show'])->name('enquiries.show');
+    Route::delete('/enquiries/{enquiry}', [AdminEnquiryController::class, 'destroy'])->name('enquiries.destroy');
     Route::post('/enquiries/{enquiry}/convert', [AdminEnquiryController::class, 'convert'])->name('enquiries.convert');
 
     Route::get('/clients', [AdminClientController::class, 'index'])->name('clients.index');

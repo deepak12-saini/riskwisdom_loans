@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-use App\Services\DocuSignService;
+use App\Services\DocumentSigningManager;
 
 class AdminClientController extends Controller
 {
@@ -64,7 +64,7 @@ class AdminClientController extends Controller
             ->with('success', 'Client file created.');
     }
 
-    public function show(Client $client, DocuSignService $docuSign): View
+    public function show(Client $client, DocumentSigningManager $signing): View
     {
         $client->load([
             'enquiry',
@@ -74,9 +74,10 @@ class AdminClientController extends Controller
         ]);
 
         $brokers = User::query()->where('is_admin', true)->orderBy('username')->get();
-        $docusignConfigured = $docuSign->isConfigured();
+        $signingConfigured = $signing->active()->isConfigured();
+        $signingProviderLabel = $signing->active()->providerLabel();
 
-        return view('admin.clients.show', compact('client', 'brokers', 'docusignConfigured'));
+        return view('admin.clients.show', compact('client', 'brokers', 'signingConfigured', 'signingProviderLabel'));
     }
 
     public function edit(Client $client): View
@@ -122,17 +123,22 @@ class AdminClientController extends Controller
         $loanTypes = array_keys(config('riskwisdom.loan_types', []));
         $states = array_keys(config('riskwisdom.states', []));
 
-        $validated = $request->validate([
+        $rules = [
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:255'],
             'loan_type' => ['nullable', 'string', 'in:'.implode(',', $loanTypes)],
             'state' => ['nullable', 'string', 'in:'.implode(',', $states)],
-            'status' => ['required', 'string', 'in:'.implode(',', $statuses)],
             'assigned_user_id' => ['nullable', 'integer', 'exists:users,id'],
             'notes' => ['nullable', 'string', 'max:5000'],
-        ]);
+        ];
+
+        if ($client !== null) {
+            $rules['status'] = ['required', 'string', 'in:'.implode(',', $statuses)];
+        }
+
+        $validated = $request->validate($rules);
 
         if ($client === null) {
             $validated['status'] = 'active';

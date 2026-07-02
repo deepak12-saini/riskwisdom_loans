@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'webhooks/docusign',
+            'webhooks/annature',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

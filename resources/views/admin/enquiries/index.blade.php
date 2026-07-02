@@ -9,26 +9,43 @@
 
 @section('content')
     <div class="rw-admin-stats">
-        <article class="rw-admin-stat">
+        <a
+            href="{{ route('admin.enquiries.index') }}"
+            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'all') is-active @endif"
+        >
             <span>Total leads</span>
             <strong>{{ number_format($stats['total']) }}</strong>
-        </article>
-        <article class="rw-admin-stat rw-admin-stat--accent">
+        </a>
+        <a
+            href="{{ route('admin.enquiries.index', ['filter' => 'ready_now']) }}"
+            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'ready_now') is-active @endif"
+        >
             <span>Ready now</span>
             <strong>{{ number_format($stats['ready_now']) }}</strong>
-        </article>
-        <article class="rw-admin-stat">
+        </a>
+        <a
+            href="{{ route('admin.enquiries.index', ['filter' => 'this_week']) }}"
+            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'this_week') is-active @endif"
+        >
             <span>This week</span>
             <strong>{{ number_format($stats['this_week']) }}</strong>
-        </article>
-        <article class="rw-admin-stat">
+        </a>
+        <a
+            href="{{ route('admin.enquiries.index', ['filter' => 'today']) }}"
+            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'today') is-active @endif"
+        >
             <span>Today</span>
             <strong>{{ number_format($stats['today']) }}</strong>
-        </article>
-        <article class="rw-admin-stat">
-            <span>Paid (CPC)</span>
-            <strong>{{ number_format($stats['paid'] ?? 0) }}</strong>
-        </article>
+        </a>
+        @if ($showPaidAds ?? config('riskwisdom.admin_show_paid_ads', false))
+            <a
+                href="{{ route('admin.enquiries.index', ['filter' => 'paid']) }}"
+                class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'paid') is-active @endif"
+            >
+                <span>Paid (CPC)</span>
+                <strong>{{ number_format($stats['paid'] ?? 0) }}</strong>
+            </a>
+        @endif
     </div>
 
     <section class="rw-admin-card">
@@ -36,11 +53,6 @@
             <div>
                 <h2>{{ $pageHeading ?? 'All enquiries' }}</h2>
                 <p>Leads submitted through the website contact form.</p>
-            </div>
-            <div class="rw-admin-filter-tabs">
-                <a href="{{ route('admin.enquiries.index') }}" class="@if ($filter === 'all') is-active @endif">All</a>
-                <a href="{{ route('admin.enquiries.index', ['filter' => 'ready_now']) }}" class="@if ($filter === 'ready_now') is-active @endif">Ready now</a>
-                <a href="{{ route('admin.enquiries.index', ['filter' => 'paid']) }}" class="@if ($filter === 'paid') is-active @endif">Paid ads</a>
             </div>
         </div>
 
@@ -60,7 +72,7 @@
                         <th>Marketing</th>
                         <th>Mailchimp</th>
                         <th>Enquiry</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,15 +140,8 @@
                                     —
                                 @endif
                             </td>
-                            <td>
-                                @if ($enquiry->client)
-                                    <a class="rw-admin-link" href="{{ route('admin.clients.show', $enquiry->client) }}">View file</a>
-                                @else
-                                    <form method="post" action="{{ route('admin.enquiries.convert', $enquiry) }}" class="rw-admin-inline-form">
-                                        @csrf
-                                        <button class="rw-admin-link" type="submit">Create file</button>
-                                    </form>
-                                @endif
+                            <td class="rw-admin-table__actions">
+                                @include('admin.enquiries.partials.actions', ['enquiry' => $enquiry])
                             </td>
                         </tr>
                     @empty

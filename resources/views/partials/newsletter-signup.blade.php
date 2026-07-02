@@ -8,24 +8,43 @@
         @endif
     </div>
 
-    <form action="{{ route('newsletter.signup') }}" method="post" class="rw-newsletter__form">
+    <form action="{{ route('newsletter.signup') }}" method="post" class="rw-newsletter__form" novalidate>
         @csrf
-        <label>
-            <span>First name</span>
-            <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="First name" required>
-            @error('first_name', 'newsletter')
-                <small>{{ $message }}</small>
-            @enderror
-        </label>
 
-        <label>
-            <span>Email</span>
-            <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address" required>
-            @error('email', 'newsletter')
-                <small>{{ $message }}</small>
-            @enderror
-        </label>
+        <div class="rw-newsletter__fields">
+            <label class="rw-newsletter__field @error('first_name', 'newsletter') is-invalid @enderror">
+                <span>First name</span>
+                <input
+                    type="text"
+                    name="first_name"
+                    value="{{ old('first_name') }}"
+                    placeholder="First name"
+                    required
+                    @error('first_name', 'newsletter') aria-invalid="true" @enderror
+                >
+            </label>
 
-        <button class="rw-button rw-button--solid" type="submit">Subscribe</button>
+            <label class="rw-newsletter__field @error('email', 'newsletter') is-invalid @enderror">
+                <span>Email</span>
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    placeholder="Email address"
+                    required
+                    @error('email', 'newsletter') aria-invalid="true" @enderror
+                >
+            </label>
+
+            <button class="rw-button rw-button--solid rw-newsletter__submit" type="submit">Subscribe</button>
+        </div>
+
+        @if ($errors->getBag('newsletter')->isNotEmpty())
+            <div class="rw-newsletter__alert" role="alert">
+                @foreach ($errors->getBag('newsletter')->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
     </form>
 </section>

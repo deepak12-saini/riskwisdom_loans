@@ -14,6 +14,7 @@ class ClientDocument extends Model
         'document_type',
         'title',
         'envelope_id',
+        'signing_provider',
         'status',
         'signer_name',
         'signer_email',

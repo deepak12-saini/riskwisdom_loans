@@ -30,21 +30,4 @@ return [
     'api_base_url' => env('DOCUSIGN_ENV', 'demo') === 'production'
         ? 'https://na4.docusign.net/restapi'
         : 'https://demo.docusign.net/restapi',
-
-    'document_types' => [
-        'privacy_consent' => 'Privacy consent',
-        'credit_guide' => 'Credit guide acknowledgment',
-        'authority_to_act' => 'Authority to act',
-        'other' => 'Other document',
-    ],
-
-    'statuses' => [
-        'draft' => 'Draft',
-        'sent' => 'Sent',
-        'delivered' => 'Delivered',
-        'signed' => 'Signed',
-        'declined' => 'Declined',
-        'voided' => 'Voided',
-        'error' => 'Error',
-    ],
 ];

@@ -3042,13 +3042,20 @@ body.has-sticky-cta {
 }
 
 .rw-newsletter__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.rw-newsletter__fields {
     display: grid;
     grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 1fr) auto;
     gap: 0.75rem;
     align-items: end;
 }
 
-.rw-newsletter__form label {
+.rw-newsletter__form label,
+.rw-newsletter__field {
     display: grid;
     gap: 0.35rem;
 }
@@ -3080,13 +3087,36 @@ body.has-sticky-cta {
     box-shadow: 0 0 0 4px rgba(27, 99, 200, 0.12);
 }
 
-.rw-newsletter__form .rw-button {
+.rw-newsletter__field.is-invalid input {
+    border-color: rgba(192, 57, 43, 0.55);
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+}
+
+.rw-newsletter__submit {
     min-height: 2.9rem;
     align-self: end;
     white-space: nowrap;
 }
 
-.rw-newsletter__form small,
+.rw-newsletter__alert {
+    margin: 0;
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.75rem;
+    background: rgba(192, 57, 43, 0.08);
+    border: 1px solid rgba(192, 57, 43, 0.18);
+    color: #b42318;
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.rw-newsletter__alert p {
+    margin: 0;
+}
+
+.rw-newsletter__alert p + p {
+    margin-top: 0.35rem;
+}
+
 .rw-chat-widget__form small {
     color: #c0392b;
     font-size: 0.8rem;
@@ -3970,6 +4000,19 @@ body.rw-admin-body {
     gap: 0.75rem;
 }
 
+.rw-admin-topbar .rw-button--ghost {
+    border: 1px solid rgba(27, 99, 200, 0.25);
+    background: #fff;
+    color: var(--rw-primary-deep);
+    backdrop-filter: none;
+}
+
+.rw-admin-topbar .rw-button--ghost:hover {
+    background: rgba(27, 99, 200, 0.06);
+    border-color: rgba(27, 99, 200, 0.35);
+    color: var(--rw-primary-deep);
+}
+
 .rw-admin-menu-toggle {
     display: none;
     flex-direction: column;
@@ -4000,7 +4043,7 @@ body.rw-admin-body {
 
 .rw-admin-stats {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
     gap: 0.75rem;
     margin-bottom: 1rem;
 }
@@ -4011,6 +4054,35 @@ body.rw-admin-body {
     background: #fff;
     border: 1px solid var(--rw-line);
     box-shadow: var(--rw-shadow);
+}
+
+.rw-admin-stat-tab {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.rw-admin-stat-tab:hover {
+    border-color: rgba(27, 99, 200, 0.28);
+    box-shadow: 0 8px 24px rgba(17, 39, 61, 0.08);
+    transform: translateY(-1px);
+}
+
+.rw-admin-stat-tab.is-active {
+    background: linear-gradient(135deg, rgba(27, 99, 200, 0.1), rgba(136, 216, 255, 0.18));
+    border-color: rgba(27, 99, 200, 0.35);
+    box-shadow: 0 8px 24px rgba(27, 99, 200, 0.12);
+}
+
+.rw-admin-stat-tab.is-active strong {
+    color: var(--rw-primary-deep);
+}
+
+.rw-admin-stat-tab:focus-visible {
+    outline: 2px solid rgba(27, 99, 200, 0.45);
+    outline-offset: 2px;
 }
 
 .rw-admin-stat span {
@@ -4030,6 +4102,7 @@ body.rw-admin-body {
     color: var(--rw-text);
 }
 
+/* Legacy accent class — prefer .rw-admin-stat-tab.is-active */
 .rw-admin-stat--accent {
     background: linear-gradient(135deg, rgba(27, 99, 200, 0.1), rgba(136, 216, 255, 0.18));
     border-color: rgba(27, 99, 200, 0.16);
@@ -4897,6 +4970,45 @@ body.rw-admin-login-page {
     white-space: nowrap;
 }
 
+.rw-admin-icon-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.rw-admin-icon-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid rgba(17, 39, 61, 0.12);
+    border-radius: 0.55rem;
+    background: #fff;
+    color: var(--rw-text-soft);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.rw-admin-icon-action svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.rw-admin-icon-action:hover {
+    background: rgba(27, 99, 200, 0.06);
+    border-color: rgba(27, 99, 200, 0.22);
+    color: var(--rw-primary);
+}
+
+.rw-admin-icon-action--danger:hover {
+    background: rgba(180, 35, 24, 0.06);
+    border-color: rgba(180, 35, 24, 0.22);
+    color: #b42318;
+}
+
 @media (max-width: 900px) {
     .rw-admin-client-summary__contact {
         text-align: left;
@@ -4994,13 +5106,13 @@ body.rw-admin-login-page {
         margin-bottom: 6.5rem;
     }
 
-    .rw-newsletter__form,
+    .rw-newsletter__fields,
     .rw-lender-strip__list,
     .rw-chat-widget__grid {
         grid-template-columns: 1fr;
     }
 
-    .rw-newsletter__form .rw-button {
+    .rw-newsletter__submit {
         width: 100%;
     }
 

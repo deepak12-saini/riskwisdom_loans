@@ -214,20 +214,20 @@
         <section class="rw-admin-card rw-admin-card--documents">
             <div class="rw-admin-card__header">
                 <div>
-                    <h2>DocuSign documents</h2>
-                    <p>Send PDFs for digital signature. Signed copies are stored on this client file.</p>
+                    <h2>E-sign documents</h2>
+                    <p>Send PDFs for digital signature via {{ $signingProviderLabel }}. Signed copies are stored on this client file.</p>
                 </div>
-                @if ($docusignConfigured)
-                    <span class="rw-admin-pill rw-admin-pill--accent">DocuSign connected</span>
+                @if ($signingConfigured)
+                    <span class="rw-admin-pill rw-admin-pill--accent">{{ $signingProviderLabel }} connected</span>
                 @else
                     <span class="rw-admin-pill rw-admin-pill--muted">Awaiting API keys</span>
                 @endif
             </div>
 
-            @if (! $docusignConfigured)
+            @if (! $signingConfigured)
                 <div class="rw-admin-docusign-notice">
-                    <strong>DocuSign not configured yet</strong>
-                    <p>Add <code>DOCUSIGN_*</code> keys to <code>.env</code> to send documents. You can still upload PDFs — they will save as drafts until keys are added.</p>
+                    <strong>{{ $signingProviderLabel }} not configured yet</strong>
+                    <p>Add <code>{{ strtoupper($signingProviderLabel === 'Annature' ? 'ANNATURE' : 'DOCUSIGN') }}_*</code> keys to <code>.env</code> to send documents. You can still upload PDFs — they will save as drafts until keys are added.</p>
                 </div>
             @endif
 
@@ -238,12 +238,12 @@
                             <div class="rw-admin-doc-item__body">
                                 <h3>{{ $document->title }}</h3>
                                 <p>
-                                    {{ config('docusign.document_types')[$document->document_type] ?? $document->document_type }}
+                                    {{ config('signing.document_types')[$document->document_type] ?? $document->document_type }}
                                     · {{ $document->signer_name }} &lt;{{ $document->signer_email }}&gt;
                                 </p>
                                 <div class="rw-admin-task-item__meta">
                                     <span class="rw-admin-pill @if ($document->status === 'signed') rw-admin-pill--accent @elseif ($document->status === 'error') rw-admin-pill--urgent @else rw-admin-pill--muted @endif">
-                                        {{ config('docusign.statuses')[$document->status] ?? $document->status }}
+                                        {{ config('signing.statuses')[$document->status] ?? $document->status }}
                                     </span>
                                     @if ($document->sent_at)
                                         <span class="rw-admin-pill">Sent {{ $document->sent_at->format('d M Y') }}</span>
@@ -259,7 +259,7 @@
                             <div class="rw-admin-doc-item__actions">
                                 @if ($document->isSigned())
                                     <a class="rw-button rw-button--solid rw-button--sm" href="{{ route('admin.clients.documents.download', [$client, $document]) }}">Download PDF</a>
-                                @elseif ($document->envelope_id && $docusignConfigured)
+                                @elseif ($document->envelope_id && $signingConfigured)
                                     <form method="post" action="{{ route('admin.clients.documents.sync', [$client, $document]) }}">
                                         @csrf
                                         <button class="rw-button rw-button--ghost rw-button--sm" type="submit">Sync status</button>
@@ -286,7 +286,7 @@
                         <label>
                             <span>Document type</span>
                             <select name="document_type" required>
-                                @foreach (config('docusign.document_types') as $value => $label)
+                                @foreach (config('signing.document_types') as $value => $label)
                                     <option value="{{ $value }}">{{ $label }}</option>
                                 @endforeach
                             </select>
@@ -321,8 +321,8 @@
                     </div>
                     <div class="rw-admin-form-actions">
                         <button class="rw-button rw-button--solid" type="submit">
-                            @if ($docusignConfigured)
-                                Send via DocuSign
+                            @if ($signingConfigured)
+                                Send via {{ $signingProviderLabel }}
                             @else
                                 Save draft
                             @endif

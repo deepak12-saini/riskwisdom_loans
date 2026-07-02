@@ -7,34 +7,10 @@
 
     $leadItems = [
         [
-            'label' => 'All leads',
+            'label' => 'Leads',
             'href' => route('admin.enquiries.index'),
             'icon' => 'leads',
-            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'all',
-        ],
-        [
-            'label' => 'Ready now',
-            'href' => route('admin.enquiries.index', ['filter' => 'ready_now']),
-            'icon' => 'urgent',
-            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'ready_now',
-        ],
-        [
-            'label' => 'This week',
-            'href' => route('admin.enquiries.index', ['filter' => 'this_week']),
-            'icon' => 'week',
-            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'this_week',
-        ],
-        [
-            'label' => 'Today',
-            'href' => route('admin.enquiries.index', ['filter' => 'today']),
-            'icon' => 'today',
-            'active' => request()->routeIs('admin.enquiries.index') && $filter === 'today',
-        ],
-        [
-            'label' => 'Paid ads',
-            'href' => route('admin.enquiries.index', ['filter' => 'paid']),
-            'icon' => 'urgent',
-            'active' => $filter === 'paid',
+            'active' => request()->routeIs('admin.enquiries.*'),
         ],
     ];
 

@@ -29,6 +29,12 @@ return [
         'callback_promise' => 'Fast callback — we aim to call you within 2 business hours.',
     ],
 
+    /*
+    | Paid ads (CPC) admin UI — set to true when running Google/Meta ads.
+    | Shows the Paid (CPC) stat, sidebar link, and filter tab on enquiries.
+    */
+    'admin_show_paid_ads' => false,
+
     'google_reviews' => [
         'rating' => 5.0,
         'count' => 18,

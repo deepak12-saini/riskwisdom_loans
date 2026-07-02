@@ -24,7 +24,7 @@ class RateReviewController extends Controller
             'first_name' => ['required', 'string', 'max:120'],
             'last_name' => ['required', 'string', 'max:120'],
             'phone' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => lead_email_rules(),
             'current_rate' => ['required', 'numeric', 'min:0', 'max:20'],
             'loan_balance' => ['nullable', 'numeric', 'min:0', 'max:50000000'],
             'lender' => ['nullable', 'string', 'max:120'],

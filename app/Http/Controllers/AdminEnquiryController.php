@@ -15,6 +15,11 @@ class AdminEnquiryController extends Controller
     public function index(Request $request): View
     {
         $filter = (string) $request->query('filter', 'all');
+        $showPaidAds = (bool) config('riskwisdom.admin_show_paid_ads', false);
+
+        if ($filter === 'paid' && ! $showPaidAds) {
+            $filter = 'all';
+        }
 
         $query = Enquiry::query()->with('client')->latest();
 
@@ -22,7 +27,7 @@ class AdminEnquiryController extends Controller
             'ready_now' => $query->where('timeline', 'ready_now'),
             'this_week' => $query->where('created_at', '>=', now()->startOfWeek()),
             'today' => $query->whereDate('created_at', today()),
-            'paid' => $query->where('utm_medium', 'cpc'),
+            'paid' => $showPaidAds ? $query->where('utm_medium', 'cpc') : null,
             default => null,
         };
 
@@ -33,8 +38,11 @@ class AdminEnquiryController extends Controller
             'ready_now' => Enquiry::query()->where('timeline', 'ready_now')->count(),
             'this_week' => Enquiry::query()->where('created_at', '>=', now()->startOfWeek())->count(),
             'today' => Enquiry::query()->whereDate('created_at', today())->count(),
-            'paid' => Enquiry::query()->where('utm_medium', 'cpc')->count(),
         ];
+
+        if ($showPaidAds) {
+            $stats['paid'] = Enquiry::query()->where('utm_medium', 'cpc')->count();
+        }
 
         $headings = [
             'all' => 'All enquiries',
@@ -46,7 +54,29 @@ class AdminEnquiryController extends Controller
 
         $pageHeading = $headings[$filter] ?? 'Website enquiries';
 
-        return view('admin.enquiries.index', compact('enquiries', 'stats', 'filter', 'pageHeading'));
+        return view('admin.enquiries.index', compact('enquiries', 'stats', 'filter', 'pageHeading', 'showPaidAds'));
+    }
+
+    public function show(Enquiry $enquiry): View
+    {
+        $enquiry->load('client');
+
+        return view('admin.enquiries.show', compact('enquiry'));
+    }
+
+    public function destroy(Enquiry $enquiry): RedirectResponse
+    {
+        if ($enquiry->client) {
+            return redirect()
+                ->route('admin.enquiries.index')
+                ->with('error', 'This enquiry has a client file. Archive or delete the client file first.');
+        }
+
+        $enquiry->delete();
+
+        return redirect()
+            ->route('admin.enquiries.index')
+            ->with('success', 'Enquiry deleted.');
     }
 
     public function convert(Enquiry $enquiry, MailchimpService $mailchimp): RedirectResponse

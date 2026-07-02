@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\ClientDocument;
-use App\Services\DocuSignService;
+use App\Services\DocumentSigningManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,9 +12,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminClientDocumentController extends Controller
 {
-    public function store(Request $request, Client $client, DocuSignService $docuSign): RedirectResponse
+    public function store(Request $request, Client $client, DocumentSigningManager $signing): RedirectResponse
     {
-        $documentTypes = array_keys(config('docusign.document_types', []));
+        $documentTypes = array_keys(config('signing.document_types', []));
+        $signingService = $signing->active();
+        $providerLabel = $signingService->providerLabel();
 
         $validated = $request->validate([
             'document_type' => ['required', 'string', 'in:'.implode(',', $documentTypes)],
@@ -45,19 +47,20 @@ class AdminClientDocumentController extends Controller
             'signer_name' => $validated['signer_name'],
             'signer_email' => $validated['signer_email'],
             'task_id' => $validated['task_id'] ?? null,
+            'signing_provider' => $signingService->provider(),
             'original_disk' => $disk,
             'original_path' => $path,
             'status' => 'draft',
         ]);
 
-        if (! $docuSign->isConfigured()) {
+        if (! $signingService->isConfigured()) {
             return redirect()
                 ->route('admin.clients.show', $client)
-                ->with('error', 'Document saved as draft. DocuSign API keys are not configured yet — add them to .env to send for signature.');
+                ->with('error', 'Document saved as draft. '.$providerLabel.' API keys are not configured yet — add them to .env to send for signature.');
         }
 
         try {
-            $result = $docuSign->sendDocument($document);
+            $result = $signingService->sendDocument($document);
 
             $document->update([
                 'envelope_id' => $result['envelope_id'],
@@ -73,35 +76,38 @@ class AdminClientDocumentController extends Controller
 
             return redirect()
                 ->route('admin.clients.show', $client)
-                ->with('error', 'Document saved but DocuSign send failed: '.$exception->getMessage());
+                ->with('error', 'Document saved but '.$providerLabel.' send failed: '.$exception->getMessage());
         }
 
         return redirect()
             ->route('admin.clients.show', $client)
-            ->with('success', 'Document sent to '.$document->signer_email.' via DocuSign.');
+            ->with('success', 'Document sent to '.$document->signer_email.' via '.$providerLabel.'.');
     }
 
-    public function sync(Client $client, ClientDocument $document, DocuSignService $docuSign): RedirectResponse
+    public function sync(Client $client, ClientDocument $document, DocumentSigningManager $signing): RedirectResponse
     {
         abort_unless($document->client_id === $client->id, 404);
 
-        if (! $docuSign->isConfigured()) {
+        $signingService = $signing->forDocument($document);
+        $providerLabel = $signingService->providerLabel();
+
+        if (! $signingService->isConfigured()) {
             return redirect()
                 ->route('admin.clients.show', $client)
-                ->with('error', 'DocuSign is not configured.');
+                ->with('error', $providerLabel.' is not configured.');
         }
 
         try {
-            $docuSign->syncEnvelopeStatus($document);
+            $signingService->syncEnvelopeStatus($document);
         } catch (\Throwable $exception) {
             return redirect()
                 ->route('admin.clients.show', $client)
-                ->with('error', 'Could not sync DocuSign status: '.$exception->getMessage());
+                ->with('error', 'Could not sync '.$providerLabel.' status: '.$exception->getMessage());
         }
 
         return redirect()
             ->route('admin.clients.show', $client)
-            ->with('success', 'DocuSign status updated.');
+            ->with('success', $providerLabel.' status updated.');
     }
 
     public function download(Client $client, ClientDocument $document): StreamedResponse

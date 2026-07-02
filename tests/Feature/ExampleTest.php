@@ -365,6 +365,101 @@ class ExampleTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_view_and_delete_enquiry(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        $enquiry = Enquiry::query()->create([
+            'lead_type' => 'conversion',
+            'first_name' => 'Test',
+            'last_name' => 'Lead',
+            'phone' => '0400111222',
+            'email' => 'test@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => '1_3_months',
+            'state' => 'NSW',
+            'enquiry' => 'Refinance enquiry',
+            'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.show', $enquiry))
+            ->assertOk()
+            ->assertSee('Test Lead')
+            ->assertSee('Refinance enquiry');
+
+        $this->actingAs($admin)
+            ->delete(route('admin.enquiries.destroy', $enquiry))
+            ->assertRedirect(route('admin.enquiries.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('enquiries', ['id' => $enquiry->id]);
+    }
+
+    public function test_admin_cannot_delete_enquiry_with_client_file(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        $enquiry = Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'Jane',
+            'last_name' => 'Borrower',
+            'phone' => '0400111222',
+            'email' => 'jane@example.com',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'Looking for a home loan',
+            'status' => 'new',
+        ]);
+
+        \App\Models\Client::query()->create(\App\Models\Client::fromEnquiry($enquiry));
+
+        $this->actingAs($admin)
+            ->delete(route('admin.enquiries.destroy', $enquiry))
+            ->assertRedirect(route('admin.enquiries.index'))
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('enquiries', ['id' => $enquiry->id]);
+    }
+
+    public function test_admin_can_create_client_file_manually(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->post(route('admin.clients.store'), [
+            'first_name' => 'Deepak',
+            'last_name' => 'Saini',
+            'email' => 'deepaksaini10036@gmail.com',
+            'phone' => '8195967310',
+            'loan_type' => 'refinance',
+            'state' => 'NSW',
+            'assigned_user_id' => $admin->id,
+            'notes' => 'Test client file',
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('clients', [
+            'first_name' => 'Deepak',
+            'last_name' => 'Saini',
+            'email' => 'deepaksaini10036@gmail.com',
+            'status' => 'active',
+        ]);
+    }
+
     public function test_admin_can_create_tasks_and_close_them(): void
     {
         $admin = User::factory()->create([
@@ -413,7 +508,7 @@ class ExampleTest extends TestCase
         $this->get(route('admin.tasks.index'))->assertRedirect(route('admin.login'));
     }
 
-    public function test_admin_can_store_document_draft_without_docusign(): void
+    public function test_admin_can_store_document_draft_without_signing_provider(): void
     {
         Storage::fake('local');
 
@@ -431,8 +526,9 @@ class ExampleTest extends TestCase
         ]);
 
         config([
-            'docusign.enabled' => false,
-            'docusign.document_types' => [
+            'signing.provider' => 'annature',
+            'annature.enabled' => false,
+            'signing.document_types' => [
                 'privacy_consent' => 'Privacy consent',
                 'credit_guide' => 'Credit guide acknowledgment',
                 'authority_to_act' => 'Authority to act',
@@ -509,6 +605,63 @@ class ExampleTest extends TestCase
                     'status' => 'completed',
                 ],
             ],
+        ])->assertOk();
+
+        $document->refresh();
+
+        $this->assertSame('signed', $document->status);
+        $this->assertNotNull($document->signed_path);
+        Storage::disk('local')->assertExists($document->signed_path);
+    }
+
+    public function test_annature_webhook_marks_document_signed(): void
+    {
+        Storage::fake('local');
+
+        $client = \App\Models\Client::query()->create([
+            'first_name' => 'Jane',
+            'last_name' => 'Signer',
+            'email' => 'jane@example.com',
+            'status' => 'active',
+        ]);
+
+        $document = \App\Models\ClientDocument::query()->create([
+            'client_id' => $client->id,
+            'document_type' => 'privacy_consent',
+            'title' => 'Privacy consent',
+            'envelope_id' => 'env-annature-123',
+            'signing_provider' => 'annature',
+            'status' => 'sent',
+            'signer_name' => 'Jane Signer',
+            'signer_email' => 'jane@example.com',
+            'original_disk' => 'local',
+            'original_path' => 'clients/1/documents/original/test.pdf',
+            'sent_at' => now(),
+        ]);
+
+        Storage::disk('local')->put('clients/1/documents/original/test.pdf', '%PDF-1.4 test');
+
+        $this->mock(\App\Services\AnnatureService::class, function ($mock) use ($document): void {
+            $mock->shouldReceive('verifyWebhookSignature')->once()->andReturn(true);
+            $mock->shouldReceive('handleWebhookPayload')->once()->with(\Mockery::type('array'))
+                ->andReturnUsing(function () use ($document): void {
+                    $disk = 'local';
+                    $path = sprintf('clients/%d/documents/%d-signed.pdf', $document->client_id, $document->id);
+                    Storage::disk($disk)->put($path, '%PDF-1.4 signed');
+                    $document->update([
+                        'status' => 'signed',
+                        'signed_disk' => $disk,
+                        'signed_path' => $path,
+                        'signed_at' => now(),
+                    ]);
+                });
+        });
+
+        $this->postJson(route('webhooks.annature'), [
+            'event' => 'recipient_completed',
+            'envelope_id' => 'env-annature-123',
+            'recipient_id' => 'recipient-1',
+            'completed' => now()->toIso8601String(),
         ])->assertOk();
 
         $document->refresh();
@@ -617,6 +770,29 @@ class ExampleTest extends TestCase
             'state' => 'NSW',
             'source' => 'conversion_refinance',
             'utm_medium' => 'cpc',
+        ]);
+    }
+
+    public function test_conversion_form_rejects_fake_email(): void
+    {
+        $response = $this->from(route('enquire.campaign', ['campaign' => 'refinance']))
+            ->post(route('enquire.campaign.submit', ['campaign' => 'refinance']), [
+                'first_name' => 'Test',
+                'last_name' => 'User',
+                'phone' => '0400000000',
+                'email' => 'test@gmail.com',
+                'loan_type' => 'refinance',
+                'timeline' => 'ready_now',
+                'state' => 'NSW',
+                'enquiry' => 'Refinance enquiry',
+            ]);
+
+        $response
+            ->assertRedirect(route('enquire.show', ['campaign' => 'refinance']).'#enquiry-form')
+            ->assertSessionHasErrors('email');
+
+        $this->assertDatabaseMissing('enquiries', [
+            'email' => 'test@gmail.com',
         ]);
     }
 

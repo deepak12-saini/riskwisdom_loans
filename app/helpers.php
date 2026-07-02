@@ -71,6 +71,20 @@ if (! function_exists('calendly_hide_branding')) {
     }
 }
 
+if (! function_exists('signing_configured')) {
+    function signing_configured(): bool
+    {
+        return app(\App\Services\DocumentSigningManager::class)->active()->isConfigured();
+    }
+}
+
+if (! function_exists('signing_provider_label')) {
+    function signing_provider_label(): string
+    {
+        return app(\App\Services\DocumentSigningManager::class)->active()->providerLabel();
+    }
+}
+
 if (! function_exists('docusign_configured')) {
     function docusign_configured(): bool
     {
@@ -129,5 +143,15 @@ if (! function_exists('conversion_landing_url')) {
         ];
 
         return ad_landing_url($map[$campaign] ?? 'enquire', $utm);
+    }
+}
+
+if (! function_exists('lead_email_rules')) {
+    /**
+     * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
+     */
+    function lead_email_rules(): array
+    {
+        return ['required', 'email', 'max:255', new \App\Rules\ValidLeadEmail];
     }
 }

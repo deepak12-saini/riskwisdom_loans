@@ -26,7 +26,7 @@ class BorrowingPowerController extends Controller
             'first_name' => ['required', 'string', 'max:120'],
             'last_name' => ['required', 'string', 'max:120'],
             'phone' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => lead_email_rules(),
             'income' => ['required', 'numeric', 'min:0', 'max:10000000'],
             'expenses' => ['required', 'numeric', 'min:0', 'max:1000000'],
             'deposit' => ['required', 'numeric', 'min:0', 'max:10000000'],
