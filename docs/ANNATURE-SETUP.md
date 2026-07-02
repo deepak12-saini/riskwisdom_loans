@@ -97,7 +97,9 @@ Admin sends envelopes with a **pre-placed signature field** so clients tap the b
 | **coordinates** (default) | Any PDF — field is placed at bottom of page 1 |
 | **anchor** | PDF includes hidden text `{{signature}}` on the signature line |
 
-**Recommended for broker forms:** add `{{signature}}` in small/light text on each PDF’s signature line, then in `.env`:
+**Recommended rollout:** keep `coordinates` as the default for reliable admin uploads. Use `anchor` only for standard broker forms you control and have tested.
+
+**For broker templates with anchor text:** add `{{signature}}` in small/light text on each PDF’s signature line, then in `.env`:
 
 ```env
 ANNATURE_SIGNATURE_PLACEMENT=anchor

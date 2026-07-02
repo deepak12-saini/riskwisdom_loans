@@ -26,18 +26,24 @@ return [
     | Signature field placement
     |--------------------------------------------------------------------------
     |
-    | anchor      — place on {{signature}} text in the PDF (default)
-    | coordinates — fixed box placement when a PDF needs explicit positioning
+    | coordinates — fixed box placement for general admin uploads (default)
+    | anchor      — place on {{signature}} text for controlled templates
     |
     | Per document type can override via document_type_placement below.
     |
     */
 
-    'signature_placement' => env('ANNATURE_SIGNATURE_PLACEMENT', 'anchor'),
+    'signature_placement' => env('ANNATURE_SIGNATURE_PLACEMENT', 'coordinates'),
 
     'anchor' => env('ANNATURE_SIGNATURE_ANCHOR', '{{signature}}'),
 
-    'signature_field' => [],
+    'signature_field' => [
+        'page' => 1,
+        'x_coordinate' => 100,
+        'y_coordinate' => 650,
+        'width' => 150,
+        'height' => 40,
+    ],
 
     'document_type_placement' => [
         // 'privacy_consent' => 'anchor',
