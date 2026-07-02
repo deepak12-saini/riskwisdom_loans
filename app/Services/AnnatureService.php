@@ -167,9 +167,21 @@ class AnnatureService implements DocumentSigningServiceContract
             return false;
         }
 
-        $expected = hash_hmac('md5', $payload, $secret);
+        $signature = trim($signature);
+        $candidates = [
+            hash_hmac('sha256', $payload, $secret),
+            'sha256='.hash_hmac('sha256', $payload, $secret),
+            hash_hmac('md5', $payload, $secret),
+            'md5='.hash_hmac('md5', $payload, $secret),
+        ];
 
-        return hash_equals($expected, $signature);
+        foreach ($candidates as $candidate) {
+            if (hash_equals($candidate, $signature)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -7,6 +7,34 @@ use Tests\TestCase;
 
 class AnnatureSignatureFieldTest extends TestCase
 {
+    public function test_webhook_signature_accepts_sha256_hex(): void
+    {
+        config([
+            'annature.webhook_secret' => 'test-secret',
+        ]);
+
+        $payload = '{"event":"envelope_completed"}';
+        $signature = hash_hmac('sha256', $payload, 'test-secret');
+
+        $this->assertTrue(
+            app(AnnatureService::class)->verifyWebhookSignature($payload, $signature)
+        );
+    }
+
+    public function test_webhook_signature_accepts_sha256_prefixed_value(): void
+    {
+        config([
+            'annature.webhook_secret' => 'test-secret',
+        ]);
+
+        $payload = '{"event":"envelope_completed"}';
+        $signature = 'sha256='.hash_hmac('sha256', $payload, 'test-secret');
+
+        $this->assertTrue(
+            app(AnnatureService::class)->verifyWebhookSignature($payload, $signature)
+        );
+    }
+
     public function test_signature_field_uses_coordinates_by_default(): void
     {
         config([
