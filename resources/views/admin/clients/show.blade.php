@@ -280,7 +280,13 @@
 
             <div class="rw-admin-task-add rw-admin-task-add--documents">
                 <h3>Send document for signature</h3>
-                <form method="post" action="{{ route('admin.clients.documents.store', $client) }}" enctype="multipart/form-data" class="rw-admin-form rw-admin-form--tasks">
+                <form
+                    method="post"
+                    action="{{ route('admin.clients.documents.store', $client) }}"
+                    enctype="multipart/form-data"
+                    class="rw-admin-form rw-admin-form--tasks"
+                    data-submit-loader-form
+                >
                     @csrf
                     <div class="rw-admin-form-grid rw-admin-form-grid--tasks">
                         <label>
@@ -320,7 +326,12 @@
                         @endif
                     </div>
                     <div class="rw-admin-form-actions">
-                        <button class="rw-button rw-button--solid" type="submit">
+                        <button
+                            class="rw-button rw-button--solid"
+                            type="submit"
+                            data-submit-loader-button
+                            data-loading-text="{{ $signingConfigured ? 'Sending...' : 'Saving...' }}"
+                        >
                             @if ($signingConfigured)
                                 Send via {{ $signingProviderLabel }}
                             @else
@@ -435,6 +446,21 @@
                 if (event.target === dialog) {
                     dialog.close();
                 }
+            });
+        });
+
+        document.querySelectorAll('[data-submit-loader-form]').forEach((form) => {
+            form.addEventListener('submit', () => {
+                const button = form.querySelector('[data-submit-loader-button]');
+
+                if (! button || button.disabled) {
+                    return;
+                }
+
+                button.dataset.originalText = button.innerHTML.trim();
+                button.textContent = button.dataset.loadingText || 'Submitting...';
+                button.disabled = true;
+                button.setAttribute('aria-busy', 'true');
             });
         });
     </script>
