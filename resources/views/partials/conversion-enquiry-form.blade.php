@@ -8,13 +8,9 @@
 
 <div class="rw-conversion-form" id="enquiry-form">
     @if ($errors->any())
-        <div class="rw-form-alert rw-form-alert-error">
+        <div class="rw-form-alert rw-form-alert-error rw-conversion-form__alert">
             <strong>We could not submit your enquiry yet.</strong>
-            <ul class="rw-form-error-list">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            <p>Please check the highlighted fields below.</p>
         </div>
     @endif
 

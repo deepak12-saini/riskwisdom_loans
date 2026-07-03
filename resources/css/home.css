@@ -5511,6 +5511,16 @@ body.rw-admin-login-page {
     overflow: hidden;
 }
 
+.rw-conversion-form__alert {
+    margin: 1rem 1.4rem 0;
+    padding: 0.75rem 0.9rem;
+}
+
+.rw-conversion-form__alert p {
+    margin: 0.35rem 0 0;
+    font-size: 0.88rem;
+}
+
 .rw-conversion-form__inner {
     display: grid;
     gap: 0;

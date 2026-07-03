@@ -32,7 +32,7 @@ class ConversionLandingController extends Controller
         $slug = $landing['slug'];
 
         if ($request->filled('_gotcha')) {
-            return redirect()->route('enquire.show', ['campaign' => $slug === 'default' ? null : $slug]);
+            return redirect()->to(conversion_landing_url_for_slug($slug));
         }
 
         $validator = Validator::make($request->all(), [
@@ -61,13 +61,11 @@ class ConversionLandingController extends Controller
 
         apply_lead_identity_checks($validator);
 
-        $redirectRoute = $slug === 'default'
-            ? route('enquire.show')
-            : route('enquire.show', ['campaign' => $slug]);
+        $redirectUrl = conversion_landing_url_for_slug($slug);
 
         if ($validator->fails()) {
             return redirect()
-                ->to($redirectRoute)
+                ->to($redirectUrl)
                 ->withErrors($validator)
                 ->withInput()
                 ->withFragment('enquiry-form');

@@ -812,7 +812,7 @@ class ExampleTest extends TestCase
             ]);
 
         $response
-            ->assertRedirect(route('enquire.show', ['campaign' => 'refinance']).'#enquiry-form')
+            ->assertRedirect(route('enquire.campaign', ['campaign' => 'refinance']).'#enquiry-form')
             ->assertSessionHasErrors('email');
 
         $this->assertDatabaseMissing('enquiries', [

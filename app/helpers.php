@@ -146,6 +146,17 @@ if (! function_exists('conversion_landing_url')) {
     }
 }
 
+if (! function_exists('conversion_landing_url_for_slug')) {
+    function conversion_landing_url_for_slug(string $slug): string
+    {
+        if ($slug === 'default') {
+            return route('enquire.show');
+        }
+
+        return route('enquire.campaign', ['campaign' => $slug]);
+    }
+}
+
 if (! function_exists('lead_email_rules')) {
     /**
      * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
