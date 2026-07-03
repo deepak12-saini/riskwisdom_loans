@@ -43,6 +43,7 @@ class ValidLeadEmailTest extends TestCase
             'disposable domain' => ['user@mailinator.com'],
             'gibberish local' => ['sdfds@gmail.com'],
             'numeric local' => ['12345@gmail.com'],
+            'no reply dotted' => ['no.reply.JoanAndersen@gmail.com'],
         ];
     }
 

@@ -21,14 +21,14 @@ class ContactController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:120'],
-            'last_name' => ['required', 'string', 'max:120'],
-            'phone' => ['required', 'string', 'max:50'],
+            'first_name' => lead_name_rules(),
+            'last_name' => lead_name_rules(),
+            'phone' => lead_phone_rules(),
             'email' => lead_email_rules(),
             'loan_type' => ['required', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.loan_types')))],
             'timeline' => ['required', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.timelines')))],
             'state' => ['required', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.states')))],
-            'enquiry' => ['required', 'string', 'max:2000'],
+            'enquiry' => lead_message_rules(),
             'source' => ['nullable', 'string', 'max:120'],
             'utm_source' => ['nullable', 'string', 'max:120'],
             'utm_medium' => ['nullable', 'string', 'max:120'],
@@ -44,6 +44,8 @@ class ContactController extends Controller
             'email.email' => 'Please enter a valid email address.',
             'enquiry.required' => 'Please tell us about your finance goals.',
         ]);
+
+        apply_lead_identity_checks($validator);
 
         if ($validator->fails()) {
             return redirect()->to(route('home').'#contact')

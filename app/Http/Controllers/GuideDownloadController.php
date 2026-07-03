@@ -35,10 +35,10 @@ class GuideDownloadController extends Controller
         $guide = $this->guideOrFail($slug);
 
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:120'],
-            'last_name' => ['required', 'string', 'max:120'],
+            'first_name' => lead_name_rules(),
+            'last_name' => lead_name_rules(),
             'email' => lead_email_rules(),
-            'phone' => ['required', 'string', 'max:50'],
+            'phone' => lead_phone_rules(),
             'state' => ['nullable', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.states')))],
         ], [
             'first_name.required' => 'Please enter your first name.',
@@ -47,6 +47,8 @@ class GuideDownloadController extends Controller
             'email.email' => 'Please enter a valid email address.',
             'phone.required' => 'Please enter your phone number.',
         ]);
+
+        apply_lead_identity_checks($validator);
 
         if ($validator->fails()) {
             return redirect()

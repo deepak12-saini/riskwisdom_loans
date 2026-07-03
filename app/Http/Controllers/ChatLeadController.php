@@ -21,11 +21,11 @@ class ChatLeadController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:120'],
-            'last_name' => ['required', 'string', 'max:120'],
+            'first_name' => lead_name_rules(),
+            'last_name' => lead_name_rules(),
             'email' => lead_email_rules(),
-            'phone' => ['required', 'string', 'max:50'],
-            'enquiry' => ['required', 'string', 'max:1200'],
+            'phone' => lead_phone_rules(),
+            'enquiry' => lead_message_rules(1200),
             'loan_type' => ['nullable', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.loan_types')))],
         ], [
             'first_name.required' => 'Please enter your first name.',
@@ -35,6 +35,8 @@ class ChatLeadController extends Controller
             'phone.required' => 'Please enter your phone number.',
             'enquiry.required' => 'Please tell us what you need help with.',
         ]);
+
+        apply_lead_identity_checks($validator);
 
         if ($validator->fails()) {
             return redirect()->back()

@@ -14,7 +14,7 @@ class NewsletterSignupController extends Controller
     public function __invoke(Request $request, MailchimpService $mailchimp): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:120'],
+            'first_name' => lead_name_rules(),
             'email' => lead_email_rules(),
         ], [
             'first_name.required' => 'Please enter your first name for newsletter updates.',

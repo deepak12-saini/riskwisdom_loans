@@ -129,8 +129,13 @@ class ValidLeadEmail implements ValidationRule
     private function isBlockedLocalPart(string $local): bool
     {
         $base = explode('+', $local, 2)[0];
+        $normalized = str_replace(['.', '-', '_'], '', $base);
 
         if (in_array($base, self::BLOCKED_LOCAL_PARTS, true)) {
+            return true;
+        }
+
+        if (str_starts_with($normalized, 'noreply') || str_contains($normalized, 'noreply')) {
             return true;
         }
 

@@ -21,9 +21,9 @@ class RateReviewController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:120'],
-            'last_name' => ['required', 'string', 'max:120'],
-            'phone' => ['required', 'string', 'max:50'],
+            'first_name' => lead_name_rules(),
+            'last_name' => lead_name_rules(),
+            'phone' => lead_phone_rules(),
             'email' => lead_email_rules(),
             'current_rate' => ['required', 'numeric', 'min:0', 'max:20'],
             'loan_balance' => ['nullable', 'numeric', 'min:0', 'max:50000000'],
@@ -39,6 +39,8 @@ class RateReviewController extends Controller
             'email.email' => 'Please enter a valid email address.',
             'current_rate.required' => 'Please enter your current interest rate.',
         ]);
+
+        apply_lead_identity_checks($validator);
 
         if ($validator->fails()) {
             return redirect()

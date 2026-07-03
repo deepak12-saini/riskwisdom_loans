@@ -101,6 +101,30 @@ class ExampleTest extends TestCase
         Mail::assertSent(ContactAutoReplyMail::class);
     }
 
+    public function test_contact_form_rejects_obvious_spam_submission(): void
+    {
+        Mail::fake();
+
+        $response = $this->from(route('home'))
+            ->post('/contact', [
+                'first_name' => 'DavidrekDS',
+                'last_name' => 'DavidrekDS',
+                'phone' => '89419874553',
+                'email' => 'no.reply.JoanAndersen@gmail.com',
+                'loan_type' => 'investment',
+                'timeline' => '3_6_months',
+                'state' => 'TAS',
+                'enquiry' => 'Good morning! I noticed your website while browsing the internet. Contact us on Telegram - https://t.me/FeedbackFormEU',
+            ]);
+
+        $response
+            ->assertRedirect(route('home').'#contact')
+            ->assertSessionHasErrors(['email', 'phone', 'enquiry', 'last_name']);
+
+        $this->assertDatabaseCount('enquiries', 0);
+        Mail::assertNothingSent();
+    }
+
     public function test_honeypot_submissions_are_silently_accepted(): void
     {
         Mail::fake();

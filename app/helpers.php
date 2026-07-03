@@ -155,3 +155,48 @@ if (! function_exists('lead_email_rules')) {
         return ['required', 'email', 'max:255', new \App\Rules\ValidLeadEmail];
     }
 }
+
+if (! function_exists('lead_name_rules')) {
+    /**
+     * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
+     */
+    function lead_name_rules(): array
+    {
+        return ['required', 'string', 'max:120', new \App\Rules\ValidLeadName];
+    }
+}
+
+if (! function_exists('lead_phone_rules')) {
+    /**
+     * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
+     */
+    function lead_phone_rules(): array
+    {
+        return ['required', 'string', 'max:50', new \App\Rules\ValidAustralianPhone];
+    }
+}
+
+if (! function_exists('lead_message_rules')) {
+    /**
+     * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
+     */
+    function lead_message_rules(int $max = 2000): array
+    {
+        return ['required', 'string', 'max:'.$max, new \App\Rules\ValidLeadMessage];
+    }
+}
+
+if (! function_exists('apply_lead_identity_checks')) {
+    function apply_lead_identity_checks(\Illuminate\Contracts\Validation\Validator $validator): void
+    {
+        $validator->after(function (\Illuminate\Validation\Validator $validator): void {
+            $data = $validator->getData();
+            $first = strtolower(trim((string) ($data['first_name'] ?? '')));
+            $last = strtolower(trim((string) ($data['last_name'] ?? '')));
+
+            if ($first !== '' && $last !== '' && $first === $last) {
+                $validator->errors()->add('last_name', 'Please enter your real first and last name.');
+            }
+        });
+    }
+}

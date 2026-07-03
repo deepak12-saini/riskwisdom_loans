@@ -23,9 +23,9 @@ class BorrowingPowerController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:120'],
-            'last_name' => ['required', 'string', 'max:120'],
-            'phone' => ['required', 'string', 'max:50'],
+            'first_name' => lead_name_rules(),
+            'last_name' => lead_name_rules(),
+            'phone' => lead_phone_rules(),
             'email' => lead_email_rules(),
             'income' => ['required', 'numeric', 'min:0', 'max:10000000'],
             'expenses' => ['required', 'numeric', 'min:0', 'max:1000000'],
@@ -42,6 +42,8 @@ class BorrowingPowerController extends Controller
             'email.required' => 'Please enter your email address.',
             'email.email' => 'Please enter a valid email address.',
         ]);
+
+        apply_lead_identity_checks($validator);
 
         if ($validator->fails()) {
             return redirect()
