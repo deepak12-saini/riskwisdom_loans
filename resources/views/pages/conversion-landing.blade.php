@@ -136,35 +136,35 @@
             <div class="container rw-conversion__strip-inner">
                 <div class="rw-conversion__strip-item">
                     <span class="rw-conversion__strip-icon rw-conversion__strip-icon--star" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2.5l2.76 5.59 6.17.9-4.47 4.35 1.06 6.15L12 16.9l-5.52 2.9 1.06-6.15-4.47-4.35 6.17-.9L12 2.5z"/>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path fill="currentColor" d="M12 2.8l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9L12 2.8z"/>
                         </svg>
                     </span>
-                    <div>
+                    <div class="rw-conversion__strip-copy">
                         <strong>{{ number_format((float) ($reviews['rating'] ?? 5), 1) }} Google rating</strong>
-                        <span>Trusted by Australian borrowers</span>
+                        <p>Trusted by Australian borrowers</p>
                     </div>
                 </div>
                 <div class="rw-conversion__strip-item">
                     <span class="rw-conversion__strip-icon rw-conversion__strip-icon--bolt" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 2.5 5.5 14h6.5l-1 7.5L18.5 10H12l1-7.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path fill="currentColor" d="M13 2 6 13h5l-1 9 8-12h-5l0-8z"/>
                         </svg>
                     </span>
-                    <div>
+                    <div class="rw-conversion__strip-copy">
                         <strong>Fast callback</strong>
-                        <span>{{ config('riskwisdom.rate_review.callback_promise') }}</span>
+                        <p>{{ config('riskwisdom.rate_review.callback_promise') }}</p>
                     </div>
                 </div>
                 <div class="rw-conversion__strip-item">
                     <span class="rw-conversion__strip-icon rw-conversion__strip-icon--bank" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M2 10 20h20M4 10 12 4.5 20 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path fill="currentColor" d="M12 3 3 8v2h18V8L12 3zm-7 8v6H4v2h16v-2h-1v-6h-2v6h-3v-6h-2v6H9v-6H7zm-3 10h20v2H2v-2z"/>
                         </svg>
                     </span>
-                    <div>
+                    <div class="rw-conversion__strip-copy">
                         <strong>Major lender panel</strong>
-                        <span>ANZ · CBA · Westpac · NAB + more</span>
+                        <p>ANZ · CBA · Westpac · NAB + more</p>
                     </div>
                 </div>
             </div>
