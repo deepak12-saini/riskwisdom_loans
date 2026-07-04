@@ -117,6 +117,8 @@ return [
             'timeline' => 'researching',
             'file' => 'guide-files/first-home-buyers-guide.html',
             'tag' => 'guide-fhb',
+            'image' => 'images/landing/home-loans-advisor.jpg',
+            'image_alt' => 'First home buyer reviewing loan options with a broker',
         ],
         'construction-knockdown-rebuild-finance-guide' => [
             'title' => 'Construction & Knockdown-Rebuild Finance Guide',
@@ -127,6 +129,8 @@ return [
             'timeline' => 'researching',
             'file' => 'guide-files/construction-knockdown-rebuild-finance-guide.html',
             'tag' => 'guide-construction',
+            'image' => 'images/landing/commercial-finance-advisor.jpg',
+            'image_alt' => 'Construction and knockdown-rebuild finance planning',
         ],
     ],
 
