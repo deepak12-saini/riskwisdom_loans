@@ -37,12 +37,16 @@ return [
 
     'anchor' => env('ANNATURE_SIGNATURE_ANCHOR', '{{signature}}'),
 
+  /*
+    | Default field size/margins for coordinate placement. Position is computed from
+    | the uploaded PDF's page size (signature goes on the last page, bottom-left).
+    | Do not set x_coordinate / y_coordinate here — they are derived per PDF.
+    */
     'signature_field' => [
-        'page' => 1,
-        'x_coordinate' => 100,
-        'y_coordinate' => 650,
-        'width' => 150,
-        'height' => 40,
+        'margin_x' => 72,
+        'margin_y' => 72,
+        'width' => 200,
+        'height' => 50,
     ],
 
     'document_type_placement' => [

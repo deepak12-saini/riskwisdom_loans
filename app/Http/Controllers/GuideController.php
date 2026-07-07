@@ -18,7 +18,8 @@ class GuideController extends Controller
 
     public function show(string $slug): View
     {
-        $post = collect($this->allPosts())->firstWhere('slug', $slug);
+        $posts = $this->allPosts();
+        $post = collect($posts)->firstWhere('slug', $slug);
 
         if ($post === null) {
             throw new NotFoundHttpException();
@@ -32,11 +33,70 @@ class GuideController extends Controller
 
         $raw = File::get($contentPath);
         $html = Str::markdown($raw);
+        $html = (string) preg_replace('/^\s*<h1[^>]*>.*?<\/h1>\s*/is', '', $html, 1);
+        $parsed = $this->parseGuideSections($html);
+
+        $related = collect($posts)
+            ->reject(fn (array $item): bool => $item['slug'] === $slug)
+            ->take(3)
+            ->values()
+            ->all();
 
         return view('guides.show', [
             'post' => $post,
-            'content' => $html,
+            'intro' => $parsed['intro'],
+            'sections' => $parsed['sections'],
+            'related' => $related,
         ]);
+    }
+
+    /**
+     * @return array{intro: string, sections: list<array{title: string, body: string}>}
+     */
+    private function parseGuideSections(string $html): array
+    {
+        $parts = preg_split('/(<h2[^>]*>.*?<\/h2>)/is', $html, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+        if ($parts === false || $parts === []) {
+            return [
+                'intro' => $html,
+                'sections' => [],
+            ];
+        }
+
+        $intro = '';
+        $sections = [];
+        $pendingTitle = null;
+
+        foreach ($parts as $part) {
+            if (preg_match('/^<h2[^>]*>(.*?)<\/h2>$/is', trim($part), $matches) === 1) {
+                $pendingTitle = trim(html_entity_decode(strip_tags($matches[1])));
+
+                continue;
+            }
+
+            $body = trim($part);
+
+            if ($pendingTitle === null) {
+                $intro .= $body;
+
+                continue;
+            }
+
+            if ($body !== '') {
+                $sections[] = [
+                    'title' => $pendingTitle,
+                    'body' => $body,
+                ];
+            }
+
+            $pendingTitle = null;
+        }
+
+        return [
+            'intro' => trim($intro),
+            'sections' => $sections,
+        ];
     }
 
     /**

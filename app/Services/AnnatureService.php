@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\DocumentSigningService as DocumentSigningServiceContract;
 use App\Models\ClientDocument;
+use App\Support\PdfSignaturePlacement;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -41,6 +42,7 @@ class AnnatureService implements DocumentSigningServiceContract
 
         $pdfContents = Storage::disk($document->original_disk)->get($document->original_path);
         $base64 = base64_encode($pdfContents);
+        $signatureField = $this->signatureFieldFor($document->document_type, $pdfContents);
 
         $payload = [
             'name' => $document->title,
@@ -60,7 +62,7 @@ class AnnatureService implements DocumentSigningServiceContract
                     'type' => 'signer',
                     'order' => 1,
                     'fields' => [
-                        $this->signatureFieldFor($document->document_type),
+                        $signatureField,
                     ],
                 ],
             ],
@@ -260,20 +262,35 @@ class AnnatureService implements DocumentSigningServiceContract
     /**
      * @return array<string, mixed>
      */
-    public function signatureFieldFor(string $documentType): array
+    public function signatureFieldFor(string $documentType, ?string $pdfContents = null): array
     {
+        $anchor = (string) config('annature.anchor', '{{signature}}');
         $placement = config("annature.document_type_placement.{$documentType}")
             ?? config('annature.signature_placement', 'coordinates');
 
-        $field = ['type' => 'signature'];
+        $useAnchor = $placement === 'anchor'
+            || ($pdfContents !== null && PdfSignaturePlacement::containsAnchor($pdfContents, $anchor));
 
-        if ($placement === 'anchor') {
-            return array_merge($field, [
-                'anchor' => config('annature.anchor', '{{signature}}'),
-            ]);
+        if ($useAnchor) {
+            return [
+                'type' => 'signature',
+                'anchor' => $anchor,
+                'required' => true,
+            ];
         }
 
-        return array_merge($field, config('annature.signature_field', []));
+        $dimensions = $pdfContents !== null
+            ? PdfSignaturePlacement::dimensions($pdfContents)
+            : ['width' => 595.0, 'height' => 842.0, 'pages' => 1];
+
+        $defaults = array_merge(
+            ['page' => $dimensions['pages']],
+            config('annature.signature_field', [])
+        );
+
+        unset($defaults['x_coordinate'], $defaults['y_coordinate']);
+
+        return PdfSignaturePlacement::coordinateField($dimensions, $defaults);
     }
 
     private function mapEnvelopeStatus(string $status): string

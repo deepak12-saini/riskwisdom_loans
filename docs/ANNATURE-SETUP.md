@@ -94,7 +94,7 @@ Admin sends envelopes with a **pre-placed signature field** so clients tap the b
 
 | Mode | When to use |
 |------|-------------|
-| **coordinates** (default) | Any PDF — field is placed at bottom of page 1 |
+| **coordinates** (default) | Any PDF — field is placed on the **last page**, bottom-left, sized to fit the PDF |
 | **anchor** | PDF includes hidden text `{{signature}}` on the signature line |
 
 **Recommended rollout:** keep `coordinates` as the default for reliable admin uploads. Use `anchor` only for standard broker forms you control and have tested.
@@ -107,7 +107,7 @@ ANNATURE_SIGNATURE_PLACEMENT=anchor
 
 Or enable per document type in `config/annature.php` → `document_type_placement`.
 
-**If the client sees “choose location”:** the envelope was likely sent from the Annature dashboard without fields, or the PDF has no `{{signature}}` anchor when anchor mode is on.
+**If the client sees PDF only with no signature box:** the old fixed coordinates could land outside the page (Annature skips those fields silently). Deploy the latest code, then void the envelope and send again. For standard broker forms, add `{{signature}}` anchor text for exact placement.
 
 ---
 

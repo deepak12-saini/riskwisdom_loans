@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Services\AnnatureService;
+use App\Support\PdfSignaturePlacement;
 use Tests\TestCase;
 
 class AnnatureSignatureFieldTest extends TestCase
@@ -35,24 +36,25 @@ class AnnatureSignatureFieldTest extends TestCase
         );
     }
 
-    public function test_signature_field_uses_coordinates_by_default(): void
+    public function test_signature_field_uses_pdf_aware_coordinates_by_default(): void
     {
         config([
             'annature.signature_placement' => 'coordinates',
             'annature.signature_field' => [
-                'page' => 1,
-                'x_coordinate' => 100,
-                'y_coordinate' => 650,
-                'width' => 150,
-                'height' => 40,
+                'margin_x' => 72,
+                'margin_y' => 72,
+                'width' => 200,
+                'height' => 50,
             ],
         ]);
 
-        $field = app(AnnatureService::class)->signatureFieldFor('privacy_consent');
+        $pdf = "%PDF-1.4\n2 0 obj<</Type/Page/MediaBox[0 0 595 500]>>endobj\n";
+        $field = app(AnnatureService::class)->signatureFieldFor('privacy_consent', $pdf);
 
         $this->assertSame('signature', $field['type']);
+        $this->assertTrue($field['required']);
         $this->assertSame(1, $field['page']);
-        $this->assertSame(100, $field['x_coordinate']);
+        $this->assertLessThan(500, $field['y_coordinate'] + $field['height']);
         $this->assertArrayNotHasKey('anchor', $field);
     }
 
@@ -71,5 +73,18 @@ class AnnatureSignatureFieldTest extends TestCase
         $this->assertSame('signature', $field['type']);
         $this->assertSame('{{signature}}', $field['anchor']);
         $this->assertArrayNotHasKey('page', $field);
+    }
+
+    public function test_signature_field_auto_uses_anchor_when_marker_exists_in_pdf(): void
+    {
+        config([
+            'annature.signature_placement' => 'coordinates',
+            'annature.anchor' => '{{signature}}',
+        ]);
+
+        $pdf = "%PDF-1.4\n{{signature}}\n2 0 obj<</Type/Page/MediaBox[0 0 595 842]>>endobj\n";
+        $field = app(AnnatureService::class)->signatureFieldFor('other', $pdf);
+
+        $this->assertSame('{{signature}}', $field['anchor']);
     }
 }
