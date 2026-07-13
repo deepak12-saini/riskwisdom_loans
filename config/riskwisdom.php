@@ -8,6 +8,14 @@ return [
     'legal_name' => 'Risk Wisdom Loans Pty Ltd',
     'brand_name' => 'Riskwisdom Loans',
 
+    'address' => [
+        'line1' => env('BUSINESS_ADDRESS_LINE1', '7B Benson Close'),
+        'suburb' => env('BUSINESS_ADDRESS_SUBURB', 'Wahroonga'),
+        'state' => env('BUSINESS_ADDRESS_STATE', 'NSW'),
+        'postcode' => env('BUSINESS_ADDRESS_POSTCODE', '2076'),
+        'country' => env('BUSINESS_ADDRESS_COUNTRY', 'AU'),
+    ],
+
     'calendly_url' => env('CALENDLY_URL', 'https://calendly.com/riskwisdomloans-info/30min'),
     'calendly_hide_branding' => env('CALENDLY_HIDE_BRANDING', true),
 

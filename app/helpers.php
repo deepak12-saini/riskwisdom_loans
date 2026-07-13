@@ -1,5 +1,59 @@
 <?php
 
+if (! function_exists('business_address_line')) {
+    function business_address_line(): string
+    {
+        $address = config('riskwisdom.address', []);
+
+        $line1 = trim((string) ($address['line1'] ?? ''));
+        $suburb = trim((string) ($address['suburb'] ?? ''));
+        $state = trim((string) ($address['state'] ?? ''));
+        $postcode = trim((string) ($address['postcode'] ?? ''));
+
+        if ($line1 === '' || $suburb === '') {
+            return '';
+        }
+
+        $locality = $suburb;
+
+        if ($state !== '' && $postcode !== '') {
+            $locality .= ' '.$state.' '.$postcode;
+        } elseif ($state !== '') {
+            $locality .= ' '.$state;
+        } elseif ($postcode !== '') {
+            $locality .= ' '.$postcode;
+        }
+
+        return $line1.', '.$locality;
+    }
+}
+
+if (! function_exists('business_address_schema')) {
+    /**
+     * @return array<string, mixed>|null
+     */
+    function business_address_schema(): ?array
+    {
+        $address = config('riskwisdom.address', []);
+
+        $line1 = trim((string) ($address['line1'] ?? ''));
+        $suburb = trim((string) ($address['suburb'] ?? ''));
+
+        if ($line1 === '' || $suburb === '') {
+            return null;
+        }
+
+        return [
+            '@type' => 'PostalAddress',
+            'streetAddress' => $line1,
+            'addressLocality' => $suburb,
+            'addressRegion' => (string) ($address['state'] ?? ''),
+            'postalCode' => (string) ($address['postcode'] ?? ''),
+            'addressCountry' => (string) ($address['country'] ?? 'AU'),
+        ];
+    }
+}
+
 if (! function_exists('contact_url')) {
     function contact_url(?string $intent = null, array $extra = []): string
     {

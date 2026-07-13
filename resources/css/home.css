@@ -1800,6 +1800,14 @@ form.is-submitting button[type="submit"]::before {
     white-space: nowrap;
 }
 
+.rw-footer__contact-link--static {
+    white-space: normal;
+}
+
+.rw-footer__contact-link--static span:last-child {
+    max-width: 14rem;
+}
+
 .rw-footer__contact-icon {
     display: inline-grid;
     width: 2rem;

@@ -5,8 +5,8 @@
 @section('canonical', url('/'))
 
 @push('head')
-    <script type="application/ld+json">
-        {!! json_encode([
+    @php
+        $organizationSchema = [
             '@context' => 'https://schema.org',
             '@type' => 'FinancialService',
             'name' => 'Risk Wisdom Loans',
@@ -18,7 +18,14 @@
             'telephone' => config('riskwisdom.phone'),
             'email' => config('riskwisdom.email'),
             'areaServed' => 'AU',
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        ];
+
+        if ($addressSchema = business_address_schema()) {
+            $organizationSchema['address'] = $addressSchema;
+        }
+    @endphp
+    <script type="application/ld+json">
+        {!! json_encode($organizationSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 @endpush
 
@@ -321,6 +328,9 @@
                         @include('partials.phone-link', ['variant' => 'text', 'cta' => 'contact-phone'])
                         <a href="mailto:{{ config('riskwisdom.email') }}">{{ config('riskwisdom.email') }}</a>
                         <a href="https://www.riskwisdomloans.com.au" target="_blank" rel="noreferrer">www.riskwisdomloans.com.au</a>
+                        @if (business_address_line() !== '')
+                            <span>{{ business_address_line() }}</span>
+                        @endif
                     </div>
                 </div>
 

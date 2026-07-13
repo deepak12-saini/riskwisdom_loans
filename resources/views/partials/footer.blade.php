@@ -85,6 +85,19 @@
                         <span>{{ config('riskwisdom.email') }}</span>
                     </a>
                 </li>
+                @if (business_address_line() !== '')
+                    <li>
+                        <span class="rw-footer__contact-link rw-footer__contact-link--static">
+                            <span class="rw-footer__contact-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 21s7-4.5 7-10a7 7 0 1 0-14 0c0 5.5 7 10 7 10Z" stroke="currentColor" stroke-width="1.8"/>
+                                    <circle cx="12" cy="11" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                                </svg>
+                            </span>
+                            <span>{{ business_address_line() }}</span>
+                        </span>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

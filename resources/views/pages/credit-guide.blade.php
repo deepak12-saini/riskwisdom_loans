@@ -14,6 +14,9 @@
         <h2>Who we are</h2>
         <p><strong>Legal entity:</strong> {{ config('riskwisdom.legal_name') }}<br>
         <strong>Trading name:</strong> {{ config('riskwisdom.brand_name') }}<br>
+        @if (business_address_line() !== '')
+        <strong>Address:</strong> {{ business_address_line() }}<br>
+        @endif
         <strong>Contact:</strong> {{ config('riskwisdom.email') }} · {{ config('riskwisdom.phone') }}</p>
 
         <h2>Australian Credit Licence</h2>

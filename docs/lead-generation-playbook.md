@@ -5,7 +5,7 @@ Operational checklist for Kal and the Riskwisdom Loans team. The website now cap
 ## Google Business Profile (start this week)
 
 1. Claim or verify **Riskwisdom Loans** at [business.google.com](https://business.google.com)
-2. Use consistent NAP: Riskwisdom Loans · +61 421 670 636 · info@riskwisdomloans.com.au · riskwisdomloans.com.au
+2. Use consistent NAP: Riskwisdom Loans · +61 421 670 636 · info@riskwisdomloans.com.au · 7B Benson Close, Wahroonga NSW 2076 · riskwisdomloans.com.au
 3. Add services: Home loans, Refinance, Investment property loans, Commercial finance
 4. Upload office/broker photos and logo
 5. Post weekly (rate tip, first home buyer tip, refinance reminder)
