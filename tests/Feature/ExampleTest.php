@@ -1046,11 +1046,15 @@ class ExampleTest extends TestCase
     {
         $this->get(route('pages.about'))
             ->assertOk()
-            ->assertSee('rw-landing-hero', false)
-            ->assertSee('About Riskwisdom Loans')
+            ->assertDontSee('rw-landing-hero', false)
+            ->assertSee('rw-about-broker', false)
+            ->assertSee('Kaltaran Bhinder')
+            ->assertSee('Mortgage Broker')
+            ->assertSee('Get in touch')
             ->assertSee('Take the next step in under a minute')
             ->assertSee('Book a free call')
             ->assertSee('images/landing/about-broker-team.jpg', false)
+            ->assertSee('images/landing/kaltaran-bhinder.png', false)
             ->assertSee('rw-landing-faq', false);
     }
 

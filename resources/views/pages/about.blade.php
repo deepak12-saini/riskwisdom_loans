@@ -2,9 +2,29 @@
 
 @php
     $about = config('riskwisdom.about');
-    $eyebrow = $about['eyebrow'] ?? 'About Riskwisdom Loans';
-    $heading = 'About Riskwisdom Loans';
-    $lead = 'Practical lending guidance built around real borrower decisions — clear advice, responsive support, and finance pathways tailored to your goals.';
+    $skipLandingHero = true;
+    $aboutBrokerSection = true;
+    $refinanceLanding = config('riskwisdom.conversion_landings.refinance', []);
+    $broker = $refinanceLanding['broker'] ?? [
+        'name' => 'Kaltaran Bhinder',
+        'tagline' => 'Mortgage broker since 2004',
+        'credential' => 'Credit representative 399434',
+        'avatar' => 'images/landing/kaltaran-bhinder.png',
+        'avatar_alt' => 'Kaltaran Bhinder, mortgage broker',
+    ];
+    $brokerHeadline = 'Mortgage Broker';
+    $brokerLead = $refinanceLanding['subheadline']
+        ?? 'Riskwisdom Loans is a mortgage broker comparing home loans from major banks and specialist lenders at no cost to you.';
+    $brokerLeadExtra = $refinanceLanding['subheadline_extra']
+        ?? 'Led by Kaltaran Bhinder, we specialise in finding you a better rate and structuring finance around your goals.';
+    $brokerCampaign = 'default';
+    $brokerLanding = array_merge(config('riskwisdom.conversion_landings.default', []), [
+        'form_headline' => 'Get in touch',
+        'form_intro' => 'An expert will call you back. Our service is 100% free to you — we receive a commission from the lender.',
+        'form_show_pill' => false,
+        'form_cta' => 'Request my free callback',
+        'default_loan_type' => null,
+    ]);
     $intent = null;
     $heroImage = 'images/landing/about-broker-team.jpg';
     $heroImageAlt = 'Riskwisdom Loans broker providing clear home loan guidance';
@@ -17,12 +37,7 @@
     $ctaLabel = 'Book a call';
     $secondaryCtaHref = route('rate-review');
     $secondaryCtaLabel = 'Free rate review';
-    $relatedLinks = [
-        ['href' => route('pages.home-loans'), 'label' => 'Home loans Australia'],
-        ['href' => route('pages.refinance'), 'label' => 'Refinance home loan'],
-        ['href' => route('pages.first-home-buyer'), 'label' => 'First home buyer loans'],
-        ['href' => route('guides.index'), 'label' => 'Guides & insights'],
-    ];
+    $relatedLinks = [];
     $whyChooseBullets = $about['principles'] ?? [];
     $bullets = $whyChooseBullets;
     $faqs = [
@@ -46,7 +61,7 @@
 @endphp
 
 @section('title', 'About Riskwisdom Loans | Riskwisdom Loans')
-@section('meta_description', 'Learn about Riskwisdom Loans, our lending philosophy, and the practical guidance we provide to Australian borrowers.')
+@section('meta_description', 'Meet Kaltaran Bhinder and learn about Riskwisdom Loans — practical lending guidance for Australian borrowers.')
 @section('canonical', route('pages.about'))
 
 @section('page_content')

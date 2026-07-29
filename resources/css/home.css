@@ -2689,6 +2689,405 @@ body.has-sticky-cta {
     }
 }
 
+/* First home buyer interactive page */
+.rw-page-fhb {
+    background: #eef3f8;
+}
+
+.rw-fhb {
+    width: 100%;
+}
+
+.rw-fhb__hero {
+    width: 100%;
+    padding: clamp(2.5rem, 5vw, 3.75rem) 1.25rem;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.12), transparent 34%),
+        linear-gradient(180deg, #1b63c8 0%, #164f9e 100%);
+    color: #fff;
+}
+
+.rw-fhb__hero-inner {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.9fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: center;
+}
+
+.rw-fhb__label {
+    display: inline-flex;
+    margin-bottom: 0.9rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #e8f1ff;
+}
+
+.rw-fhb__story h1 {
+    margin: 0 0 0.85rem;
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    color: #fff;
+}
+
+.rw-fhb__lead {
+    margin: 0 0 1.4rem;
+    max-width: 36rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(232, 241, 255, 0.94);
+}
+
+.rw-fhb__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.rw-fhb__ghost {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    background: transparent !important;
+}
+
+.rw-fhb__ghost:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.rw-fhb__media {
+    overflow: hidden;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 24px 50px rgba(8, 27, 48, 0.28);
+}
+
+.rw-fhb__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 18rem;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.rw-fhb__media:hover img {
+    transform: scale(1.04);
+}
+
+.rw-fhb__section-inner {
+    width: min(1120px, calc(100% - 2.5rem));
+    margin: 0 auto;
+}
+
+.rw-fhb__section-head {
+    margin-bottom: 1.5rem;
+    max-width: 40rem;
+}
+
+.rw-fhb__section-head h2 {
+    margin: 0.55rem 0 0.55rem;
+    font-size: clamp(1.45rem, 2.6vw, 1.95rem);
+    letter-spacing: -0.02em;
+    color: #0f2239;
+}
+
+.rw-fhb__section-head p {
+    margin: 0;
+    color: var(--rw-text-soft);
+    line-height: 1.65;
+}
+
+.rw-fhb__journey {
+    padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+    background: #f7fafc;
+}
+
+.rw-fhb__journey-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+}
+
+.rw-fhb__journey-card {
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: #fff;
+    border: 1px solid rgba(17, 39, 61, 0.08);
+    box-shadow: 0 16px 36px rgba(8, 27, 48, 0.06);
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+.rw-fhb__journey-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px rgba(8, 27, 48, 0.1);
+}
+
+.rw-fhb__journey-media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.rw-fhb__journey-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.rw-fhb__journey-card:hover .rw-fhb__journey-media img {
+    transform: scale(1.05);
+}
+
+.rw-fhb__journey-step {
+    position: absolute;
+    left: 0.9rem;
+    top: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.65rem;
+    border-radius: 999px;
+    background: rgba(15, 34, 57, 0.82);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.rw-fhb__journey-copy {
+    padding: 1.1rem 1.2rem 1.25rem;
+}
+
+.rw-fhb__journey-copy h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.08rem;
+    color: #0f2239;
+}
+
+.rw-fhb__journey-copy p {
+    margin: 0;
+    color: var(--rw-text-soft);
+    line-height: 1.6;
+}
+
+.rw-fhb__resources {
+    padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+    background: #eef3f8;
+}
+
+.rw-fhb__resource-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+}
+
+.rw-fhb__resource-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: #fff;
+    border: 1px solid rgba(17, 39, 61, 0.08);
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 16px 36px rgba(8, 27, 48, 0.06);
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+.rw-fhb__resource-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px rgba(8, 27, 48, 0.1);
+}
+
+.rw-fhb__resource-media {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+}
+
+.rw-fhb__resource-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.rw-fhb__resource-card:hover .rw-fhb__resource-media img {
+    transform: scale(1.05);
+}
+
+.rw-fhb__resource-copy {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+    padding: 1.15rem 1.2rem 1.3rem;
+}
+
+.rw-fhb__resource-copy h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #0f2239;
+}
+
+.rw-fhb__resource-copy p {
+    margin: 0;
+    color: var(--rw-text-soft);
+    line-height: 1.55;
+}
+
+.rw-fhb__resource-copy span {
+    margin-top: 0.35rem;
+    color: var(--rw-primary);
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.rw-fhb__trust {
+    padding: 0.5rem 0 2rem;
+    background: #eef3f8;
+}
+
+.rw-fhb__faq {
+    padding: clamp(2rem, 4vw, 3rem) 0;
+    background: #f7fafc;
+}
+
+.rw-fhb__faq-inner {
+    max-width: 760px;
+}
+
+.rw-fhb__faq-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.rw-fhb__faq-item {
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid rgba(17, 39, 61, 0.08);
+    box-shadow: 0 10px 24px rgba(8, 27, 48, 0.04);
+    overflow: hidden;
+}
+
+.rw-fhb__faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 700;
+    color: #0f2239;
+}
+
+.rw-fhb__faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.rw-fhb__faq-item summary em {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    background: rgba(27, 99, 200, 0.1);
+    position: relative;
+    flex: none;
+}
+
+.rw-fhb__faq-item summary em::before,
+.rw-fhb__faq-item summary em::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0.65rem;
+    height: 2px;
+    background: var(--rw-primary);
+    transform: translate(-50%, -50%);
+}
+
+.rw-fhb__faq-item summary em::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: opacity 0.2s ease;
+}
+
+.rw-fhb__faq-item[open] summary em::after {
+    opacity: 0;
+}
+
+.rw-fhb__faq-answer {
+    padding: 0 1.15rem 1.1rem;
+}
+
+.rw-fhb__faq-answer p {
+    margin: 0;
+    color: var(--rw-text-soft);
+    line-height: 1.65;
+}
+
+.rw-fhb__cta {
+    padding: clamp(2.25rem, 4vw, 3rem) 1.25rem;
+    background:
+        radial-gradient(circle at 88% 20%, rgba(136, 216, 255, 0.18), transparent 30%),
+        linear-gradient(180deg, #123b78 0%, #0f2f5f 100%);
+    color: #fff;
+}
+
+.rw-fhb__cta-inner {
+    width: min(760px, 100%);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.rw-fhb__cta-inner h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.45rem, 2.8vw, 1.95rem);
+    color: #fff;
+}
+
+.rw-fhb__cta-inner p {
+    margin: 0 0 1.25rem;
+    color: rgba(232, 241, 255, 0.9);
+    line-height: 1.65;
+}
+
+.rw-fhb__cta .rw-page-actions {
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .rw-fhb__hero-inner,
+    .rw-fhb__journey-grid,
+    .rw-fhb__resource-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rw-fhb__media {
+        order: -1;
+        max-height: 16rem;
+    }
+
+    .rw-fhb__media img {
+        min-height: 14rem;
+    }
+}
+
 .rw-guide-form {
     margin-top: 1.75rem;
     padding: 1.5rem;
@@ -6338,6 +6737,14 @@ body.rw-admin-login-page {
     background:
         radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.06), transparent 28%),
         linear-gradient(180deg, #2b6b58 0%, #2e715d 100%);
+}
+
+.rw-about-broker {
+    margin-top: 0;
+}
+
+.rw-body--landing .rw-about-broker {
+    padding-top: clamp(5.5rem, 10vw, 7rem);
 }
 
 .rw-conversion__shell {

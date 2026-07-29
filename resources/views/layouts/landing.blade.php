@@ -2,7 +2,14 @@
 
 @section('content')
     <main class="rw-page rw-page--landing">
-        @include('pages._landing-hero')
+        @if (! empty($skipLandingHero))
+            @isset($aboutBrokerSection)
+                @include('pages._about-broker-hero')
+            @endisset
+        @else
+            @include('pages._landing-hero')
+        @endif
+
         @include('pages._landing-why-choose')
 
         <section class="rw-landing-main">
