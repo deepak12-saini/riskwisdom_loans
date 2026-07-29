@@ -59,6 +59,12 @@
                             <td>
                                 <strong>{{ $client->full_name }}</strong>
                                 <br><small>Created {{ $client->created_at?->format('d M Y') }}</small>
+                                @if ($client->enquiry)
+                                    <br>
+                                    <a class="rw-admin-link" href="{{ route('admin.enquiries.show', $client->enquiry) }}">From lead</a>
+                                @else
+                                    <br><small class="rw-admin-muted">Manual file</small>
+                                @endif
                             </td>
                             <td class="rw-admin-table__contact">
                                 <a href="mailto:{{ $client->email }}">{{ $client->email }}</a>
@@ -93,9 +99,9 @@
             </table>
         </div>
 
-        @if ($clients->hasPages())
+        @if ($clients->total() > 0)
             <div class="rw-admin-pagination">
-                {{ $clients->links() }}
+                {{ $clients->onEachSide(1)->links() }}
             </div>
         @endif
     </section>

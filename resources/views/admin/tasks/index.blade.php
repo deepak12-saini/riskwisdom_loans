@@ -98,9 +98,9 @@
             </table>
         </div>
 
-        @if ($tasks->hasPages())
+        @if ($tasks->total() > 0)
             <div class="rw-admin-pagination">
-                {{ $tasks->links() }}
+                {{ $tasks->onEachSide(1)->links() }}
             </div>
         @endif
     </section>

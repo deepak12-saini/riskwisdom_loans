@@ -71,6 +71,7 @@
                         <th>UTM</th>
                         <th>Marketing</th>
                         <th>Mailchimp</th>
+                        <th>File</th>
                         <th>Enquiry</th>
                         <th>Actions</th>
                     </tr>
@@ -125,6 +126,13 @@
                                     —
                                 @endif
                             </td>
+                            <td>
+                                @if ($enquiry->client)
+                                    <a class="rw-admin-pill rw-admin-pill--accent" href="{{ route('admin.clients.show', $enquiry->client) }}">Client file</a>
+                                @else
+                                    <span class="rw-admin-pill rw-admin-pill--muted">Lead only</span>
+                                @endif
+                            </td>
                             <td class="rw-admin-table__enquiry">
                                 @if ($enquiry->enquiry && strlen($enquiry->enquiry) > 100)
                                     <details class="rw-admin-enquiry-details">
@@ -146,16 +154,16 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="13" class="rw-admin-table__empty">No enquiries yet.</td>
+                            <td colspan="14" class="rw-admin-table__empty">No enquiries yet.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
 
-        @if ($enquiries->hasPages())
+        @if ($enquiries->total() > 0)
             <div class="rw-admin-pagination">
-                {{ $enquiries->links() }}
+                {{ $enquiries->onEachSide(1)->links() }}
             </div>
         @endif
     </section>

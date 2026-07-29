@@ -38,12 +38,9 @@
             <h3>Information</h3>
             <ul>
                 <li><a href="{{ route('pages.about') }}">About Us</a></li>
-                <li><a href="{{ route('guides.index') }}">Guides & Insights</a></li>
                 <li><a href="{{ route('tools.borrowing-power') }}">Calculators</a></li>
                 <li><a href="{{ route('book') }}">Book a call</a></li>
                 <li><a href="{{ contact_url() }}">Contact Us</a></li>
-                <li><a href="{{ route('pages.privacy') }}">Privacy Policy</a></li>
-                <li><a href="{{ route('pages.credit-guide') }}">Credit Guide</a></li>
             </ul>
         </div>
 

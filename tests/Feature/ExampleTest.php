@@ -387,6 +387,175 @@ class ExampleTest extends TestCase
             'first_name' => 'Jane',
             'status' => 'active',
         ]);
+
+        $client = \App\Models\Client::query()->where('enquiry_id', $enquiry->id)->firstOrFail();
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index'))
+            ->assertOk()
+            ->assertSee('Client file')
+            ->assertSee(route('admin.clients.show', $client), false);
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.show', $enquiry))
+            ->assertOk()
+            ->assertSee('Has client file')
+            ->assertSee(route('admin.clients.show', $client), false);
+
+        $this->actingAs($admin)
+            ->get(route('admin.clients.index'))
+            ->assertOk()
+            ->assertSee('From lead')
+            ->assertSee(route('admin.enquiries.show', $enquiry), false);
+
+        $this->actingAs($admin)
+            ->get(route('admin.clients.show', $client))
+            ->assertOk()
+            ->assertSee('Source lead')
+            ->assertSee(route('admin.enquiries.show', $enquiry), false);
+    }
+
+    public function test_admin_leads_index_shows_create_client_file_for_unconverted_lead(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'Sam',
+            'last_name' => 'Leadonly',
+            'phone' => '0400999888',
+            'email' => 'sam.leadonly@example.com',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'Need help',
+            'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index'))
+            ->assertOk()
+            ->assertSee('Lead only')
+            ->assertSee('Create client file', false);
+    }
+
+    public function test_admin_manual_client_file_shows_manual_label(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        \App\Models\Client::query()->create([
+            'first_name' => 'Manual',
+            'last_name' => 'Client',
+            'phone' => '0400123456',
+            'email' => 'manual.client@example.com',
+            'loan_type' => 'refinance',
+            'state' => 'VIC',
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.clients.index'))
+            ->assertOk()
+            ->assertSee('Manual Client')
+            ->assertSee('Manual file');
+    }
+
+    public function test_admin_listing_pages_show_pagination_summary_and_pages(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'Single',
+            'last_name' => 'Page',
+            'phone' => '0400111222',
+            'email' => 'single.page@example.com',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'One page only',
+            'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index'))
+            ->assertOk()
+            ->assertSee('rw-pager', false)
+            ->assertSee('Showing')
+            ->assertSee('Previous')
+            ->assertSee('Next');
+
+        for ($i = 1; $i <= 16; $i++) {
+            Enquiry::query()->create([
+                'lead_type' => 'contact',
+                'first_name' => 'Lead',
+                'last_name' => 'Person'.$i,
+                'phone' => '04000000'.str_pad((string) $i, 2, '0', STR_PAD_LEFT),
+                'email' => "lead{$i}@example.com",
+                'loan_type' => 'home_purchase',
+                'timeline' => 'ready_now',
+                'state' => 'NSW',
+                'enquiry' => 'Enquiry '.$i,
+                'status' => 'new',
+            ]);
+        }
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index'))
+            ->assertOk()
+            ->assertSee('rw-pager', false)
+            ->assertSee('Showing')
+            ->assertSee('of')
+            ->assertSee('Next')
+            ->assertSee('page=2', false);
+
+        $client = \App\Models\Client::query()->create([
+            'first_name' => 'Paged',
+            'last_name' => 'Client',
+            'phone' => '0400111000',
+            'email' => 'paged.client@example.com',
+            'loan_type' => 'refinance',
+            'state' => 'NSW',
+            'status' => 'active',
+        ]);
+
+        for ($i = 1; $i <= 16; $i++) {
+            \App\Models\Task::query()->create([
+                'client_id' => $client->id,
+                'title' => 'Task '.$i,
+                'owner' => 'client',
+                'status' => 'open',
+                'priority' => 'normal',
+            ]);
+        }
+
+        $this->actingAs($admin)
+            ->get(route('admin.clients.index'))
+            ->assertOk()
+            ->assertSee('rw-pager', false)
+            ->assertSee('Showing')
+            ->assertSee('Previous')
+            ->assertSee('Next');
+
+        $this->actingAs($admin)
+            ->get(route('admin.tasks.index'))
+            ->assertOk()
+            ->assertSee('rw-pager', false)
+            ->assertSee('Previous')
+            ->assertSee('Next')
+            ->assertSee('page=2', false);
     }
 
     public function test_admin_can_view_and_delete_enquiry(): void

@@ -31,7 +31,7 @@ class AdminEnquiryController extends Controller
             default => null,
         };
 
-        $enquiries = $query->paginate(25)->withQueryString();
+        $enquiries = $query->paginate(15)->withQueryString();
 
         $stats = [
             'total' => Enquiry::count(),

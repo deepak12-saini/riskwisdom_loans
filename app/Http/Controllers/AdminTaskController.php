@@ -26,7 +26,7 @@ class AdminTaskController extends Controller
             default => $query->open(),
         };
 
-        $tasks = $query->paginate(25)->withQueryString();
+        $tasks = $query->paginate(15)->withQueryString();
 
         $stats = [
             'open' => Task::query()->open()->count(),

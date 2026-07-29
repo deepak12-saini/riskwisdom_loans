@@ -17,6 +17,7 @@ class AdminClientController extends Controller
         $filter = (string) $request->query('filter', 'active');
 
         $query = Client::query()
+            ->with('enquiry')
             ->withCount(['tasks as open_tasks_count' => fn ($q) => $q->open()])
             ->latest();
 
@@ -26,7 +27,7 @@ class AdminClientController extends Controller
             default => $query->where('status', 'active'),
         };
 
-        $clients = $query->paginate(25)->withQueryString();
+        $clients = $query->paginate(15)->withQueryString();
 
         $stats = [
             'active' => Client::query()->where('status', 'active')->count(),
