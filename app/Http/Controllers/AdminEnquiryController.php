@@ -15,6 +15,7 @@ class AdminEnquiryController extends Controller
     public function index(Request $request): View
     {
         $filter = (string) $request->query('filter', 'all');
+        $q = trim((string) $request->query('q', ''));
         $showPaidAds = (bool) config('riskwisdom.admin_show_paid_ads', false);
 
         if ($filter === 'paid' && ! $showPaidAds) {
@@ -28,8 +29,21 @@ class AdminEnquiryController extends Controller
             'this_week' => $query->where('created_at', '>=', now()->startOfWeek()),
             'today' => $query->whereDate('created_at', today()),
             'paid' => $showPaidAds ? $query->where('utm_medium', 'cpc') : null,
+            'converted' => $query->whereHas('client'),
+            'lead_only' => $query->whereDoesntHave('client'),
             default => null,
         };
+
+        if ($q !== '') {
+            $query->where(function ($builder) use ($q) {
+                $builder
+                    ->where('first_name', 'like', "%{$q}%")
+                    ->orWhere('last_name', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%")
+                    ->orWhere('phone', 'like', "%{$q}%")
+                    ->orWhere('enquiry', 'like', "%{$q}%");
+            });
+        }
 
         $enquiries = $query->paginate(15)->withQueryString();
 
@@ -38,6 +52,8 @@ class AdminEnquiryController extends Controller
             'ready_now' => Enquiry::query()->where('timeline', 'ready_now')->count(),
             'this_week' => Enquiry::query()->where('created_at', '>=', now()->startOfWeek())->count(),
             'today' => Enquiry::query()->whereDate('created_at', today())->count(),
+            'converted' => Enquiry::query()->whereHas('client')->count(),
+            'lead_only' => Enquiry::query()->whereDoesntHave('client')->count(),
         ];
 
         if ($showPaidAds) {
@@ -50,11 +66,13 @@ class AdminEnquiryController extends Controller
             'this_week' => 'This week leads',
             'today' => 'Today\'s leads',
             'paid' => 'Paid ad leads (CPC)',
+            'converted' => 'Leads with client file',
+            'lead_only' => 'Lead only',
         ];
 
         $pageHeading = $headings[$filter] ?? 'Website enquiries';
 
-        return view('admin.enquiries.index', compact('enquiries', 'stats', 'filter', 'pageHeading', 'showPaidAds'));
+        return view('admin.enquiries.index', compact('enquiries', 'stats', 'filter', 'pageHeading', 'showPaidAds', 'q'));
     }
 
     public function show(Enquiry $enquiry): View

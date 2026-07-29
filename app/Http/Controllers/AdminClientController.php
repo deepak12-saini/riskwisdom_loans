@@ -15,6 +15,7 @@ class AdminClientController extends Controller
     public function index(Request $request): View
     {
         $filter = (string) $request->query('filter', 'active');
+        $q = trim((string) $request->query('q', ''));
 
         $query = Client::query()
             ->with('enquiry')
@@ -27,13 +28,22 @@ class AdminClientController extends Controller
             default => $query->where('status', 'active'),
         };
 
+        if ($q !== '') {
+            $query->where(function ($builder) use ($q) {
+                $builder
+                    ->where('first_name', 'like', "%{$q}%")
+                    ->orWhere('last_name', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%")
+                    ->orWhere('phone', 'like', "%{$q}%");
+            });
+        }
+
         $clients = $query->paginate(15)->withQueryString();
 
         $stats = [
             'active' => Client::query()->where('status', 'active')->count(),
-            'open_tasks' => \App\Models\Task::query()->open()->count(),
-            'overdue_tasks' => \App\Models\Task::query()->overdue()->count(),
             'archived' => Client::query()->where('status', 'archived')->count(),
+            'all' => Client::query()->count(),
         ];
 
         $headings = [
@@ -44,7 +54,7 @@ class AdminClientController extends Controller
 
         $pageHeading = $headings[$filter] ?? 'Client files';
 
-        return view('admin.clients.index', compact('clients', 'stats', 'filter', 'pageHeading'));
+        return view('admin.clients.index', compact('clients', 'stats', 'filter', 'pageHeading', 'q'));
     }
 
     public function create(): View

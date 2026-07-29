@@ -468,6 +468,74 @@ class ExampleTest extends TestCase
             ->assertSee('Manual file');
     }
 
+    public function test_admin_listing_filters_and_search_work(): void
+    {
+        $admin = User::factory()->create([
+            'username' => 'admin',
+            'password' => 'SecretPass123',
+            'is_admin' => true,
+        ]);
+
+        Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'Ready',
+            'last_name' => 'Buyer',
+            'phone' => '0400111001',
+            'email' => 'ready.buyer@example.com',
+            'loan_type' => 'home_purchase',
+            'timeline' => 'ready_now',
+            'state' => 'NSW',
+            'enquiry' => 'Ready now enquiry',
+            'status' => 'new',
+        ]);
+
+        Enquiry::query()->create([
+            'lead_type' => 'contact',
+            'first_name' => 'Later',
+            'last_name' => 'Buyer',
+            'phone' => '0400111002',
+            'email' => 'later.buyer@example.com',
+            'loan_type' => 'refinance',
+            'timeline' => '1_3_months',
+            'state' => 'VIC',
+            'enquiry' => 'Later enquiry',
+            'status' => 'new',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index'))
+            ->assertOk()
+            ->assertDontSee('rw-admin-stats', false)
+            ->assertSee('rw-admin-filters', false)
+            ->assertSee('Ready now')
+            ->assertSee('Lead only')
+            ->assertSee('Has client file');
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index', ['filter' => 'ready_now']))
+            ->assertOk()
+            ->assertSee('Ready Buyer')
+            ->assertDontSee('Later Buyer');
+
+        $this->actingAs($admin)
+            ->get(route('admin.enquiries.index', ['q' => 'later.buyer']))
+            ->assertOk()
+            ->assertSee('Later Buyer')
+            ->assertDontSee('Ready Buyer');
+
+        $this->actingAs($admin)
+            ->get(route('admin.clients.index'))
+            ->assertOk()
+            ->assertDontSee('rw-admin-stats', false)
+            ->assertSee('rw-admin-filters', false);
+
+        $this->actingAs($admin)
+            ->get(route('admin.tasks.index'))
+            ->assertOk()
+            ->assertDontSee('rw-admin-stats', false)
+            ->assertSee('rw-admin-filters', false);
+    }
+
     public function test_admin_listing_pages_show_pagination_summary_and_pages(): void
     {
         $admin = User::factory()->create([

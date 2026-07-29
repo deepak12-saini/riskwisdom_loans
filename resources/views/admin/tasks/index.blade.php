@@ -8,36 +8,40 @@
 @endsection
 
 @section('content')
-    <div class="rw-admin-stats">
-        <article class="rw-admin-stat rw-admin-stat--accent">
-            <span>Open</span>
-            <strong>{{ number_format($stats['open']) }}</strong>
-        </article>
-        <article class="rw-admin-stat">
-            <span>Overdue</span>
-            <strong>{{ number_format($stats['overdue']) }}</strong>
-        </article>
-        <article class="rw-admin-stat">
-            <span>Done</span>
-            <strong>{{ number_format($stats['done']) }}</strong>
-        </article>
-        <article class="rw-admin-stat">
-            <span>Total</span>
-            <strong>{{ number_format($stats['total']) }}</strong>
-        </article>
-    </div>
-
     <section class="rw-admin-card">
-        <div class="rw-admin-card__header">
-            <div>
-                <h2>{{ $pageHeading ?? 'Tasks' }}</h2>
-                <p>Outstanding work across all client files.</p>
-            </div>
+        <div class="rw-admin-filters">
+            <form method="get" action="{{ route('admin.tasks.index') }}" class="rw-admin-filters__search">
+                @if ($filter !== 'open')
+                    <input type="hidden" name="filter" value="{{ $filter }}">
+                @endif
+                <label class="rw-admin-filters__search-field">
+                    <span class="visually-hidden">Search tasks</span>
+                    <input
+                        type="search"
+                        name="q"
+                        value="{{ $q ?? '' }}"
+                        placeholder="Search task or client…"
+                    >
+                </label>
+                <button class="rw-button rw-button--solid rw-button--sm" type="submit">Search</button>
+                @if (($q ?? '') !== '')
+                    <a class="rw-admin-link" href="{{ route('admin.tasks.index', array_filter(['filter' => $filter !== 'open' ? $filter : null])) }}">Clear</a>
+                @endif
+            </form>
+
             <div class="rw-admin-filter-tabs">
-                <a href="{{ route('admin.tasks.index', ['filter' => 'open']) }}" class="@if ($filter === 'open') is-active @endif">Open</a>
-                <a href="{{ route('admin.tasks.index', ['filter' => 'overdue']) }}" class="@if ($filter === 'overdue') is-active @endif">Overdue</a>
-                <a href="{{ route('admin.tasks.index', ['filter' => 'done']) }}" class="@if ($filter === 'done') is-active @endif">Done</a>
-                <a href="{{ route('admin.tasks.index', ['filter' => 'all']) }}" class="@if ($filter === 'all') is-active @endif">All</a>
+                <a href="{{ route('admin.tasks.index', array_filter(['q' => $q ?: null])) }}" class="@if ($filter === 'open') is-active @endif">
+                    Open <em>{{ number_format($stats['open']) }}</em>
+                </a>
+                <a href="{{ route('admin.tasks.index', array_filter(['filter' => 'overdue', 'q' => $q ?: null])) }}" class="@if ($filter === 'overdue') is-active @endif">
+                    Overdue <em>{{ number_format($stats['overdue']) }}</em>
+                </a>
+                <a href="{{ route('admin.tasks.index', array_filter(['filter' => 'done', 'q' => $q ?: null])) }}" class="@if ($filter === 'done') is-active @endif">
+                    Done <em>{{ number_format($stats['done']) }}</em>
+                </a>
+                <a href="{{ route('admin.tasks.index', array_filter(['filter' => 'all', 'q' => $q ?: null])) }}" class="@if ($filter === 'all') is-active @endif">
+                    All <em>{{ number_format($stats['all']) }}</em>
+                </a>
             </div>
         </div>
 

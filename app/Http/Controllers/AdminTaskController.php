@@ -14,6 +14,7 @@ class AdminTaskController extends Controller
     public function index(Request $request): View
     {
         $filter = (string) $request->query('filter', 'open');
+        $q = trim((string) $request->query('q', ''));
 
         $query = Task::query()
             ->with(['client', 'assignedUser'])
@@ -26,13 +27,27 @@ class AdminTaskController extends Controller
             default => $query->open(),
         };
 
+        if ($q !== '') {
+            $query->where(function ($builder) use ($q) {
+                $builder
+                    ->where('title', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%")
+                    ->orWhereHas('client', function ($clientQuery) use ($q) {
+                        $clientQuery
+                            ->where('first_name', 'like', "%{$q}%")
+                            ->orWhere('last_name', 'like', "%{$q}%")
+                            ->orWhere('email', 'like', "%{$q}%");
+                    });
+            });
+        }
+
         $tasks = $query->paginate(15)->withQueryString();
 
         $stats = [
             'open' => Task::query()->open()->count(),
             'overdue' => Task::query()->overdue()->count(),
             'done' => Task::query()->where('status', 'done')->count(),
-            'total' => Task::count(),
+            'all' => Task::count(),
         ];
 
         $headings = [
@@ -44,7 +59,7 @@ class AdminTaskController extends Controller
 
         $pageHeading = $headings[$filter] ?? 'Tasks';
 
-        return view('admin.tasks.index', compact('tasks', 'stats', 'filter', 'pageHeading'));
+        return view('admin.tasks.index', compact('tasks', 'stats', 'filter', 'pageHeading', 'q'));
     }
 
     public function store(Request $request, Client $client): RedirectResponse

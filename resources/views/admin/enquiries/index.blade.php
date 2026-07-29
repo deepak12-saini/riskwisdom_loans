@@ -8,51 +8,51 @@
 @endsection
 
 @section('content')
-    <div class="rw-admin-stats">
-        <a
-            href="{{ route('admin.enquiries.index') }}"
-            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'all') is-active @endif"
-        >
-            <span>Total leads</span>
-            <strong>{{ number_format($stats['total']) }}</strong>
-        </a>
-        <a
-            href="{{ route('admin.enquiries.index', ['filter' => 'ready_now']) }}"
-            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'ready_now') is-active @endif"
-        >
-            <span>Ready now</span>
-            <strong>{{ number_format($stats['ready_now']) }}</strong>
-        </a>
-        <a
-            href="{{ route('admin.enquiries.index', ['filter' => 'this_week']) }}"
-            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'this_week') is-active @endif"
-        >
-            <span>This week</span>
-            <strong>{{ number_format($stats['this_week']) }}</strong>
-        </a>
-        <a
-            href="{{ route('admin.enquiries.index', ['filter' => 'today']) }}"
-            class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'today') is-active @endif"
-        >
-            <span>Today</span>
-            <strong>{{ number_format($stats['today']) }}</strong>
-        </a>
-        @if ($showPaidAds ?? config('riskwisdom.admin_show_paid_ads', false))
-            <a
-                href="{{ route('admin.enquiries.index', ['filter' => 'paid']) }}"
-                class="rw-admin-stat rw-admin-stat-tab @if ($filter === 'paid') is-active @endif"
-            >
-                <span>Paid (CPC)</span>
-                <strong>{{ number_format($stats['paid'] ?? 0) }}</strong>
-            </a>
-        @endif
-    </div>
-
     <section class="rw-admin-card">
-        <div class="rw-admin-card__header">
-            <div>
-                <h2>{{ $pageHeading ?? 'All enquiries' }}</h2>
-                <p>Leads submitted through the website contact form.</p>
+        <div class="rw-admin-filters">
+            <form method="get" action="{{ route('admin.enquiries.index') }}" class="rw-admin-filters__search">
+                @if ($filter !== 'all')
+                    <input type="hidden" name="filter" value="{{ $filter }}">
+                @endif
+                <label class="rw-admin-filters__search-field">
+                    <span class="visually-hidden">Search leads</span>
+                    <input
+                        type="search"
+                        name="q"
+                        value="{{ $q ?? '' }}"
+                        placeholder="Search name, email, phone…"
+                    >
+                </label>
+                <button class="rw-button rw-button--solid rw-button--sm" type="submit">Search</button>
+                @if (($q ?? '') !== '')
+                    <a class="rw-admin-link" href="{{ route('admin.enquiries.index', array_filter(['filter' => $filter !== 'all' ? $filter : null])) }}">Clear</a>
+                @endif
+            </form>
+
+            <div class="rw-admin-filter-tabs">
+                <a href="{{ route('admin.enquiries.index', array_filter(['q' => $q ?: null])) }}" class="@if ($filter === 'all') is-active @endif">
+                    All <em>{{ number_format($stats['total']) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'ready_now', 'q' => $q ?: null])) }}" class="@if ($filter === 'ready_now') is-active @endif">
+                    Ready now <em>{{ number_format($stats['ready_now']) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'this_week', 'q' => $q ?: null])) }}" class="@if ($filter === 'this_week') is-active @endif">
+                    This week <em>{{ number_format($stats['this_week']) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'today', 'q' => $q ?: null])) }}" class="@if ($filter === 'today') is-active @endif">
+                    Today <em>{{ number_format($stats['today']) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'lead_only', 'q' => $q ?: null])) }}" class="@if ($filter === 'lead_only') is-active @endif">
+                    Lead only <em>{{ number_format($stats['lead_only']) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'converted', 'q' => $q ?: null])) }}" class="@if ($filter === 'converted') is-active @endif">
+                    Has client file <em>{{ number_format($stats['converted']) }}</em>
+                </a>
+                @if ($showPaidAds ?? config('riskwisdom.admin_show_paid_ads', false))
+                    <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'paid', 'q' => $q ?: null])) }}" class="@if ($filter === 'paid') is-active @endif">
+                        Paid (CPC) <em>{{ number_format($stats['paid'] ?? 0) }}</em>
+                    </a>
+                @endif
             </div>
         </div>
 
