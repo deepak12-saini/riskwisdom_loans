@@ -92,17 +92,15 @@
                                 <small>{{ $message }}</small>
                             @enderror
                         </label>
-                        <label class="@if ($errors->has('email')) is-invalid @endif">
+                        @include('partials.phone-field', [
+                            'variant' => 'label',
+                            'fullWidth' => true,
+                            'placeholder' => 'Phone number',
+                        ])
+                        <label class="rw-download-guide__full @if ($errors->has('email')) is-invalid @endif">
                             <span>Email <em class="rw-required">*</em></span>
                             <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address" required autocomplete="email">
                             @error('email')
-                                <small>{{ $message }}</small>
-                            @enderror
-                        </label>
-                        <label class="@if ($errors->has('phone')) is-invalid @endif">
-                            <span>Phone <em class="rw-required">*</em></span>
-                            <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="04xx xxx xxx" required autocomplete="tel">
-                            @error('phone')
                                 <small>{{ $message }}</small>
                             @enderror
                         </label>

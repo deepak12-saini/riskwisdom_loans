@@ -211,6 +211,115 @@ if (! function_exists('conversion_landing_url_for_slug')) {
     }
 }
 
+if (! function_exists('phone_country_codes')) {
+    /**
+     * @return array<string, string>
+     */
+    function phone_country_codes(): array
+    {
+        return [
+            '+61' => '+61 AU',
+            '+64' => '+64 NZ',
+            '+91' => '+91 IN',
+            '+44' => '+44 UK',
+            '+1' => '+1 US/CA',
+            '+65' => '+65 SG',
+            '+971' => '+971 UAE',
+        ];
+    }
+}
+
+if (! function_exists('split_lead_phone')) {
+    /**
+     * @return array{phone_country_code: string, phone: string}
+     */
+    function split_lead_phone(?string $value = null): array
+    {
+        $value = trim((string) $value);
+
+        if ($value === '') {
+            return [
+                'phone_country_code' => '+61',
+                'phone' => '',
+            ];
+        }
+
+        $normalized = preg_replace('/[\s\-().]/', '', $value) ?? $value;
+
+        if (! str_starts_with($normalized, '+')) {
+            return [
+                'phone_country_code' => '+61',
+                'phone' => $value,
+            ];
+        }
+
+        $codes = array_keys(phone_country_codes());
+        usort($codes, fn (string $a, string $b): int => strlen($b) <=> strlen($a));
+
+        foreach ($codes as $code) {
+            if (str_starts_with($normalized, $code)) {
+                $national = substr($normalized, strlen($code));
+
+                if ($code === '+61' && $national !== '' && ! str_starts_with($national, '0')) {
+                    $national = '0'.$national;
+                }
+
+                return [
+                    'phone_country_code' => $code,
+                    'phone' => $national,
+                ];
+            }
+        }
+
+        return [
+            'phone_country_code' => '+61',
+            'phone' => $value,
+        ];
+    }
+}
+
+if (! function_exists('compose_lead_phone')) {
+    function compose_lead_phone(?string $countryCode, ?string $national): string
+    {
+        $countryCode = trim((string) $countryCode) ?: '+61';
+        $national = trim((string) $national);
+        $digits = preg_replace('/\D+/', '', $national) ?? '';
+        $codeDigits = ltrim($countryCode, '+');
+
+        if ($digits === '') {
+            return '';
+        }
+
+        if (str_starts_with($digits, $codeDigits) && strlen($digits) > strlen($codeDigits) + 5) {
+            return '+'.$digits;
+        }
+
+        if ($countryCode === '+61' && str_starts_with($digits, '0')) {
+            $digits = substr($digits, 1);
+        }
+
+        return '+'.$codeDigits.$digits;
+    }
+}
+
+if (! function_exists('normalize_validated_lead_phone')) {
+    /**
+     * @param  array<string, mixed>  $validated
+     * @return array<string, mixed>
+     */
+    function normalize_validated_lead_phone(array $validated): array
+    {
+        $validated['phone'] = compose_lead_phone(
+            isset($validated['phone_country_code']) ? (string) $validated['phone_country_code'] : null,
+            isset($validated['phone']) ? (string) $validated['phone'] : null,
+        );
+
+        unset($validated['phone_country_code']);
+
+        return $validated;
+    }
+}
+
 if (! function_exists('lead_email_rules')) {
     /**
      * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
@@ -231,13 +340,23 @@ if (! function_exists('lead_name_rules')) {
     }
 }
 
+if (! function_exists('lead_phone_country_code_rules')) {
+    /**
+     * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
+     */
+    function lead_phone_country_code_rules(): array
+    {
+        return ['required', 'string', 'in:'.implode(',', array_keys(phone_country_codes()))];
+    }
+}
+
 if (! function_exists('lead_phone_rules')) {
     /**
      * @return list<\Illuminate\Contracts\Validation\ValidationRule|string>
      */
     function lead_phone_rules(): array
     {
-        return ['required', 'string', 'max:50', new \App\Rules\ValidAustralianPhone];
+        return ['required', 'string', 'max:50', new \App\Rules\ValidLeadPhoneNumber];
     }
 }
 

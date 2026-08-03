@@ -38,6 +38,7 @@ class GuideDownloadController extends Controller
             'first_name' => lead_name_rules(),
             'last_name' => lead_name_rules(),
             'email' => lead_email_rules(),
+            'phone_country_code' => lead_phone_country_code_rules(),
             'phone' => lead_phone_rules(),
             'state' => ['nullable', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.states')))],
         ], [
@@ -46,6 +47,7 @@ class GuideDownloadController extends Controller
             'email.required' => 'Please enter your email address.',
             'email.email' => 'Please enter a valid email address.',
             'phone.required' => 'Please enter your phone number.',
+            'phone_country_code.required' => 'Please select a country code.',
         ]);
 
         apply_lead_identity_checks($validator);
@@ -58,7 +60,7 @@ class GuideDownloadController extends Controller
                 ->withFragment('guide-download-form');
         }
 
-        $validated = $validator->validated();
+        $validated = normalize_validated_lead_phone($validator->validated());
 
         $enquiry = Enquiry::query()->create([
             'lead_type' => 'guide_download',

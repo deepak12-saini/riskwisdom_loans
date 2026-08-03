@@ -5,8 +5,10 @@
         value="1"
         @checked(old('marketing_consent'))
     >
-    <span>{{ config('mailchimp.marketing_consent_label') }}</span>
-    @error('marketing_consent')
-        <small>{{ $message }}</small>
-    @enderror
+    <span class="rw-marketing-consent__copy">
+        <span>{{ config('mailchimp.marketing_consent_label') }}</span>
+        @error('marketing_consent')
+            <small>{{ $message }}</small>
+        @enderror
+    </span>
 </label>

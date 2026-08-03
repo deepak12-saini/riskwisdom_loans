@@ -100,17 +100,13 @@
                                 @enderror
                             </div>
 
-                            <div class="rw-field @if ($errors->has('phone')) is-invalid @endif">
-                                <label class="rw-field__label" for="rr-phone">Phone</label>
-                                <div class="rw-field__control">
-                                    <input type="text" name="phone" id="rr-phone" value="{{ old('phone') }}" placeholder="Best number to call you on" required>
-                                </div>
-                                @error('phone')
-                                    <small class="rw-field__error">{{ $message }}</small>
-                                @enderror
-                            </div>
+                            @include('partials.phone-field', [
+                                'id' => 'rr-phone',
+                                'fullWidth' => true,
+                                'placeholder' => 'Best number to call you on',
+                            ])
 
-                            <div class="rw-field @if ($errors->has('email')) is-invalid @endif">
+                            <div class="rw-field rw-form-full @if ($errors->has('email')) is-invalid @endif">
                                 <label class="rw-field__label" for="rr-email">Email</label>
                                 <div class="rw-field__control">
                                     <input type="email" name="email" id="rr-email" value="{{ old('email') }}" placeholder="Email address" required>

@@ -38,6 +38,7 @@ class ConversionLandingController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => lead_name_rules(),
             'last_name' => lead_name_rules(),
+            'phone_country_code' => lead_phone_country_code_rules(),
             'phone' => lead_phone_rules(),
             'email' => lead_email_rules(),
             'loan_type' => ['required', 'string', 'in:'.implode(',', array_keys(config('riskwisdom.loan_types')))],
@@ -54,6 +55,7 @@ class ConversionLandingController extends Controller
             'first_name.required' => 'Please enter your first name.',
             'last_name.required' => 'Please enter your last name.',
             'phone.required' => 'Please enter your phone number.',
+            'phone_country_code.required' => 'Please select a country code.',
             'email.required' => 'Please enter your email address.',
             'email.email' => 'Please enter a valid email address.',
             'enquiry.required' => 'Please tell us what you need help with.',
@@ -71,7 +73,7 @@ class ConversionLandingController extends Controller
                 ->withFragment('enquiry-form');
         }
 
-        $validated = $validator->validated();
+        $validated = normalize_validated_lead_phone($validator->validated());
 
         $enquiry = Enquiry::create([
             'lead_type' => 'conversion',

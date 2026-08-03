@@ -50,15 +50,13 @@
                 @enderror
             </label>
 
-            <label @class(['is-invalid' => $errors->has('phone')])>
-                <span>Phone <em class="rw-required">*</em></span>
-                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone number" required>
-                @error('phone')
-                    <small>{{ $message }}</small>
-                @enderror
-            </label>
+            @include('partials.phone-field', [
+                'variant' => 'label',
+                'fullWidth' => true,
+                'placeholder' => 'Phone number',
+            ])
 
-            <label @class(['is-invalid' => $errors->has('email')])>
+            <label @class(['is-invalid' => $errors->has('email'), 'rw-form-full' => true])>
                 <span>Email <em class="rw-required">*</em></span>
                 <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address" required>
                 @error('email')

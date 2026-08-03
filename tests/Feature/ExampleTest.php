@@ -81,6 +81,7 @@ class ExampleTest extends TestCase
         $response = $this->post('/contact', [
             'first_name' => 'Kal',
             'last_name' => 'Example',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'info@riskwisdomloans.com.au',
             'loan_type' => 'home_purchase',
@@ -109,6 +110,7 @@ class ExampleTest extends TestCase
             ->post('/contact', [
                 'first_name' => 'DavidrekDS',
                 'last_name' => 'DavidrekDS',
+                'phone_country_code' => '+61',
                 'phone' => '89419874553',
                 'email' => 'no.reply.JoanAndersen@gmail.com',
                 'loan_type' => 'investment',
@@ -133,6 +135,7 @@ class ExampleTest extends TestCase
             '_gotcha' => 'http://spam.test',
             'first_name' => 'Bot',
             'last_name' => 'Spam',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'spam@example.com',
             'loan_type' => 'other',
@@ -164,6 +167,7 @@ class ExampleTest extends TestCase
         $response = $this->post(route('tools.borrowing-power.submit'), [
             'first_name' => 'Alex',
             'last_name' => 'Borrower',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'alex@example.com',
             'income' => 120000,
@@ -181,6 +185,7 @@ class ExampleTest extends TestCase
             'lead_type' => 'borrowing_power',
             'email' => 'alex@example.com',
             'first_name' => 'Alex',
+            'phone' => '+61400000000',
             'source' => 'borrowing_power_calculator',
         ]);
 
@@ -191,6 +196,33 @@ class ExampleTest extends TestCase
         $followUp->assertSee('Your guide range');
     }
 
+    public function test_borrowing_power_accepts_indian_mobile_with_country_code(): void
+    {
+        Mail::fake();
+
+        $response = $this->post(route('tools.borrowing-power.submit'), [
+            'first_name' => 'Deepak',
+            'last_name' => 'Saini',
+            'phone_country_code' => '+91',
+            'phone' => '8195967310',
+            'email' => 'deepak.phone@example.com',
+            'income' => 120000,
+            'expenses' => 3500,
+            'deposit' => 80000,
+            'rate' => 6.2,
+            'term' => 30,
+        ]);
+
+        $response
+            ->assertRedirect(route('tools.borrowing-power').'#bp-result')
+            ->assertSessionHas('borrowing_power_result');
+
+        $this->assertDatabaseHas('enquiries', [
+            'email' => 'deepak.phone@example.com',
+            'phone' => '+918195967310',
+        ]);
+    }
+
     public function test_the_borrowing_power_calculator_rejects_honeypot_submissions(): void
     {
         Mail::fake();
@@ -199,6 +231,7 @@ class ExampleTest extends TestCase
             '_gotcha' => 'http://spam.test',
             'first_name' => 'Bot',
             'last_name' => 'Spam',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'spam@example.com',
             'income' => 120000,
@@ -285,6 +318,7 @@ class ExampleTest extends TestCase
             ->post(route('rate-review.submit'), [
                 'first_name' => 'Sam',
                 'last_name' => 'Reviewer',
+                'phone_country_code' => '+61',
                 'phone' => '0400111222',
                 'email' => 'sam@example.com',
                 'current_rate' => 6.49,
@@ -316,6 +350,7 @@ class ExampleTest extends TestCase
             '_gotcha' => 'spam',
             'first_name' => 'Bot',
             'last_name' => 'Spam',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'spam@example.com',
             'current_rate' => 6,
@@ -1008,6 +1043,7 @@ class ExampleTest extends TestCase
             ->post(route('enquire.campaign.submit', ['campaign' => 'refinance']), [
                 'first_name' => 'Jane',
                 'last_name' => 'Borrower',
+                'phone_country_code' => '+61',
                 'phone' => '0400000000',
                 'email' => 'jane@example.com',
                 'loan_type' => 'refinance',
@@ -1040,6 +1076,7 @@ class ExampleTest extends TestCase
             ->post(route('enquire.campaign.submit', ['campaign' => 'refinance']), [
                 'first_name' => 'Test',
                 'last_name' => 'User',
+                'phone_country_code' => '+61',
                 'phone' => '0400000000',
                 'email' => 'test@gmail.com',
                 'loan_type' => 'refinance',
@@ -1095,6 +1132,7 @@ class ExampleTest extends TestCase
         $response = $this->post('/contact', [
             'first_name' => 'Kal',
             'last_name' => 'Example',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'lead@example.com',
             'loan_type' => 'refinance',
@@ -1134,6 +1172,7 @@ class ExampleTest extends TestCase
         $this->post('/contact', [
             'first_name' => 'Kal',
             'last_name' => 'Example',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'noope@example.com',
             'loan_type' => 'refinance',
@@ -1169,6 +1208,7 @@ class ExampleTest extends TestCase
         $this->post('/contact', [
             'first_name' => 'Kal',
             'last_name' => 'Example',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'fail@example.com',
             'loan_type' => 'refinance',
@@ -1190,6 +1230,7 @@ class ExampleTest extends TestCase
             'lead_type' => 'contact',
             'first_name' => 'A',
             'last_name' => 'B',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'email' => 'pending@example.com',
             'loan_type' => 'refinance',
@@ -1322,6 +1363,7 @@ class ExampleTest extends TestCase
             'first_name' => 'Guide',
             'last_name' => 'User',
             'email' => 'guide@example.com',
+            'phone_country_code' => '+61',
             'phone' => '0400000000',
             'state' => 'NSW',
         ]);
@@ -1386,6 +1428,7 @@ class ExampleTest extends TestCase
             'first_name' => 'Night',
             'last_name' => 'Visitor',
             'email' => 'night@example.com',
+            'phone_country_code' => '+61',
             'phone' => '0400999888',
             'loan_type' => 'refinance',
             'enquiry' => 'Need help after hours.',

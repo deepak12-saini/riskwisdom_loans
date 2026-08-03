@@ -60,17 +60,13 @@
                     </div>
                 </div>
 
-                <div class="rw-field @if ($errors->has('phone')) is-invalid @endif">
-                    <label class="rw-field__label" for="{{ $formIdPrefix }}-phone">Phone</label>
-                    <div class="rw-field__control">
-                        <input type="tel" name="phone" id="{{ $formIdPrefix }}-phone" value="{{ old('phone') }}" placeholder="04xx xxx xxx" required autocomplete="tel">
-                    </div>
-                    @error('phone')
-                        <small class="rw-field__error">{{ $message }}</small>
-                    @enderror
-                </div>
+                @include('partials.phone-field', [
+                    'id' => $formIdPrefix.'-phone',
+                    'fullWidth' => true,
+                    'placeholder' => 'Phone number',
+                ])
 
-                <div class="rw-field @if ($errors->has('email')) is-invalid @endif">
+                <div class="rw-field rw-form-full @if ($errors->has('email')) is-invalid @endif">
                     <label class="rw-field__label" for="{{ $formIdPrefix }}-email">Email</label>
                     <div class="rw-field__control">
                         <input type="email" name="email" id="{{ $formIdPrefix }}-email" value="{{ old('email') }}" placeholder="your@email.com" required autocomplete="email">

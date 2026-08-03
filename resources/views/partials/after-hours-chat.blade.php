@@ -31,17 +31,16 @@
                         <small>{{ $message }}</small>
                     @enderror
                 </label>
-                <label>
+                @include('partials.phone-field', [
+                    'variant' => 'label',
+                    'fullWidth' => true,
+                    'errorBag' => 'chat',
+                    'placeholder' => 'Phone number',
+                ])
+                <label class="rw-chat-widget__full">
                     <span>Email</span>
                     <input type="email" name="email" value="{{ old('email') }}" required>
                     @error('email', 'chat')
-                        <small>{{ $message }}</small>
-                    @enderror
-                </label>
-                <label>
-                    <span>Phone</span>
-                    <input type="text" name="phone" value="{{ old('phone') }}" required>
-                    @error('phone', 'chat')
                         <small>{{ $message }}</small>
                     @enderror
                 </label>

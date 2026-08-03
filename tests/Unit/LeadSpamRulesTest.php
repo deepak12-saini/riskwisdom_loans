@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Rules\ValidAustralianPhone;
 use App\Rules\ValidLeadMessage;
 use App\Rules\ValidLeadName;
+use App\Rules\ValidLeadPhoneNumber;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -20,6 +21,33 @@ class LeadSpamRulesTest extends TestCase
     public function test_rejects_invalid_australian_phone_numbers(string $phone): void
     {
         $this->assertRuleFails(new ValidAustralianPhone, $phone);
+    }
+
+    public function test_accepts_indian_mobile_with_country_code(): void
+    {
+        $rule = new ValidLeadPhoneNumber;
+        $rule->setData(['phone_country_code' => '+91']);
+
+        $this->assertRulePasses($rule, '8195967310');
+        $this->assertSame('+918195967310', compose_lead_phone('+91', '8195967310'));
+    }
+
+    public function test_rejects_indian_mobile_when_australia_selected(): void
+    {
+        $rule = new ValidLeadPhoneNumber;
+        $rule->setData(['phone_country_code' => '+61']);
+
+        $this->assertRuleFails($rule, '8195967310');
+    }
+
+    public function test_compose_and_split_round_trip_australian_mobile(): void
+    {
+        $composed = compose_lead_phone('+61', '0412 345 678');
+        $this->assertSame('+61412345678', $composed);
+
+        $parts = split_lead_phone($composed);
+        $this->assertSame('+61', $parts['phone_country_code']);
+        $this->assertSame('0412345678', $parts['phone']);
     }
 
     #[DataProvider('spamMessages')]
