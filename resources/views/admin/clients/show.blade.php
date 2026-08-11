@@ -382,10 +382,26 @@
                                 <span>Signer email</span>
                                 <input type="email" name="signer_email" value="{{ $client->email }}" required>
                             </label>
-                            <label class="rw-admin-form-full">
-                                <span>PDF file</span>
-                                <input type="file" name="pdf" accept="application/pdf" required>
-                            </label>
+                            <div class="rw-admin-form-full">
+                                <span class="rw-admin-file-label">PDF file</span>
+                                <label class="rw-file-picker" data-file-picker>
+                                    <input type="file" name="pdf" accept="application/pdf" required data-file-picker-input>
+                                    <span class="rw-file-picker__box">
+                                        <span class="rw-file-picker__icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none">
+                                                <path d="M14 3.5H8.5A2.5 2.5 0 0 0 6 6v12a2.5 2.5 0 0 0 2.5 2.5h7A2.5 2.5 0 0 0 18 18V8.5L14 3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                                                <path d="M14 3.5V8.5H18" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                                                <path d="M9.5 13h5M9.5 16h3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                            </svg>
+                                        </span>
+                                        <span class="rw-file-picker__copy">
+                                            <strong data-file-picker-name>Choose a PDF file…</strong>
+                                            <small data-file-picker-hint>PDF only · Click to browse</small>
+                                        </span>
+                                        <span class="rw-file-picker__btn">Browse</span>
+                                    </span>
+                                </label>
+                            </div>
                             @if ($openTasks->isNotEmpty())
                                 <label class="rw-admin-form-full">
                                     <span>Link to open task <small>(optional — auto-closes when signed)</small></span>
@@ -649,6 +665,36 @@
                     dialog.close();
                 }
             });
+        });
+
+        document.querySelectorAll('[data-file-picker]').forEach((picker) => {
+            const input = picker.querySelector('[data-file-picker-input]');
+            const nameEl = picker.querySelector('[data-file-picker-name]');
+            const hintEl = picker.querySelector('[data-file-picker-hint]');
+
+            if (! input || ! nameEl) {
+                return;
+            }
+
+            const sync = () => {
+                const file = input.files?.[0];
+                if (file) {
+                    picker.classList.add('has-file');
+                    nameEl.textContent = file.name;
+                    if (hintEl) {
+                        hintEl.textContent = `${Math.max(1, Math.round(file.size / 1024))} KB selected`;
+                    }
+                } else {
+                    picker.classList.remove('has-file');
+                    nameEl.textContent = 'Choose a PDF file…';
+                    if (hintEl) {
+                        hintEl.textContent = 'PDF only · Click to browse';
+                    }
+                }
+            };
+
+            input.addEventListener('change', sync);
+            sync();
         });
 
         document.querySelectorAll('[data-submit-loader-form]').forEach((form) => {

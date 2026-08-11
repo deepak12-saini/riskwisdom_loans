@@ -7711,6 +7711,109 @@ a.rw-pager__btn:hover {
     min-height: auto;
 }
 
+.rw-admin-file-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #5e6f81;
+}
+
+.rw-file-picker {
+    position: relative;
+    display: block;
+    cursor: pointer;
+}
+
+.rw-file-picker input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.rw-file-picker__box {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 3.4rem;
+    padding: 0.85rem 1rem;
+    border: 1.5px dashed #b7c9df;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rw-file-picker:hover .rw-file-picker__box,
+.rw-file-picker:focus-within .rw-file-picker__box {
+    border-color: #1b63c8;
+    background: rgba(27, 99, 200, 0.04);
+    box-shadow: 0 0 0 3px rgba(27, 99, 200, 0.1);
+}
+
+.rw-file-picker.has-file .rw-file-picker__box {
+    border-style: solid;
+    border-color: #1b63c8;
+    background: #fff;
+}
+
+.rw-file-picker__icon {
+    flex: 0 0 auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.65rem;
+    display: grid;
+    place-items: center;
+    background: rgba(19, 43, 85, 0.08);
+    color: #132b55;
+}
+
+.rw-file-picker__icon svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+.rw-file-picker__copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    gap: 0.15rem;
+}
+
+.rw-file-picker__copy strong {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #61758a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rw-file-picker.has-file .rw-file-picker__copy strong {
+    color: #13263d;
+}
+
+.rw-file-picker__copy small {
+    font-size: 0.75rem;
+    color: #8a9aab;
+}
+
+.rw-file-picker__btn {
+    flex: 0 0 auto;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #dde6ef;
+    background: #fff;
+    color: #1b63c8;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
 .rw-admin-row--overdue {
     background: rgba(180, 35, 24, 0.04);
 }
