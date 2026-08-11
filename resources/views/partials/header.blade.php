@@ -38,8 +38,6 @@
                 ['title' => 'Borrowing Power Calculator', 'href' => route('tools.borrowing-power')],
                 ['title' => 'Repayment Calculator', 'href' => route('tools.repayment-calculator')],
                 ['title' => 'Stamp Duty Calculator', 'href' => route('tools.stamp-duty')],
-                ['title' => 'First Home Buyer\'s Guide', 'href' => route('guides.download.show', 'first-home-buyers-guide')],
-                ['title' => 'Guides & Insights', 'href' => route('guides.index')],
             ],
         ],
         [
