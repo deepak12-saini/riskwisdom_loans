@@ -13,11 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminAuthenticate::class,
+            'admin.can' => \App\Http\Middleware\EnsureAdminPermission::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
             'webhooks/docusign',
             'webhooks/annature',
+            'webhooks/calendly',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

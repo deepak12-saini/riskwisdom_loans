@@ -161,7 +161,7 @@ The site will automatically:
 | Google Ads refinance | `/enquire/refinance?utm_...` | `conversion` + Paid ads filter | `form_submit` → `generate_lead` |
 | Google Ads FHB | `/enquire/first-home-buyer?utm_...` | same | same |
 | Organic SEO | `/refinance`, `/home-loans` | contact / rate_review | `generate_lead` |
-| Book a call | `/book` | Calendly (not in enquiries) | `book_appointment` |
+| Book a call | `/book` | `calendly` (via webhook) | `book_appointment` |
 
 **PHP helper for ad URLs:** `conversion_landing_url('refinance')`
 

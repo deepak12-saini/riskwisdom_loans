@@ -16,6 +16,8 @@
                             Thanks for requesting <strong>{{ $details['guide_title'] ?: 'your guide' }}</strong>. Use the link below to access it right away.
                         @elseif (($details['lead_type'] ?? 'contact') === 'chat_widget')
                             We received your after-hours message and will follow up on the next business day.
+                        @elseif (($details['lead_type'] ?? 'contact') === 'calendly')
+                            Your call booking is confirmed. We will call you at the time you selected in Calendly.
                         @else
                             We have received your enquiry and a broker from Riskwisdom Loans will contact you within 24 hours.
                         @endif

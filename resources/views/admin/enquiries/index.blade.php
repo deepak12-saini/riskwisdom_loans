@@ -4,7 +4,9 @@
 @section('page_heading', $pageHeading ?? 'Website enquiries')
 
 @section('topbar_actions')
-    <a class="rw-button rw-button--solid" href="{{ route('admin.enquiries.export') }}">Export CSV</a>
+    @if (auth()->user()?->canAdmin('enquiries.export'))
+        <a class="rw-button rw-button--solid" href="{{ route('admin.enquiries.export') }}">Export CSV</a>
+    @endif
 @endsection
 
 @section('content')
@@ -41,6 +43,9 @@
                 </a>
                 <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'today', 'q' => $q ?: null])) }}" class="@if ($filter === 'today') is-active @endif">
                     Today <em>{{ number_format($stats['today']) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'calendly', 'q' => $q ?: null])) }}" class="@if ($filter === 'calendly') is-active @endif">
+                    Calendly <em>{{ number_format($stats['calendly'] ?? 0) }}</em>
                 </a>
                 <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'lead_only', 'q' => $q ?: null])) }}" class="@if ($filter === 'lead_only') is-active @endif">
                     Lead only <em>{{ number_format($stats['lead_only']) }}</em>

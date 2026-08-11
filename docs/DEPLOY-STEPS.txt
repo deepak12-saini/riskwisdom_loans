@@ -1,0 +1,112 @@
+========================================================
+Riskwisdom Loans — Deploy Steps (Local → Live Server)
+========================================================
+
+RULE:
+  Local PC  →  commit + push to GitHub
+  Server    →  git pull origin main
+  Extra commands only when needed (composer / migrate / cache)
+
+--------------------------------------------------------
+A) ON LOCAL PC (after you change code)
+--------------------------------------------------------
+
+1. Go to project folder
+   cd c:\xampp\htdocs\riskwisdomloans
+
+2. If you changed CSS or JS, build assets first
+   npm run build
+
+3. Check what changed
+   git status
+
+4. Add, commit, push
+   git add .
+   git commit -m "short description of your change"
+   git push origin main
+
+--------------------------------------------------------
+B) ON SERVER / PuTTY (normal everyday deploy)
+--------------------------------------------------------
+
+1. Go to site folder
+   cd /var/www/vhosts/riskwisdomloans.com.au/httpdocs
+
+2. Pull latest code from GitHub
+   git pull origin main
+
+For most normal changes (PHP, Blade, views, already-built CSS/JS),
+this ONE command is enough.
+
+--------------------------------------------------------
+C) EXTRA SERVER COMMANDS (only when needed)
+--------------------------------------------------------
+
+If composer.json / composer.lock changed:
+   composer install --no-dev --optimize-autoloader
+
+If new database migration files were added:
+   php artisan migrate --force
+
+If site shows old content or cache issues:
+   php artisan config:clear
+   php artisan cache:clear
+   php artisan view:clear
+   php artisan route:clear
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+
+--------------------------------------------------------
+D) IF git pull FAILS (dirty server / conflicts)
+--------------------------------------------------------
+
+Use only when pull says local changes would be overwritten.
+
+1. Backup .env
+   cp .env /root/riskwisdomloans.env.backup
+
+2. Match server exactly to GitHub
+   git fetch origin
+   git reset --hard origin/main
+   git clean -fd
+
+3. Then run section C if needed (composer / migrate / cache)
+
+WARNING:
+  reset --hard and clean delete local server file changes.
+  Do NOT use this every time — only when pull is blocked.
+
+--------------------------------------------------------
+E) DO NOT DO
+--------------------------------------------------------
+
+- Do not edit live files by FTP if you use Git
+- Do not git push from the server
+- Do not delete .env
+- Do not run reset/clean on every deploy
+
+--------------------------------------------------------
+F) QUICK SUMMARY
+--------------------------------------------------------
+
+Local:
+  (optional) npm run build
+  git add .
+  git commit -m "message"
+  git push origin main
+
+Server (normal):
+  git pull origin main
+
+Server (sometimes):
+  composer install --no-dev --optimize-autoloader
+  php artisan migrate --force
+  artisan clear + cache commands
+
+Staff users / roles:
+  See docs/ADMIN-ROLES.md
+  After role feature deploy, run: php artisan migrate --force
+  Admin → Users to add employees and tick permissions
+
+========================================================

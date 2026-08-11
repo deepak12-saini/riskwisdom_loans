@@ -28,6 +28,7 @@ class AdminEnquiryController extends Controller
             'ready_now' => $query->where('timeline', 'ready_now'),
             'this_week' => $query->where('created_at', '>=', now()->startOfWeek()),
             'today' => $query->whereDate('created_at', today()),
+            'calendly' => $query->where('lead_type', 'calendly'),
             'paid' => $showPaidAds ? $query->where('utm_medium', 'cpc') : null,
             'converted' => $query->whereHas('client'),
             'lead_only' => $query->whereDoesntHave('client'),
@@ -52,6 +53,7 @@ class AdminEnquiryController extends Controller
             'ready_now' => Enquiry::query()->where('timeline', 'ready_now')->count(),
             'this_week' => Enquiry::query()->where('created_at', '>=', now()->startOfWeek())->count(),
             'today' => Enquiry::query()->whereDate('created_at', today())->count(),
+            'calendly' => Enquiry::query()->where('lead_type', 'calendly')->count(),
             'converted' => Enquiry::query()->whereHas('client')->count(),
             'lead_only' => Enquiry::query()->whereDoesntHave('client')->count(),
         ];
@@ -65,6 +67,7 @@ class AdminEnquiryController extends Controller
             'ready_now' => 'Ready now leads',
             'this_week' => 'This week leads',
             'today' => 'Today\'s leads',
+            'calendly' => 'Calendly bookings',
             'paid' => 'Paid ad leads (CPC)',
             'converted' => 'Leads with client file',
             'lead_only' => 'Lead only',

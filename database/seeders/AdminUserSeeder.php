@@ -17,6 +17,8 @@ class AdminUserSeeder extends Seeder
                 'email' => (string) env('ADMIN_EMAIL', 'admin@riskwisdomloans.com.au'),
                 'password' => Hash::make((string) env('ADMIN_PASSWORD', 'Admin@12345')),
                 'is_admin' => true,
+                'role' => User::ROLE_ADMIN,
+                'permissions' => null,
             ]
         );
     }

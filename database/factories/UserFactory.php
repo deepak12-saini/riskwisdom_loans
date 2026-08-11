@@ -30,7 +30,32 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'is_admin' => false,
+            'permissions' => null,
         ];
+    }
+
+    public function panelAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_admin' => true,
+            'role' => User::ROLE_ADMIN,
+            'permissions' => null,
+            'username' => fake()->unique()->userName(),
+        ]);
+    }
+
+    /**
+     * @param  list<string>|null  $permissions
+     */
+    public function panelStaff(?array $permissions = null): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_admin' => true,
+            'role' => User::ROLE_STAFF,
+            'permissions' => $permissions ?? User::staffPresetPermissions(),
+            'username' => fake()->unique()->userName(),
+        ]);
     }
 
     /**

@@ -11,20 +11,7 @@
         </svg>
     </a>
 
-    @if ($enquiry->client)
-        <a
-            class="rw-admin-icon-action"
-            href="{{ route('admin.clients.show', $enquiry->client) }}"
-            title="View client file"
-            aria-label="View client file"
-        >
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 3.75h7.5L19 8.25v12a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20.25v-15A1.5 1.5 0 0 1 7.5 3.75H7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M14.25 3.75V8.1H18.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M9 12.5h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-        </a>
-    @else
+    @if (! $enquiry->client && auth()->user()?->canAdmin('enquiries.convert'))
         <form
             method="post"
             action="{{ route('admin.enquiries.convert', $enquiry) }}"
@@ -43,25 +30,40 @@
                 </svg>
             </button>
         </form>
-    @endif
-
-    <form
-        method="post"
-        action="{{ route('admin.enquiries.destroy', $enquiry) }}"
-        class="rw-admin-inline-form"
-        onsubmit="return confirm('Delete this enquiry permanently?');"
-    >
-        @csrf
-        @method('DELETE')
-        <button
-            class="rw-admin-icon-action rw-admin-icon-action--danger"
-            type="submit"
-            title="Delete enquiry"
-            aria-label="Delete enquiry"
+    @elseif ($enquiry->client && auth()->user()?->canAdmin('clients.view'))
+        <a
+            class="rw-admin-icon-action"
+            href="{{ route('admin.clients.show', $enquiry->client) }}"
+            title="View client file"
+            aria-label="View client file"
         >
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m1 0v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7h12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 3.75h7.5L19 8.25v12a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20.25v-15A1.5 1.5 0 0 1 7.5 3.75H7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M14.25 3.75V8.1H18.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M9 12.5h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
             </svg>
-        </button>
-    </form>
+        </a>
+    @endif
+
+    @if (auth()->user()?->canAdmin('enquiries.delete'))
+        <form
+            method="post"
+            action="{{ route('admin.enquiries.destroy', $enquiry) }}"
+            class="rw-admin-inline-form"
+            onsubmit="return confirm('Delete this enquiry permanently?');"
+        >
+            @csrf
+            @method('DELETE')
+            <button
+                class="rw-admin-icon-action rw-admin-icon-action--danger"
+                type="submit"
+                title="Delete enquiry"
+                aria-label="Delete enquiry"
+            >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m1 0v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7h12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </form>
+    @endif
 </div>

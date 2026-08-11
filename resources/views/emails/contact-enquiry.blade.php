@@ -14,6 +14,8 @@
                             A new borrowing power calculator lead was submitted on the Riskwisdom Loans website.
                         @elseif (($details['lead_type'] ?? 'contact') === 'rate_review')
                             A new rate review request was submitted — fast callback requested.
+                        @elseif (($details['lead_type'] ?? 'contact') === 'calendly')
+                            A new Calendly booking was made — call this contact at the booked time.
                         @else
                             A new contact form enquiry was submitted on the Riskwisdom Loans website.
                         @endif

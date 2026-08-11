@@ -6,8 +6,10 @@
 @section('topbar_actions')
     <a class="rw-button rw-button--ghost" href="{{ route('admin.enquiries.index') }}">All leads</a>
     @if ($enquiry->client)
-        <a class="rw-button rw-button--solid" href="{{ route('admin.clients.show', $enquiry->client) }}">View client file</a>
-    @else
+        @if (auth()->user()?->canAdmin('clients.view'))
+            <a class="rw-button rw-button--solid" href="{{ route('admin.clients.show', $enquiry->client) }}">View client file</a>
+        @endif
+    @elseif (auth()->user()?->canAdmin('enquiries.convert'))
         <form method="post" action="{{ route('admin.enquiries.convert', $enquiry) }}" class="rw-admin-inline-form">
             @csrf
             <button class="rw-button rw-button--solid" type="submit">Create client file</button>
@@ -74,6 +76,26 @@
                         <dt>Submitted</dt>
                         <dd>{{ $enquiry->created_at?->format('d M Y H:i') ?: '—' }}</dd>
                     </div>
+                    @if (($enquiry->lead_type === 'calendly') && ! empty($metadata['calendly_start_time']))
+                        <div>
+                            <dt>Booked call</dt>
+                            <dd>
+                                @php
+                                    try {
+                                        $bookedAt = (new \DateTimeImmutable((string) $metadata['calendly_start_time']))
+                                            ->setTimezone(new \DateTimeZone((string) ($metadata['calendly_timezone'] ?? 'Australia/Sydney')));
+                                        $bookedLabel = $bookedAt->format('D j M Y g:ia T');
+                                    } catch (\Throwable) {
+                                        $bookedLabel = (string) $metadata['calendly_start_time'];
+                                    }
+                                @endphp
+                                {{ $bookedLabel }}
+                                @if (($metadata['calendly_status'] ?? '') === 'canceled')
+                                    <br><span class="rw-admin-pill rw-admin-pill--urgent">Canceled</span>
+                                @endif
+                            </dd>
+                        </div>
+                    @endif
                     <div>
                         <dt>Loan type</dt>
                         <dd>{{ $loanLabel }}</dd>
@@ -109,12 +131,20 @@
             <section class="rw-lead-panel">
                 <div class="rw-lead-panel__intro">
                     <div>
-                        <h2>Enquiry message</h2>
-                        <p>What they submitted through the website form.</p>
+                        <h2>{{ $enquiry->lead_type === 'calendly' ? 'Booking details' : 'Enquiry message' }}</h2>
+                        <p>
+                            @if ($enquiry->lead_type === 'calendly')
+                                Calendly booking synced into admin so staff can call this contact.
+                            @else
+                                What they submitted through the website form.
+                            @endif
+                        </p>
                     </div>
                     @if ($enquiry->client)
-                        <a class="rw-button rw-button--solid rw-button--sm" href="{{ route('admin.clients.show', $enquiry->client) }}">Open client file</a>
-                    @else
+                        @if (auth()->user()?->canAdmin('clients.view'))
+                            <a class="rw-button rw-button--solid rw-button--sm" href="{{ route('admin.clients.show', $enquiry->client) }}">Open client file</a>
+                        @endif
+                    @elseif (auth()->user()?->canAdmin('enquiries.convert'))
                         <form method="post" action="{{ route('admin.enquiries.convert', $enquiry) }}" class="rw-admin-inline-form">
                             @csrf
                             <button class="rw-button rw-button--solid rw-button--sm" type="submit">Create client file</button>
@@ -207,8 +237,10 @@
 
                 <div class="rw-lead-next">
                     @if ($enquiry->client)
-                        <a class="rw-button rw-button--solid" href="{{ route('admin.clients.show', $enquiry->client) }}">View client file</a>
-                    @else
+                        @if (auth()->user()?->canAdmin('clients.view'))
+                            <a class="rw-button rw-button--solid" href="{{ route('admin.clients.show', $enquiry->client) }}">View client file</a>
+                        @endif
+                    @elseif (auth()->user()?->canAdmin('enquiries.convert'))
                         <form method="post" action="{{ route('admin.enquiries.convert', $enquiry) }}" class="rw-admin-inline-form">
                             @csrf
                             <button class="rw-button rw-button--solid" type="submit">Create client file</button>

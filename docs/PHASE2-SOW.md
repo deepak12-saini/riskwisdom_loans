@@ -129,7 +129,7 @@ Please confirm or adjust:
 - Full CRM (HubSpot replacement)
 - Client-facing portal for task upload (can be 2C)
 - Automated SMS/WhatsApp pipeline (original Phase 1 item #7 — separate)
-- Calendly bookings stored in admin (requires Calendly webhook / paid plan)
+- ~~Calendly bookings stored in admin (requires Calendly webhook / paid plan)~~ → Implemented (`/webhooks/calendly`, see `docs/CALENDLY-WEBHOOK-SETUP.md`)
 
 ---
 

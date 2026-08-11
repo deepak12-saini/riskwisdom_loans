@@ -31,6 +31,7 @@ return [
         'guide_download' => 'Guide download',
         'chat_widget' => 'After-hours chat',
         'conversion' => 'Ad / conversion landing',
+        'calendly' => 'Calendly booking',
     ],
 
     'rate_review' => [

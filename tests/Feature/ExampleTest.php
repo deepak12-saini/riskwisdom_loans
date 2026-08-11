@@ -117,7 +117,7 @@ class ExampleTest extends TestCase
                 'timeline' => '3_6_months',
                 'state' => 'TAS',
                 'enquiry' => 'Good morning! I noticed your website while browsing the internet. Contact us on Telegram - https://t.me/FeedbackFormEU',
-            ]);
+        ]);
 
         $response
             ->assertRedirect(route('home').'#contact')
@@ -1440,5 +1440,76 @@ class ExampleTest extends TestCase
             'email' => 'night@example.com',
             'source' => 'after_hours_chat',
         ]);
+    }
+
+    public function test_calendly_webhook_stores_booking_enquiry(): void
+    {
+        config([
+            'calendly.webhook_signing_key' => 'calendly-test-key',
+            'calendly.webhook_tolerance_seconds' => 300,
+        ]);
+
+        $payloadArray = [
+            'event' => 'invitee.created',
+            'payload' => [
+                'uri' => 'https://api.calendly.com/scheduled_events/EVT/invitees/INV',
+                'email' => 'booker@example.com',
+                'first_name' => 'Alex',
+                'last_name' => 'Booker',
+                'name' => 'Alex Booker',
+                'timezone' => 'Australia/Sydney',
+                'questions_and_answers' => [
+                    ['question' => 'Mobile phone', 'answer' => '+61 412 000 111'],
+                ],
+                'scheduled_event' => [
+                    'name' => 'Free 15-minute phone call',
+                    'start_time' => '2026-08-15T01:00:00.000000Z',
+                    'end_time' => '2026-08-15T01:15:00.000000Z',
+                ],
+            ],
+        ];
+
+        $raw = json_encode($payloadArray, JSON_THROW_ON_ERROR);
+        $timestamp = (string) time();
+        $signature = hash_hmac('sha256', $timestamp.'.'.$raw, 'calendly-test-key');
+
+        $this->call(
+            'POST',
+            route('webhooks.calendly'),
+            [],
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_Calendly-Webhook-Signature' => "t={$timestamp},v1={$signature}",
+            ],
+            $raw
+        )->assertOk();
+
+        $this->assertDatabaseHas('enquiries', [
+            'lead_type' => 'calendly',
+            'email' => 'booker@example.com',
+            'first_name' => 'Alex',
+            'phone' => '+61 412 000 111',
+            'source' => 'calendly',
+        ]);
+    }
+
+    public function test_calendly_webhook_rejects_invalid_signature(): void
+    {
+        config(['calendly.webhook_signing_key' => 'calendly-test-key']);
+
+        $this->call(
+            'POST',
+            route('webhooks.calendly'),
+            [],
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_Calendly-Webhook-Signature' => 't='.time().',v1=bad',
+            ],
+            '{"event":"invitee.created"}'
+        )->assertStatus(401);
     }
 }

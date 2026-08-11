@@ -5,19 +5,23 @@
 
 @section('topbar_actions')
     <a class="rw-button rw-button--ghost" href="{{ route('admin.clients.index') }}">All clients</a>
-    <a class="rw-button rw-button--ghost" href="{{ route('admin.clients.edit', $client) }}">Edit details</a>
-    @if ($client->isArchived())
-        <form method="post" action="{{ route('admin.clients.restore', $client) }}" class="rw-admin-inline-form">
-            @csrf
-            @method('patch')
-            <button class="rw-button rw-button--solid" type="submit">Restore active</button>
-        </form>
-    @else
-        <form method="post" action="{{ route('admin.clients.archive', $client) }}" class="rw-admin-inline-form" onsubmit="return confirm('Archive this client file?');">
-            @csrf
-            @method('patch')
-            <button class="rw-button rw-button--ghost" type="submit">Archive</button>
-        </form>
+    @if (auth()->user()?->canAdmin('clients.update'))
+        <a class="rw-button rw-button--ghost" href="{{ route('admin.clients.edit', $client) }}">Edit details</a>
+    @endif
+    @if (auth()->user()?->canAdmin('clients.archive'))
+        @if ($client->isArchived())
+            <form method="post" action="{{ route('admin.clients.restore', $client) }}" class="rw-admin-inline-form">
+                @csrf
+                @method('patch')
+                <button class="rw-button rw-button--solid" type="submit">Restore active</button>
+            </form>
+        @else
+            <form method="post" action="{{ route('admin.clients.archive', $client) }}" class="rw-admin-inline-form" onsubmit="return confirm('Archive this client file?');">
+                @csrf
+                @method('patch')
+                <button class="rw-button rw-button--ghost" type="submit">Archive</button>
+            </form>
+        @endif
     @endif
 @endsection
 
@@ -438,19 +442,21 @@
                                     @endif
                                 </div>
                                 <div class="rw-admin-doc-item__actions">
-                                    @if ($document->isSigned())
+                                    @if ($document->isSigned() && auth()->user()?->canAdmin('documents.view'))
                                         <a class="rw-button rw-button--solid rw-button--sm" href="{{ route('admin.clients.documents.download', [$client, $document]) }}">Download PDF</a>
-                                    @elseif ($document->envelope_id && $signingConfigured)
+                                    @elseif ($document->envelope_id && $signingConfigured && auth()->user()?->canAdmin('documents.manage'))
                                         <form method="post" action="{{ route('admin.clients.documents.sync', [$client, $document]) }}">
                                             @csrf
                                             <button class="rw-button rw-button--ghost rw-button--sm" type="submit">Sync status</button>
                                         </form>
                                     @endif
-                                    <form method="post" action="{{ route('admin.clients.documents.destroy', [$client, $document]) }}" onsubmit="return confirm('Remove this document record?');">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="rw-admin-link rw-admin-link--danger" type="submit">Remove</button>
-                                    </form>
+                                    @if (auth()->user()?->canAdmin('documents.delete'))
+                                        <form method="post" action="{{ route('admin.clients.documents.destroy', [$client, $document]) }}" onsubmit="return confirm('Remove this document record?');">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="rw-admin-link rw-admin-link--danger" type="submit">Remove</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </article>
                         @endforeach
@@ -533,16 +539,18 @@
                     </div>
                 </form>
 
-                <form
-                    method="post"
-                    action="{{ route('admin.clients.tasks.destroy', [$client, $task]) }}"
-                    class="rw-admin-drawer__delete"
-                    onsubmit="return confirm('Delete this task permanently?');"
-                >
-                    @csrf
-                    @method('delete')
-                    <button class="rw-admin-link rw-admin-link--danger" type="submit">Delete task</button>
-                </form>
+                @if (auth()->user()?->canAdmin('tasks.delete'))
+                    <form
+                        method="post"
+                        action="{{ route('admin.clients.tasks.destroy', [$client, $task]) }}"
+                        class="rw-admin-drawer__delete"
+                        onsubmit="return confirm('Delete this task permanently?');"
+                    >
+                        @csrf
+                        @method('delete')
+                        <button class="rw-admin-link rw-admin-link--danger" type="submit">Delete task</button>
+                    </form>
+                @endif
             </div>
         </dialog>
     @endforeach

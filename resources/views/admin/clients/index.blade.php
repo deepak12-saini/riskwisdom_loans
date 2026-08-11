@@ -4,7 +4,9 @@
 @section('page_heading', $pageHeading ?? 'Client files')
 
 @section('topbar_actions')
-    <a class="rw-button rw-button--solid" href="{{ route('admin.clients.create') }}">New client file</a>
+    @if (auth()->user()?->canAdmin('clients.create'))
+        <a class="rw-button rw-button--solid" href="{{ route('admin.clients.create') }}">New client file</a>
+    @endif
 @endsection
 
 @section('content')
