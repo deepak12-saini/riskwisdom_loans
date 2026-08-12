@@ -38,6 +38,30 @@
             document.querySelector('.rw-admin-menu-toggle')?.addEventListener('click', () => {
                 document.body.classList.toggle('rw-admin-sidebar-open');
             });
+
+            document.querySelectorAll('.js-copy-booking-link').forEach((button) => {
+                button.addEventListener('click', async () => {
+                    const url = button.getAttribute('data-copy-url');
+                    const defaultLabel = button.getAttribute('data-copy-label') || 'Copy booking link';
+                    const copiedLabel = button.getAttribute('data-copied-label') || 'Link copied';
+
+                    if (!url) {
+                        return;
+                    }
+
+                    try {
+                        await navigator.clipboard.writeText(url);
+                        button.textContent = copiedLabel;
+                        button.classList.add('is-copied');
+                        window.setTimeout(() => {
+                            button.textContent = defaultLabel;
+                            button.classList.remove('is-copied');
+                        }, 1800);
+                    } catch (error) {
+                        window.prompt('Copy this booking link:', url);
+                    }
+                });
+            });
         </script>
         @stack('scripts')
     </body>

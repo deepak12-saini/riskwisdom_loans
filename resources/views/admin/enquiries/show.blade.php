@@ -69,6 +69,17 @@
                             <strong>{{ $enquiry->phone }}</strong>
                         </a>
                     @endif
+                    @if (calendly_url())
+                        <a
+                            class="rw-client-profile__action rw-client-profile__action--accent"
+                            href="{{ calendly_prefill_url($enquiry->full_name, $enquiry->email, $enquiry->phone, $enquiry->first_name, $enquiry->last_name) }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span>Meeting</span>
+                            <strong>Book in Calendly</strong>
+                        </a>
+                    @endif
                 </div>
 
                 <dl class="rw-client-profile__meta">
@@ -229,11 +240,19 @@
                             @if ($enquiry->client)
                                 This lead already has a client file — continue checklist and e-sign there.
                             @else
-                                Convert this lead into a client file when you’re ready to track tasks and documents.
+                                Call the lead, book a meeting, or convert into a client file when you’re ready.
                             @endif
                         </p>
                     </div>
                 </div>
+
+                @include('admin.partials.book-meeting', [
+                    'bookName' => $enquiry->full_name,
+                    'bookEmail' => $enquiry->email,
+                    'bookPhone' => $enquiry->phone,
+                    'bookFirstName' => $enquiry->first_name,
+                    'bookLastName' => $enquiry->last_name,
+                ])
 
                 <div class="rw-lead-next">
                     @if ($enquiry->client)
@@ -243,7 +262,7 @@
                     @elseif (auth()->user()?->canAdmin('enquiries.convert'))
                         <form method="post" action="{{ route('admin.enquiries.convert', $enquiry) }}" class="rw-admin-inline-form">
                             @csrf
-                            <button class="rw-button rw-button--solid" type="submit">Create client file</button>
+                            <button class="rw-button rw-button--ghost" type="submit">Create client file</button>
                         </form>
                     @endif
                     <a class="rw-button rw-button--ghost" href="mailto:{{ $enquiry->email }}">Email lead</a>

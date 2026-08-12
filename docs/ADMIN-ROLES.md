@@ -33,6 +33,15 @@ Includes: view/export/convert enquiries, clients view/create/update, tasks view/
 
 Does **not** include: delete enquiries/tasks/documents, archive clients, manage users.
 
+## Book meeting (staff callers)
+
+On **Enquiry** and **Client** pages, staff can:
+
+1. **Book meeting** — opens Calendly with name / email / phone prefilled
+2. **Copy booking link** — public `/book` URL to paste into SMS or WhatsApp
+
+No extra permission is required beyond viewing the enquiry or client.
+
 ## Deploy note
 
 After pulling this feature:

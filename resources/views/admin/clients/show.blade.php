@@ -70,7 +70,27 @@
                             <strong>{{ $client->phone }}</strong>
                         </a>
                     @endif
+                    @if (calendly_url())
+                        <a
+                            class="rw-client-profile__action rw-client-profile__action--accent"
+                            href="{{ calendly_prefill_url($client->full_name, $client->email, $client->phone, $client->first_name, $client->last_name) }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span>Meeting</span>
+                            <strong>Book in Calendly</strong>
+                        </a>
+                    @endif
                 </div>
+
+                @include('admin.partials.book-meeting', [
+                    'bookName' => $client->full_name,
+                    'bookEmail' => $client->email,
+                    'bookPhone' => $client->phone,
+                    'bookFirstName' => $client->first_name,
+                    'bookLastName' => $client->last_name,
+                    'variant' => 'compact',
+                ])
 
                 <dl class="rw-client-profile__meta">
                     <div>

@@ -85,6 +85,44 @@ if (! function_exists('calendly_url')) {
     }
 }
 
+if (! function_exists('calendly_prefill_url')) {
+    /**
+     * Calendly scheduling link with invitee name/email/phone prefilled for staff booking.
+     *
+     * @see https://help.calendly.com/hc/en-us/articles/226766767
+     */
+    function calendly_prefill_url(
+        ?string $name = null,
+        ?string $email = null,
+        ?string $phone = null,
+        ?string $firstName = null,
+        ?string $lastName = null,
+    ): ?string {
+        $base = calendly_url();
+
+        if ($base === null) {
+            return null;
+        }
+
+        $params = array_filter([
+            'name' => $name !== null && trim($name) !== '' ? trim($name) : null,
+            'first_name' => $firstName !== null && trim($firstName) !== '' ? trim($firstName) : null,
+            'last_name' => $lastName !== null && trim($lastName) !== '' ? trim($lastName) : null,
+            'email' => $email !== null && trim($email) !== '' ? trim($email) : null,
+            // First custom invitee question is commonly phone on broker event types.
+            'a1' => $phone !== null && trim($phone) !== '' ? trim($phone) : null,
+        ], static fn ($value) => $value !== null && $value !== '');
+
+        if ($params === []) {
+            return $base;
+        }
+
+        $separator = str_contains($base, '?') ? '&' : '?';
+
+        return $base.$separator.http_build_query($params);
+    }
+}
+
 if (! function_exists('calendly_embed_url')) {
     /**
      * Calendly inline embed URL with branding + hide duplicate cookie banner
