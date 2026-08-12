@@ -126,7 +126,25 @@
                 <p class="rw-conversion__brands-title">Trusted across major banks, challenger lenders, and specialist finance providers</p>
                 <div class="rw-conversion__brands-row">
                     @foreach (config('riskwisdom.lender_panel.items', []) as $lender)
-                        <span class="rw-conversion__brand-pill">{{ $lender }}</span>
+                        @php
+                            $name = is_array($lender) ? ($lender['name'] ?? '') : (string) $lender;
+                            $logo = is_array($lender) ? ($lender['logo'] ?? null) : null;
+                        @endphp
+                        <span class="rw-conversion__brand-pill">
+                            @if ($logo)
+                                <img
+                                    class="rw-conversion__brand-logo"
+                                    src="{{ asset($logo) }}"
+                                    alt="{{ $name }}"
+                                    width="110"
+                                    height="32"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            @else
+                                {{ $name }}
+                            @endif
+                        </span>
                     @endforeach
                 </div>
             </div>

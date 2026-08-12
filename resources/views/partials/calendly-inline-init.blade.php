@@ -1,13 +1,48 @@
 <script>
     (function () {
         const hideBranding = @json(calendly_hide_branding());
+        let booted = false;
 
         const hideLoader = (loader, mount) => {
-            if (loader) {
+            if (loader && !loader.hidden) {
                 loader.hidden = true;
             }
 
             mount?.classList.add('is-ready');
+
+            const badge = document.querySelector('[data-calendly-badge]');
+            if (badge && !badge.dataset.ready) {
+                badge.dataset.ready = '1';
+                badge.textContent = 'Live availability';
+            }
+        };
+
+        const watchIframeReady = (mount, loader) => {
+            const bindIframe = (iframe) => {
+                if (!iframe || iframe.dataset.rwBound) {
+                    return;
+                }
+
+                iframe.dataset.rwBound = '1';
+                iframe.addEventListener('load', () => hideLoader(loader, mount), { once: true });
+            };
+
+            const existing = mount.querySelector('iframe');
+            if (existing) {
+                bindIframe(existing);
+                return;
+            }
+
+            const observer = new MutationObserver(() => {
+                const iframe = mount.querySelector('iframe');
+                if (iframe) {
+                    bindIframe(iframe);
+                    observer.disconnect();
+                }
+            });
+
+            observer.observe(mount, { childList: true, subtree: true });
+            window.setTimeout(() => observer.disconnect(), 15000);
         };
 
         const initBookCalendly = () => {
@@ -15,9 +50,15 @@
             const loader = document.getElementById('rw-calendly-loader');
             const url = mount?.dataset.url?.trim() ?? '';
 
-            if (!mount || !url || !window.Calendly) {
+            if (!mount || !url || !window.Calendly || booted) {
+                return Boolean(window.Calendly && mount && url && booted);
+            }
+
+            if (!window.Calendly) {
                 return false;
             }
+
+            booted = true;
 
             const options = {
                 url,
@@ -30,6 +71,7 @@
             }
 
             window.Calendly.initInlineWidget(options);
+            watchIframeReady(mount, loader);
 
             const onCalendlyMessage = (event) => {
                 if (!event.origin?.includes('calendly.com')) {
@@ -60,7 +102,7 @@
             };
 
             window.addEventListener('message', onCalendlyMessage);
-            window.setTimeout(() => hideLoader(loader, mount), 6000);
+            window.setTimeout(() => hideLoader(loader, mount), 4500);
 
             return true;
         };
@@ -74,16 +116,26 @@
             const timer = window.setInterval(() => {
                 attempts += 1;
 
-                if (initBookCalendly() || attempts >= 40) {
+                if (initBookCalendly() || attempts >= 80) {
                     window.clearInterval(timer);
                 }
-            }, 100);
+            }, 50);
         };
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', boot);
+        // Start as soon as the mount exists — do not wait for full page load.
+        if (document.getElementById('rw-calendly-mount')) {
+            boot();
+        } else if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', boot, { once: true });
         } else {
             boot();
         }
+
+        // If widget.js finishes after our first poll window, still boot.
+        window.addEventListener('load', () => {
+            if (!booted) {
+                boot();
+            }
+        }, { once: true });
     })();
 </script>

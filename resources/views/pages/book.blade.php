@@ -1,10 +1,12 @@
 @if (calendly_embed_url())
     @push('head')
+        <link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+        <link rel="preconnect" href="https://calendly.com" crossorigin>
+        <link rel="dns-prefetch" href="https://assets.calendly.com">
+        <link rel="dns-prefetch" href="https://calendly.com">
+        <link rel="preload" href="https://assets.calendly.com/assets/external/widget.js" as="script">
         <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    @endpush
-
-    @push('scripts')
-        <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript"></script>
+        <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
         @include('partials.calendly-inline-init')
     @endpush
 @endif
@@ -100,7 +102,7 @@
                                     <h2>Select a date &amp; time</h2>
                                     <p>Times shown in your local timezone.</p>
                                 </div>
-                                <span class="rw-book__embed-badge">Live availability</span>
+                                <span class="rw-book__embed-badge" data-calendly-badge>Loading calendar…</span>
                             </div>
 
                             <div
@@ -110,8 +112,20 @@
                                 aria-live="polite"
                                 aria-label="Loading calendar"
                             >
-                                <div class="rw-book__loader-skeleton" aria-hidden="true"></div>
-                                <p>Loading available times…</p>
+                                <div class="rw-book__loader-skeleton" aria-hidden="true">
+                                    <div class="rw-book__loader-toolbar"></div>
+                                    <div class="rw-book__loader-week">
+                                        @for ($i = 0; $i < 7; $i++)
+                                            <span></span>
+                                        @endfor
+                                    </div>
+                                    <div class="rw-book__loader-grid">
+                                        @for ($i = 0; $i < 35; $i++)
+                                            <span></span>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p>Fetching live availability from Calendly…</p>
                             </div>
 
                             <div

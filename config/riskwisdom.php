@@ -64,14 +64,14 @@ return [
     'lender_panel' => [
         'title' => 'Trusted across major banks, challenger lenders, and specialist finance providers.',
         'items' => [
-            'ANZ',
-            'CBA',
-            'Westpac',
-            'NAB',
-            'Macquarie',
-            'ING',
-            'Suncorp',
-            'Bankwest',
+            ['name' => 'ANZ', 'logo' => 'images/lenders/anz.svg'],
+            ['name' => 'CBA', 'logo' => 'images/lenders/cba.svg'],
+            ['name' => 'Westpac', 'logo' => 'images/lenders/westpac.svg'],
+            ['name' => 'NAB', 'logo' => 'images/lenders/nab.svg'],
+            ['name' => 'Macquarie', 'logo' => 'images/lenders/macquarie.svg'],
+            ['name' => 'ING', 'logo' => 'images/lenders/ing.svg'],
+            ['name' => 'Suncorp', 'logo' => 'images/lenders/suncorp.svg'],
+            ['name' => 'Bankwest', 'logo' => 'images/lenders/bankwest.svg'],
         ],
     ],
 

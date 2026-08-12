@@ -253,13 +253,38 @@
                                 id="task-{{ $task->id }}"
                                 data-task-state="{{ $task->status === 'done' ? 'done' : 'open' }}"
                             >
-                                <div class="rw-admin-task-item__status" aria-hidden="true">
+                                <div class="rw-admin-task-item__status">
                                     @if ($task->status === 'done')
-                                        <span class="rw-admin-task-item__icon rw-admin-task-item__icon--done"></span>
-                                    @elseif ($task->isOverdue())
-                                        <span class="rw-admin-task-item__icon rw-admin-task-item__icon--overdue"></span>
+                                        <span
+                                            class="rw-admin-task-check is-done"
+                                            title="Completed"
+                                            aria-label="Task completed"
+                                        >
+                                            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                                <path d="M3.5 8.2 6.4 11l6.1-6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
+                                    @elseif (auth()->user()?->canAdmin('tasks.manage'))
+                                        <form
+                                            method="post"
+                                            action="{{ route('admin.clients.tasks.close', [$client, $task]) }}"
+                                            class="rw-admin-task-check-form"
+                                        >
+                                            @csrf
+                                            @method('patch')
+                                            <button
+                                                type="submit"
+                                                class="rw-admin-task-check @if ($task->isOverdue()) is-overdue @endif"
+                                                title="Mark as done"
+                                                aria-label="Mark task as done: {{ $task->title }}"
+                                            ></button>
+                                        </form>
                                     @else
-                                        <span class="rw-admin-task-item__icon"></span>
+                                        <span
+                                            class="rw-admin-task-check @if ($task->isOverdue()) is-overdue @endif"
+                                            title="{{ $task->isOverdue() ? 'Overdue' : 'Open' }}"
+                                            aria-hidden="true"
+                                        ></span>
                                     @endif
                                 </div>
 
@@ -285,20 +310,22 @@
                                 </div>
 
                                 <div class="rw-admin-task-item__actions">
-                                    @if ($task->isOpen())
+                                    @if ($task->isOpen() && auth()->user()?->canAdmin('tasks.manage'))
                                         <form method="post" action="{{ route('admin.clients.tasks.close', [$client, $task]) }}">
                                             @csrf
                                             @method('patch')
                                             <button class="rw-button rw-button--solid rw-button--sm" type="submit">Mark done</button>
                                         </form>
                                     @endif
-                                    <button
-                                        class="rw-button rw-button--ghost rw-button--sm"
-                                        type="button"
-                                        data-open-drawer="task-drawer-{{ $task->id }}"
-                                    >
-                                        Edit
-                                    </button>
+                                    @if (auth()->user()?->canAdmin('tasks.manage'))
+                                        <button
+                                            class="rw-button rw-button--ghost rw-button--sm"
+                                            type="button"
+                                            data-open-drawer="task-drawer-{{ $task->id }}"
+                                        >
+                                            Edit
+                                        </button>
+                                    @endif
                                 </div>
                             </article>
                         @endforeach

@@ -10,7 +10,25 @@
 
     <div class="rw-lender-strip__list" role="list" aria-label="Representative lender panel">
         @foreach (($panel['items'] ?? []) as $item)
-            <span role="listitem" class="rw-lender-strip__item">{{ $item }}</span>
+            @php
+                $name = is_array($item) ? ($item['name'] ?? '') : (string) $item;
+                $logo = is_array($item) ? ($item['logo'] ?? null) : null;
+            @endphp
+            <span role="listitem" class="rw-lender-strip__item">
+                @if ($logo)
+                    <img
+                        class="rw-lender-strip__logo"
+                        src="{{ asset($logo) }}"
+                        alt="{{ $name }}"
+                        width="140"
+                        height="40"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                @else
+                    <span class="rw-lender-strip__name">{{ $name }}</span>
+                @endif
+            </span>
         @endforeach
     </div>
 </section>

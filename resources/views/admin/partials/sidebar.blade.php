@@ -23,18 +23,29 @@
         ];
     }
     if ($user?->canAdmin('tasks.view')) {
-        $clientItems[] = [
-            'label' => 'Open tasks',
-            'href' => route('admin.tasks.index', ['filter' => 'open']),
-            'icon' => 'tasks',
-            'active' => request()->routeIs('admin.tasks.index') && $taskFilter === 'open',
-        ];
-        $clientItems[] = [
-            'label' => 'Overdue tasks',
-            'href' => route('admin.tasks.index', ['filter' => 'overdue']),
-            'icon' => 'urgent',
-            'active' => request()->routeIs('admin.tasks.index') && $taskFilter === 'overdue',
-        ];
+        $openTaskCount = \App\Models\Task::query()->open()->count();
+        $overdueTaskCount = \App\Models\Task::query()->overdue()->count();
+
+        if ($openTaskCount > 0 || (request()->routeIs('admin.tasks.index') && $taskFilter === 'open')) {
+            $clientItems[] = [
+                'label' => 'Open tasks',
+                'href' => route('admin.tasks.index', ['filter' => 'open']),
+                'icon' => 'tasks',
+                'active' => request()->routeIs('admin.tasks.index') && $taskFilter === 'open',
+                'count' => $openTaskCount,
+            ];
+        }
+
+        if ($overdueTaskCount > 0 || (request()->routeIs('admin.tasks.index') && $taskFilter === 'overdue')) {
+            $clientItems[] = [
+                'label' => 'Overdue tasks',
+                'href' => route('admin.tasks.index', ['filter' => 'overdue']),
+                'icon' => 'urgent',
+                'active' => request()->routeIs('admin.tasks.index') && $taskFilter === 'overdue',
+                'count' => $overdueTaskCount,
+                'urgent' => true,
+            ];
+        }
     }
 
     $toolItems = [];
@@ -91,10 +102,13 @@
                 <a
                     class="rw-admin-sidebar__link @if ($item['active']) is-active @endif"
                     href="{{ $item['href'] }}"
-                    title="{{ $item['label'] }}"
+                    title="{{ $item['label'] }}{{ isset($item['count']) ? ' ('.$item['count'].')' : '' }}"
                 >
                     @include('admin.partials.sidebar-icon', ['icon' => $item['icon']])
                     <span>{{ $item['label'] }}</span>
+                    @if (isset($item['count']))
+                        <em class="rw-admin-sidebar__count @if (! empty($item['urgent'])) is-urgent @endif">{{ number_format($item['count']) }}</em>
+                    @endif
                 </a>
             @endforeach
         @endif
