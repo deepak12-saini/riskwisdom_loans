@@ -29,6 +29,14 @@ class AdminEnquiryController extends Controller
             'this_week' => $query->where('created_at', '>=', now()->startOfWeek()),
             'today' => $query->whereDate('created_at', today()),
             'calendly' => $query->where('lead_type', 'calendly'),
+            'callbacks_due' => $query
+                ->where('call_status', 'callback')
+                ->where(function ($builder) {
+                    $builder
+                        ->whereNull('callback_at')
+                        ->orWhere('callback_at', '<=', now()->endOfDay());
+                }),
+            'new_leads' => $query->where('call_status', 'new'),
             'paid' => $showPaidAds ? $query->where('utm_medium', 'cpc') : null,
             'converted' => $query->whereHas('client'),
             'lead_only' => $query->whereDoesntHave('client'),
@@ -54,6 +62,15 @@ class AdminEnquiryController extends Controller
             'this_week' => Enquiry::query()->where('created_at', '>=', now()->startOfWeek())->count(),
             'today' => Enquiry::query()->whereDate('created_at', today())->count(),
             'calendly' => Enquiry::query()->where('lead_type', 'calendly')->count(),
+            'callbacks_due' => Enquiry::query()
+                ->where('call_status', 'callback')
+                ->where(function ($builder) {
+                    $builder
+                        ->whereNull('callback_at')
+                        ->orWhere('callback_at', '<=', now()->endOfDay());
+                })
+                ->count(),
+            'new_leads' => Enquiry::query()->where('call_status', 'new')->count(),
             'converted' => Enquiry::query()->whereHas('client')->count(),
             'lead_only' => Enquiry::query()->whereDoesntHave('client')->count(),
         ];
@@ -68,6 +85,8 @@ class AdminEnquiryController extends Controller
             'this_week' => 'This week leads',
             'today' => 'Today\'s leads',
             'calendly' => 'Calendly bookings',
+            'callbacks_due' => 'Callbacks due',
+            'new_leads' => 'New — not yet called',
             'paid' => 'Paid ad leads (CPC)',
             'converted' => 'Leads with client file',
             'lead_only' => 'Lead only',
@@ -83,6 +102,41 @@ class AdminEnquiryController extends Controller
         $enquiry->load('client');
 
         return view('admin.enquiries.show', compact('enquiry'));
+    }
+
+    public function updateCallTracking(Request $request, Enquiry $enquiry): RedirectResponse
+    {
+        $statuses = array_keys(config('riskwisdom.call_statuses', []));
+
+        $validated = $request->validate([
+            'call_status' => ['required', 'string', 'in:'.implode(',', $statuses)],
+            'call_notes' => ['nullable', 'string', 'max:5000'],
+            'callback_at' => ['nullable', 'date'],
+        ]);
+
+        if ($validated['call_status'] === 'callback' && empty($validated['callback_at'])) {
+            return back()
+                ->withErrors(['callback_at' => 'Set a callback date and time when status is Callback.'])
+                ->withInput();
+        }
+
+        $updates = [
+            'call_status' => $validated['call_status'],
+            'call_notes' => $validated['call_notes'] ?? null,
+            'callback_at' => $validated['call_status'] === 'callback'
+                ? $validated['callback_at']
+                : null,
+        ];
+
+        if (in_array($validated['call_status'], ['called', 'no_answer', 'booked', 'callback', 'not_interested'], true)) {
+            $updates['last_called_at'] = now();
+        }
+
+        $enquiry->update($updates);
+
+        return redirect()
+            ->route('admin.enquiries.show', $enquiry)
+            ->with('success', 'Call status updated.');
     }
 
     public function destroy(Enquiry $enquiry): RedirectResponse

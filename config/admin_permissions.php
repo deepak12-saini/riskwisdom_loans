@@ -46,6 +46,9 @@ return [
             'documents.view',
             'documents.manage',
         ],
+        'caller' => [
+            'enquiries.view',
+        ],
     ],
 
     /*

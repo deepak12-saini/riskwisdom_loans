@@ -7623,6 +7623,242 @@ a.rw-pager__btn:hover {
     gap: 0.65rem;
 }
 
+.rw-call-tracking-form {
+    display: grid;
+    gap: 1.15rem;
+}
+
+.rw-call-tracking-form__section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.rw-call-tracking-form__section legend {
+    margin: 0 0 0.65rem;
+    padding: 0;
+    color: #0f2239;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.rw-call-status-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.rw-call-status-option {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.rw-call-status-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.rw-call-status-option span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.35rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(17, 39, 61, 0.1);
+    background: #f8fbfe;
+    color: var(--rw-text-soft);
+    font-size: 0.86rem;
+    font-weight: 650;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.rw-call-status-option:hover span {
+    border-color: rgba(27, 99, 200, 0.22);
+    color: #0f2239;
+}
+
+.rw-call-status-option.is-active span,
+.rw-call-status-option input:focus-visible + span {
+    box-shadow: 0 0 0 3px rgba(27, 99, 200, 0.12);
+}
+
+.rw-call-status-option--new.is-active span {
+    background: rgba(27, 99, 200, 0.12);
+    border-color: rgba(27, 99, 200, 0.28);
+    color: var(--rw-primary-deep);
+}
+
+.rw-call-status-option--called.is-active span,
+.rw-call-status-option--no_answer.is-active span {
+    background: rgba(243, 180, 71, 0.18);
+    border-color: rgba(243, 180, 71, 0.45);
+    color: #8a5a00;
+}
+
+.rw-call-status-option--booked.is-active span {
+    background: rgba(39, 174, 96, 0.14);
+    border-color: rgba(39, 174, 96, 0.35);
+    color: #1f7a43;
+}
+
+.rw-call-status-option--callback.is-active span {
+    background: rgba(155, 89, 182, 0.14);
+    border-color: rgba(155, 89, 182, 0.35);
+    color: #6c3483;
+}
+
+.rw-call-status-option--not_interested.is-active span {
+    background: rgba(17, 39, 61, 0.08);
+    border-color: rgba(17, 39, 61, 0.18);
+    color: var(--rw-text-soft);
+}
+
+.rw-call-tracking-form__callback {
+    padding: 0.95rem 1rem;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(155, 89, 182, 0.18);
+    background: linear-gradient(180deg, #fbf7fd 0%, #ffffff 100%);
+}
+
+.rw-call-tracking-form__callback.is-hidden {
+    display: none;
+}
+
+.rw-call-tracking-form__callback-label {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.rw-call-tracking-form__callback-label span {
+    color: #6c3483;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.rw-call-tracking-form__callback-label input {
+    width: 100%;
+    min-height: 2.85rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgba(155, 89, 182, 0.22);
+    border-radius: 0.75rem;
+    background: #fff;
+    font: inherit;
+    color: #0f2239;
+}
+
+.rw-call-tracking-form__callback-label input:focus {
+    outline: none;
+    border-color: rgba(155, 89, 182, 0.45);
+    box-shadow: 0 0 0 4px rgba(155, 89, 182, 0.12);
+}
+
+.rw-call-notes-field textarea {
+    width: 100%;
+    min-height: 8.5rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(17, 39, 61, 0.1);
+    border-radius: 0.95rem;
+    background: #fbfdff;
+    font: inherit;
+    line-height: 1.6;
+    color: #0f2239;
+    resize: vertical;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+}
+
+.rw-call-notes-field textarea:focus {
+    outline: none;
+    border-color: rgba(27, 99, 200, 0.35);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(27, 99, 200, 0.1);
+}
+
+.rw-call-notes-field textarea::placeholder {
+    color: rgba(17, 39, 61, 0.42);
+}
+
+.rw-call-notes-field__hint {
+    margin: 0.45rem 0 0;
+    color: var(--rw-text-soft);
+    font-size: 0.8rem;
+}
+
+.rw-call-tracking-form__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 0.35rem;
+    border-top: 1px solid rgba(17, 39, 61, 0.08);
+}
+
+.rw-call-tracking-form__meta {
+    margin: 0;
+    color: var(--rw-text-soft);
+    font-size: 0.84rem;
+}
+
+.rw-lead-panel--call-tracking .rw-lead-panel__intro {
+    align-items: center;
+}
+
+.rw-lead-panel--call-tracking .rw-field__error {
+    display: block;
+    margin-top: 0.35rem;
+}
+
+@media (max-width: 720px) {
+    .rw-call-tracking-form__footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rw-call-tracking-form__footer .rw-button {
+        width: 100%;
+    }
+}
+
+.rw-admin-pill--call-new {
+    background: rgba(27, 99, 200, 0.12);
+    color: var(--rw-primary-deep);
+}
+
+.rw-admin-pill--call-called,
+.rw-admin-pill--call-no_answer {
+    background: rgba(243, 180, 71, 0.18);
+    color: #8a5a00;
+}
+
+.rw-admin-pill--call-booked {
+    background: rgba(39, 174, 96, 0.14);
+    color: #1f7a43;
+}
+
+.rw-admin-pill--call-callback {
+    background: rgba(155, 89, 182, 0.14);
+    color: #6c3483;
+}
+
+.rw-admin-pill--call-not_interested {
+    background: rgba(17, 39, 61, 0.08);
+    color: var(--rw-text-soft);
+}
+
 .rw-book-meeting {
     display: grid;
     gap: 0.85rem;

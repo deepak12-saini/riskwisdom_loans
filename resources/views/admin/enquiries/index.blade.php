@@ -44,6 +44,12 @@
                 <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'today', 'q' => $q ?: null])) }}" class="@if ($filter === 'today') is-active @endif">
                     Today <em>{{ number_format($stats['today']) }}</em>
                 </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'new_leads', 'q' => $q ?: null])) }}" class="@if ($filter === 'new_leads') is-active @endif">
+                    New <em>{{ number_format($stats['new_leads'] ?? 0) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'callbacks_due', 'q' => $q ?: null])) }}" class="@if ($filter === 'callbacks_due') is-active @endif">
+                    Callbacks due <em>{{ number_format($stats['callbacks_due'] ?? 0) }}</em>
+                </a>
                 <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'calendly', 'q' => $q ?: null])) }}" class="@if ($filter === 'calendly') is-active @endif">
                     Calendly <em>{{ number_format($stats['calendly'] ?? 0) }}</em>
                 </a>
@@ -71,6 +77,7 @@
                         <th>Contact</th>
                         <th>Loan type</th>
                         <th>Timeline</th>
+                        <th>Call status</th>
                         <th>State</th>
                         <th>Source</th>
                         <th>UTM</th>
@@ -99,6 +106,14 @@
                                     <span class="rw-admin-pill rw-admin-pill--urgent">Ready now</span>
                                 @else
                                     <span class="rw-admin-pill">{{ config('riskwisdom.timelines')[$enquiry->timeline] ?? $enquiry->timeline }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="rw-admin-pill rw-admin-pill--call-{{ $enquiry->call_status ?? 'new' }}">
+                                    {{ $enquiry->callStatusLabel() }}
+                                </span>
+                                @if (($enquiry->call_status ?? '') === 'callback' && $enquiry->callback_at)
+                                    <br><small>{{ $enquiry->callback_at->format('d M g:ia') }}</small>
                                 @endif
                             </td>
                             <td>{{ $enquiry->state }}</td>
@@ -159,7 +174,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="14" class="rw-admin-table__empty">No enquiries yet.</td>
+                            <td colspan="15" class="rw-admin-table__empty">No enquiries yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

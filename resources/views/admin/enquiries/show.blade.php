@@ -46,6 +46,7 @@
                         <h2 class="rw-client-profile__name">{{ $enquiry->full_name }}</h2>
                         <div class="rw-client-profile__badges">
                             <span class="rw-admin-pill">{{ $leadType }}</span>
+                            <span class="rw-admin-pill rw-admin-pill--call-{{ $enquiry->call_status ?? 'new' }}">{{ $enquiry->callStatusLabel() }}</span>
                             @if ($isReadyNow)
                                 <span class="rw-admin-pill rw-admin-pill--urgent">Ready now</span>
                             @endif
@@ -172,6 +173,8 @@
                     </div>
                 @endif
             </section>
+
+            @include('admin.enquiries.partials.call-tracking')
 
             <section class="rw-lead-panel">
                 <div class="rw-lead-panel__intro">

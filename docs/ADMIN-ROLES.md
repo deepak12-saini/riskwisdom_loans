@@ -42,6 +42,23 @@ On **Enquiry** and **Client** pages, staff can:
 
 No extra permission is required beyond viewing the enquiry or client.
 
+## Call tracking (staff callers)
+
+On each **Enquiry** page, staff can:
+
+1. Set **call status** — New, Called, Booked, Callback, No answer, Not interested
+2. Add **call notes** — what was discussed and next step
+3. Set **callback date** when status is Callback
+
+**Enquiries filters:**
+
+- **New** — not yet called
+- **Callbacks due** — callback status with date today or overdue
+
+Calendly bookings auto-set status to **Booked**.
+
+**Caller preset permissions** (when adding staff): only `enquiries.view` — enough to view leads, update call tracking, call, and book meetings.
+
 ## Deploy note
 
 After pulling this feature:

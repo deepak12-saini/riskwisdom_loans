@@ -128,6 +128,7 @@ class CalendlyService
             'utm_campaign' => null,
             'ip_address' => null,
             'status' => 'new',
+            'call_status' => 'booked',
             'marketing_consent' => false,
             'metadata' => [
                 'calendly_invitee_uri' => $inviteeUri,

@@ -38,6 +38,15 @@ return [
         'callback_promise' => 'Fast callback — we aim to call you within 2 business hours.',
     ],
 
+    'call_statuses' => [
+        'new' => 'New',
+        'called' => 'Called',
+        'booked' => 'Booked',
+        'callback' => 'Callback',
+        'no_answer' => 'No answer',
+        'not_interested' => 'Not interested',
+    ],
+
     /*
     | Paid ads (CPC) admin UI — set to true when running Google/Meta ads.
     | Shows the Paid (CPC) stat, sidebar link, and filter tab on enquiries.

@@ -24,6 +24,10 @@ class Enquiry extends Model
         'utm_campaign',
         'ip_address',
         'status',
+        'call_status',
+        'call_notes',
+        'callback_at',
+        'last_called_at',
         'email_sent_at',
         'auto_reply_sent_at',
         'marketing_consent',
@@ -39,7 +43,28 @@ class Enquiry extends Model
             'auto_reply_sent_at' => 'datetime',
             'marketing_consent' => 'boolean',
             'mailchimp_synced_at' => 'datetime',
+            'callback_at' => 'datetime',
+            'last_called_at' => 'datetime',
         ];
+    }
+
+    public function callStatusLabel(): string
+    {
+        return config('riskwisdom.call_statuses')[$this->call_status ?? 'new']
+            ?? ucfirst(str_replace('_', ' ', (string) ($this->call_status ?? 'new')));
+    }
+
+    public function isCallbackDue(): bool
+    {
+        if (($this->call_status ?? 'new') !== 'callback') {
+            return false;
+        }
+
+        if ($this->callback_at === null) {
+            return true;
+        }
+
+        return $this->callback_at->lte(now()->endOfDay());
     }
 
     public function client(): HasOne

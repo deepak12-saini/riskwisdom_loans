@@ -103,6 +103,9 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/enquiries/{enquiry}', [AdminEnquiryController::class, 'show'])
         ->middleware('admin.can:enquiries.view')
         ->name('enquiries.show');
+    Route::patch('/enquiries/{enquiry}/call-tracking', [AdminEnquiryController::class, 'updateCallTracking'])
+        ->middleware('admin.can:enquiries.view')
+        ->name('enquiries.call-tracking.update');
     Route::delete('/enquiries/{enquiry}', [AdminEnquiryController::class, 'destroy'])
         ->middleware('admin.can:enquiries.delete')
         ->name('enquiries.destroy');
