@@ -7,8 +7,8 @@
     $refinanceLanding = config('riskwisdom.conversion_landings.refinance', []);
     $broker = $refinanceLanding['broker'] ?? [
         'name' => 'Kaltaran Bhinder',
-        'tagline' => 'Mortgage broker since 2004',
-        'credential' => 'Credit representative 399434',
+        'tagline' => 'Mortgage broker since XX04',
+        'credential' => 'Credit representative XXXX34',
         'avatar' => 'images/landing/kaltaran-bhinder.png',
         'avatar_alt' => 'Kaltaran Bhinder, mortgage broker',
     ];
