@@ -117,6 +117,8 @@
                 type="range"
                 class="rw-field__range"
                 data-range-for="sd-property-value"
+                data-range-format="money"
+                data-range-max-plus="1"
                 min="50000"
                 max="5000000"
                 step="10000"

@@ -49,7 +49,7 @@
                     <span class="rw-field__prefix">$</span>
                     <input type="number" id="rc-amount" min="50000" max="3000000" step="1000" value="500000">
                 </div>
-                <input type="range" class="rw-field__range" data-range-for="rc-amount" min="50000" max="2000000" step="10000" value="500000" aria-label="Adjust loan amount">
+                <input type="range" class="rw-field__range" data-range-for="rc-amount" data-range-format="money" data-range-max-plus="1" min="50000" max="2000000" step="10000" value="500000" aria-label="Adjust loan amount">
             </div>
 
             <div class="rw-field">
@@ -57,7 +57,7 @@
                 <div class="rw-field__control">
                     <input type="number" id="rc-rate" min="0" max="20" step="0.1" value="6.2">
                 </div>
-                <input type="range" class="rw-field__range" data-range-for="rc-rate" min="2" max="12" step="0.1" value="6.2" aria-label="Adjust interest rate">
+                <input type="range" class="rw-field__range" data-range-for="rc-rate" data-range-format="percent" min="2" max="12" step="0.1" value="6.2" aria-label="Adjust interest rate">
             </div>
 
             <div class="rw-field">
@@ -65,7 +65,7 @@
                 <div class="rw-field__control">
                     <input type="number" id="rc-term" min="1" max="30" step="1" value="30">
                 </div>
-                <input type="range" class="rw-field__range" data-range-for="rc-term" min="5" max="30" step="1" value="30" aria-label="Adjust loan term">
+                <input type="range" class="rw-field__range" data-range-for="rc-term" data-range-format="years" min="5" max="30" step="1" value="30" aria-label="Adjust loan term">
             </div>
         </div>
 

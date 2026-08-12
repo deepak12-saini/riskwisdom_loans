@@ -107,7 +107,7 @@
                         <span class="rw-field__prefix">$</span>
                         <input type="number" name="income" id="bp-income" min="30000" max="2000000" step="1000" value="{{ old('income', 120000) }}" required>
                     </div>
-                    <input type="range" class="rw-field__range" data-range-for="bp-income" min="30000" max="500000" step="5000" value="{{ old('income', 120000) }}" aria-label="Adjust annual income">
+                    <input type="range" class="rw-field__range" data-range-for="bp-income" data-range-format="money" data-range-max-plus="1" min="30000" max="500000" step="5000" value="{{ old('income', 120000) }}" aria-label="Adjust annual income">
                 </div>
 
                 <div class="rw-field @if ($errors->has('expenses')) is-invalid @endif">
@@ -116,7 +116,7 @@
                         <span class="rw-field__prefix">$</span>
                         <input type="number" name="expenses" id="bp-expenses" min="0" max="20000" step="100" value="{{ old('expenses', 3500) }}" required>
                     </div>
-                    <input type="range" class="rw-field__range" data-range-for="bp-expenses" min="500" max="15000" step="100" value="{{ old('expenses', 3500) }}" aria-label="Adjust monthly expenses">
+                    <input type="range" class="rw-field__range" data-range-for="bp-expenses" data-range-format="money" min="500" max="15000" step="100" value="{{ old('expenses', 3500) }}" aria-label="Adjust monthly expenses">
                 </div>
 
                 <div class="rw-field @if ($errors->has('deposit')) is-invalid @endif">
@@ -125,7 +125,7 @@
                         <span class="rw-field__prefix">$</span>
                         <input type="number" name="deposit" id="bp-deposit" min="0" max="3000000" step="1000" value="{{ old('deposit', 80000) }}" required>
                     </div>
-                    <input type="range" class="rw-field__range" data-range-for="bp-deposit" min="0" max="500000" step="5000" value="{{ old('deposit', 80000) }}" aria-label="Adjust deposit">
+                    <input type="range" class="rw-field__range" data-range-for="bp-deposit" data-range-format="money" data-range-max-plus="1" min="0" max="500000" step="5000" value="{{ old('deposit', 80000) }}" aria-label="Adjust deposit">
                 </div>
 
                 <div class="rw-calculator__grid rw-calculator__grid--compact">
@@ -134,7 +134,7 @@
                         <div class="rw-field__control">
                             <input type="number" name="rate" id="bp-rate" min="0" max="15" step="0.1" value="{{ old('rate', 6.2) }}" required>
                         </div>
-                        <input type="range" class="rw-field__range" data-range-for="bp-rate" min="3" max="12" step="0.1" value="{{ old('rate', 6.2) }}" aria-label="Adjust interest rate">
+                        <input type="range" class="rw-field__range" data-range-for="bp-rate" data-range-format="percent" min="3" max="12" step="0.1" value="{{ old('rate', 6.2) }}" aria-label="Adjust interest rate">
                     </div>
 
                     <div class="rw-field @if ($errors->has('term')) is-invalid @endif">
@@ -142,7 +142,7 @@
                         <div class="rw-field__control">
                             <input type="number" name="term" id="bp-term" min="5" max="30" step="1" value="{{ old('term', 30) }}" required>
                         </div>
-                        <input type="range" class="rw-field__range" data-range-for="bp-term" min="5" max="30" step="1" value="{{ old('term', 30) }}" aria-label="Adjust loan term">
+                        <input type="range" class="rw-field__range" data-range-for="bp-term" data-range-format="years" min="5" max="30" step="1" value="{{ old('term', 30) }}" aria-label="Adjust loan term">
                     </div>
                 </div>
             </div>
