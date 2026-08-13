@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Enquiry;
+use App\Models\User;
+use App\Services\EnquiryActivityLogger;
 use App\Services\MailchimpService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -22,21 +24,17 @@ class AdminEnquiryController extends Controller
             $filter = 'all';
         }
 
-        $query = Enquiry::query()->with('client')->latest();
+        $query = Enquiry::query()->with(['client', 'assignedUser'])->latest();
 
         match ($filter) {
             'ready_now' => $query->where('timeline', 'ready_now'),
             'this_week' => $query->where('created_at', '>=', now()->startOfWeek()),
             'today' => $query->whereDate('created_at', today()),
             'calendly' => $query->where('lead_type', 'calendly'),
-            'callbacks_due' => $query
-                ->where('call_status', 'callback')
-                ->where(function ($builder) {
-                    $builder
-                        ->whereNull('callback_at')
-                        ->orWhere('callback_at', '<=', now()->endOfDay());
-                }),
-            'new_leads' => $query->where('call_status', 'new'),
+            'callbacks_due' => $query->callbacksDueToday(),
+            'new_leads' => $query->newLeads(),
+            'mine' => $query->assignedTo((int) $request->user()->id),
+            'unassigned' => $query->unassigned(),
             'paid' => $showPaidAds ? $query->where('utm_medium', 'cpc') : null,
             'converted' => $query->whereHas('client'),
             'lead_only' => $query->whereDoesntHave('client'),
@@ -62,15 +60,10 @@ class AdminEnquiryController extends Controller
             'this_week' => Enquiry::query()->where('created_at', '>=', now()->startOfWeek())->count(),
             'today' => Enquiry::query()->whereDate('created_at', today())->count(),
             'calendly' => Enquiry::query()->where('lead_type', 'calendly')->count(),
-            'callbacks_due' => Enquiry::query()
-                ->where('call_status', 'callback')
-                ->where(function ($builder) {
-                    $builder
-                        ->whereNull('callback_at')
-                        ->orWhere('callback_at', '<=', now()->endOfDay());
-                })
-                ->count(),
-            'new_leads' => Enquiry::query()->where('call_status', 'new')->count(),
+            'callbacks_due' => Enquiry::query()->callbacksDueToday()->count(),
+            'new_leads' => Enquiry::query()->newLeads()->count(),
+            'mine' => Enquiry::query()->assignedTo((int) $request->user()->id)->count(),
+            'unassigned' => Enquiry::query()->unassigned()->count(),
             'converted' => Enquiry::query()->whereHas('client')->count(),
             'lead_only' => Enquiry::query()->whereDoesntHave('client')->count(),
         ];
@@ -87,6 +80,8 @@ class AdminEnquiryController extends Controller
             'calendly' => 'Calendly bookings',
             'callbacks_due' => 'Callbacks due',
             'new_leads' => 'New — not yet called',
+            'mine' => 'My leads',
+            'unassigned' => 'Unassigned leads',
             'paid' => 'Paid ad leads (CPC)',
             'converted' => 'Leads with client file',
             'lead_only' => 'Lead only',
@@ -99,12 +94,63 @@ class AdminEnquiryController extends Controller
 
     public function show(Enquiry $enquiry): View
     {
-        $enquiry->load('client');
+        $enquiry->load(['client', 'assignedUser', 'activities.user']);
+        $panelUsers = User::panelUsers();
 
-        return view('admin.enquiries.show', compact('enquiry'));
+        return view('admin.enquiries.show', compact('enquiry', 'panelUsers'));
     }
 
-    public function updateCallTracking(Request $request, Enquiry $enquiry): RedirectResponse
+    public function updateAssignment(Request $request, Enquiry $enquiry, EnquiryActivityLogger $logger): RedirectResponse
+    {
+        $user = $request->user();
+        $assigneeId = $request->input('assigned_user_id');
+        $assigneeId = $assigneeId === '' || $assigneeId === null ? null : (int) $assigneeId;
+
+        $panelIds = array_map('intval', User::panelUsers()->pluck('id')->all());
+
+        if ($assigneeId !== null && ! in_array($assigneeId, $panelIds, true)) {
+            return back()->with('error', 'Choose a valid staff member.');
+        }
+
+        if (! $user->isPanelAdmin()) {
+            $allowed = [$user->id, null];
+            if ($enquiry->assigned_user_id !== null && (int) $enquiry->assigned_user_id !== (int) $user->id) {
+                return back()->with('error', 'This lead is assigned to someone else.');
+            }
+            if (! in_array($assigneeId, $allowed, true)) {
+                return back()->with('error', 'You can only take this lead or leave it unassigned.');
+            }
+        }
+
+        $previous = $enquiry->assignedUser;
+        $next = $assigneeId ? User::query()->find($assigneeId) : null;
+
+        if ((int) ($enquiry->assigned_user_id ?? 0) === (int) ($assigneeId ?? 0)) {
+            return back()->with('success', 'Assignment unchanged.');
+        }
+
+        $enquiry->update([
+            'assigned_user_id' => $assigneeId,
+            'assigned_at' => $assigneeId ? now() : null,
+        ]);
+
+        if ($next) {
+            $logger->record($enquiry, 'assigned', 'Assigned to '.$next->displayName().'.', $user);
+        } else {
+            $logger->record(
+                $enquiry,
+                'unassigned',
+                'Unassigned'.($previous ? ' (was '.$previous->displayName().')' : '').'.',
+                $user,
+            );
+        }
+
+        return redirect()
+            ->route('admin.enquiries.show', $enquiry)
+            ->with('success', $next ? 'Lead assigned to '.$next->displayName().'.' : 'Lead is now unassigned.');
+    }
+
+    public function updateCallTracking(Request $request, Enquiry $enquiry, EnquiryActivityLogger $logger): RedirectResponse
     {
         $statuses = array_keys(config('riskwisdom.call_statuses', []));
 
@@ -120,6 +166,9 @@ class AdminEnquiryController extends Controller
                 ->withInput();
         }
 
+        $previousStatus = $enquiry->call_status ?? 'new';
+        $previousNotes = (string) ($enquiry->call_notes ?? '');
+
         $updates = [
             'call_status' => $validated['call_status'],
             'call_notes' => $validated['call_notes'] ?? null,
@@ -132,7 +181,38 @@ class AdminEnquiryController extends Controller
             $updates['last_called_at'] = now();
         }
 
+        $user = $request->user();
+
+        if ($enquiry->assigned_user_id === null && $user) {
+            $updates['assigned_user_id'] = $user->id;
+            $updates['assigned_at'] = now();
+        }
+
         $enquiry->update($updates);
+
+        if ($enquiry->wasChanged('assigned_user_id') && $user) {
+            $logger->record($enquiry, 'assigned', 'Assigned to '.$user->displayName().' (took lead).', $user);
+        }
+
+        $statusLabel = config('riskwisdom.call_statuses')[$validated['call_status']] ?? $validated['call_status'];
+        $parts = [];
+
+        if ($previousStatus !== $validated['call_status']) {
+            $parts[] = 'Call status set to '.$statusLabel;
+        }
+
+        $newNotes = trim((string) ($validated['call_notes'] ?? ''));
+        if ($newNotes !== '' && $newNotes !== trim($previousNotes)) {
+            $parts[] = $newNotes;
+        }
+
+        if ($parts === []) {
+            $parts[] = 'Call tracking updated ('.$statusLabel.').';
+        }
+
+        $logger->record($enquiry, 'call_status', implode(' — ', $parts).'.', $user, [
+            'call_status' => $validated['call_status'],
+        ]);
 
         return redirect()
             ->route('admin.enquiries.show', $enquiry)
@@ -154,7 +234,7 @@ class AdminEnquiryController extends Controller
             ->with('success', 'Enquiry deleted.');
     }
 
-    public function convert(Enquiry $enquiry, MailchimpService $mailchimp): RedirectResponse
+    public function convert(Request $request, Enquiry $enquiry, MailchimpService $mailchimp): RedirectResponse
     {
         $existing = Client::query()->where('enquiry_id', $enquiry->id)->first();
 
@@ -165,6 +245,13 @@ class AdminEnquiryController extends Controller
         }
 
         $client = Client::query()->create(Client::fromEnquiry($enquiry));
+
+        app(EnquiryActivityLogger::class)->record(
+            $enquiry,
+            'converted',
+            'Converted to client file.',
+            $request->user(),
+        );
 
         if ($enquiry->mailchimp_synced_at && $mailchimp->isConfigured()) {
             try {

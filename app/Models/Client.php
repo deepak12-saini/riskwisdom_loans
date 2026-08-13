@@ -70,6 +70,7 @@ class Client extends Model
             'loan_type' => $enquiry->loan_type,
             'state' => $enquiry->state,
             'status' => 'active',
+            'assigned_user_id' => $enquiry->assigned_user_id,
         ];
     }
 }

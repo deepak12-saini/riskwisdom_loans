@@ -155,5 +155,9 @@ class CalendlyServiceTest extends TestCase
         $this->assertSame('canceled', $enquiry->status);
         $this->assertSame('canceled', $enquiry->metadata['calendly_status'] ?? null);
         $this->assertStringContainsString('[Canceled]', $enquiry->enquiry);
+        $this->assertDatabaseHas('enquiry_activities', [
+            'enquiry_id' => $enquiry->id,
+            'type' => 'calendly_canceled',
+        ]);
     }
 }

@@ -39,23 +39,7 @@ class AdminAuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        if ($user->canAdmin('enquiries.view')) {
-            return redirect()->route('admin.enquiries.index');
-        }
-
-        if ($user->canAdmin('clients.view')) {
-            return redirect()->route('admin.clients.index');
-        }
-
-        if ($user->canAdmin('tasks.view')) {
-            return redirect()->route('admin.tasks.index');
-        }
-
-        if ($user->canAdmin('users.manage')) {
-            return redirect()->route('admin.users.index');
-        }
-
-        return redirect()->route('home');
+        return redirect()->intended(route('admin.dashboard'));
     }
 
     public function logout(Request $request): RedirectResponse

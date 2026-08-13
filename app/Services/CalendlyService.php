@@ -194,6 +194,12 @@ class CalendlyService
             'enquiry' => trim($enquiry->enquiry."\n\n[Canceled] This Calendly booking was canceled."),
         ]);
 
+        app(EnquiryActivityLogger::class)->record(
+            $enquiry,
+            'calendly_canceled',
+            'Calendly booking canceled.',
+        );
+
         Log::info('Calendly booking marked canceled', [
             'enquiry_id' => $enquiry->id,
         ]);

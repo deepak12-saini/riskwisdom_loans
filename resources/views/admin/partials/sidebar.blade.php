@@ -3,13 +3,40 @@
     $user = auth()->user();
     $taskFilter = request()->routeIs('admin.tasks.*') ? request()->query('filter', 'open') : 'open';
 
+    $homeItems = [
+        [
+            'label' => 'Dashboard',
+            'href' => route('admin.dashboard'),
+            'icon' => 'dashboard',
+            'active' => request()->routeIs('admin.dashboard'),
+        ],
+    ];
+
     $leadItems = [];
     if ($user?->canAdmin('enquiries.view')) {
+        $enquiryFilter = request()->routeIs('admin.enquiries.index') ? request()->query('filter', 'all') : null;
+        $myLeadCount = \App\Models\Enquiry::query()->assignedTo((int) $user->id)->count();
+        $unassignedCount = \App\Models\Enquiry::query()->unassigned()->count();
+
         $leadItems[] = [
             'label' => 'Leads',
             'href' => route('admin.enquiries.index'),
             'icon' => 'leads',
-            'active' => request()->routeIs('admin.enquiries.*'),
+            'active' => request()->routeIs('admin.enquiries.*') && ! in_array($enquiryFilter, ['mine', 'unassigned'], true),
+        ];
+        $leadItems[] = [
+            'label' => 'My leads',
+            'href' => route('admin.enquiries.index', ['filter' => 'mine']),
+            'icon' => 'mine',
+            'active' => $enquiryFilter === 'mine',
+            'count' => $myLeadCount,
+        ];
+        $leadItems[] = [
+            'label' => 'Unassigned',
+            'href' => route('admin.enquiries.index', ['filter' => 'unassigned']),
+            'icon' => 'unassigned',
+            'active' => $enquiryFilter === 'unassigned',
+            'count' => $unassignedCount,
         ];
     }
 
@@ -76,22 +103,37 @@
 
 <aside class="rw-admin-sidebar">
     <div class="rw-admin-sidebar__brand">
-        <a href="{{ $user?->canAdmin('enquiries.view') ? route('admin.enquiries.index') : route('home') }}" title="Riskwisdom Loans Admin">
+        <a href="{{ route('admin.dashboard') }}" title="Riskwisdom Loans Admin">
             <img src="{{ $logoUrl }}" alt="Risk Wisdom Loans">
         </a>
     </div>
 
     <nav class="rw-admin-sidebar__nav" aria-label="Admin navigation">
+        <p class="rw-admin-sidebar__section">Home</p>
+        @foreach ($homeItems as $item)
+            <a
+                class="rw-admin-sidebar__link @if ($item['active']) is-active @endif"
+                href="{{ $item['href'] }}"
+                title="{{ $item['label'] }}"
+            >
+                @include('admin.partials.sidebar-icon', ['icon' => $item['icon']])
+                <span>{{ $item['label'] }}</span>
+            </a>
+        @endforeach
+
         @if ($leadItems !== [])
             <p class="rw-admin-sidebar__section">Leads</p>
             @foreach ($leadItems as $item)
                 <a
                     class="rw-admin-sidebar__link @if ($item['active']) is-active @endif"
                     href="{{ $item['href'] }}"
-                    title="{{ $item['label'] }}"
+                    title="{{ $item['label'] }}{{ isset($item['count']) ? ' ('.$item['count'].')' : '' }}"
                 >
                     @include('admin.partials.sidebar-icon', ['icon' => $item['icon']])
                     <span>{{ $item['label'] }}</span>
+                    @if (isset($item['count']))
+                        <em class="rw-admin-sidebar__count">{{ number_format($item['count']) }}</em>
+                    @endif
                 </a>
             @endforeach
         @endif
@@ -126,23 +168,4 @@
             </a>
         @endforeach
     </nav>
-
-    <div class="rw-admin-sidebar__footer">
-        @if ($user)
-            <div class="rw-admin-sidebar__user" title="{{ $user->email }}">
-                <span class="rw-admin-sidebar__avatar">{{ strtoupper(substr((string) $user->username, 0, 1)) }}</span>
-                <span class="rw-admin-sidebar__user-text">
-                    <strong>{{ $user->username }}</strong>
-                    <small>{{ $user->roleLabel() }}</small>
-                </span>
-            </div>
-        @endif
-        <form method="post" action="{{ route('admin.logout') }}">
-            @csrf
-            <button class="rw-admin-sidebar__logout" type="submit" title="Log out">
-                @include('admin.partials.sidebar-icon', ['icon' => 'logout'])
-                <span>Log out</span>
-            </button>
-        </form>
-    </div>
 </aside>

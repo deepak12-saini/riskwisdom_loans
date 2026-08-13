@@ -50,6 +50,12 @@
                 <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'callbacks_due', 'q' => $q ?: null])) }}" class="@if ($filter === 'callbacks_due') is-active @endif">
                     Callbacks due <em>{{ number_format($stats['callbacks_due'] ?? 0) }}</em>
                 </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'mine', 'q' => $q ?: null])) }}" class="@if ($filter === 'mine') is-active @endif">
+                    My leads <em>{{ number_format($stats['mine'] ?? 0) }}</em>
+                </a>
+                <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'unassigned', 'q' => $q ?: null])) }}" class="@if ($filter === 'unassigned') is-active @endif">
+                    Unassigned <em>{{ number_format($stats['unassigned'] ?? 0) }}</em>
+                </a>
                 <a href="{{ route('admin.enquiries.index', array_filter(['filter' => 'calendly', 'q' => $q ?: null])) }}" class="@if ($filter === 'calendly') is-active @endif">
                     Calendly <em>{{ number_format($stats['calendly'] ?? 0) }}</em>
                 </a>
@@ -74,6 +80,7 @@
                         <th>Date</th>
                         <th>Type</th>
                         <th>Name</th>
+                        <th>Assigned</th>
                         <th>Contact</th>
                         <th>Loan type</th>
                         <th>Timeline</th>
@@ -96,6 +103,11 @@
                                 <span class="rw-admin-pill">{{ config('riskwisdom.lead_types')[$enquiry->lead_type] ?? $enquiry->lead_type }}</span>
                             </td>
                             <td><strong>{{ $enquiry->full_name }}</strong></td>
+                            <td>
+                                <span class="rw-admin-pill @if ($enquiry->assigned_user_id) rw-admin-pill--accent @else rw-admin-pill--muted @endif">
+                                    {{ $enquiry->assigneeLabel() }}
+                                </span>
+                            </td>
                             <td class="rw-admin-table__contact">
                                 <a href="mailto:{{ $enquiry->email }}">{{ $enquiry->email }}</a>
                                 <a href="tel:{{ $enquiry->phone }}">{{ $enquiry->phone }}</a>
@@ -174,7 +186,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="15" class="rw-admin-table__empty">No enquiries yet.</td>
+                            <td colspan="16" class="rw-admin-table__empty">No enquiries yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

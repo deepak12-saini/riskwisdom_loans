@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminClientController;
 use App\Http\Controllers\AdminClientDocumentController;
 use App\Http\Controllers\AdminEnquiryController;
@@ -94,6 +95,8 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', AdminDashboardController::class)->name('dashboard');
+
     Route::get('/enquiries', [AdminEnquiryController::class, 'index'])
         ->middleware('admin.can:enquiries.view')
         ->name('enquiries.index');
@@ -106,6 +109,9 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/enquiries/{enquiry}/call-tracking', [AdminEnquiryController::class, 'updateCallTracking'])
         ->middleware('admin.can:enquiries.view')
         ->name('enquiries.call-tracking.update');
+    Route::patch('/enquiries/{enquiry}/assignment', [AdminEnquiryController::class, 'updateAssignment'])
+        ->middleware('admin.can:enquiries.view')
+        ->name('enquiries.assignment.update');
     Route::delete('/enquiries/{enquiry}', [AdminEnquiryController::class, 'destroy'])
         ->middleware('admin.can:enquiries.delete')
         ->name('enquiries.destroy');

@@ -81,6 +81,24 @@ class User extends Authenticatable
         return (string) (config('admin_permissions.roles')[$this->role] ?? ucfirst((string) $this->role));
     }
 
+    public function displayName(): string
+    {
+        $name = trim((string) ($this->name ?: $this->username ?: $this->email));
+
+        return $name !== '' ? $name : 'Staff';
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, User>
+     */
+    public static function panelUsers()
+    {
+        return static::query()
+            ->where('is_admin', true)
+            ->orderBy('username')
+            ->get();
+    }
+
     /**
      * @return list<string>
      */

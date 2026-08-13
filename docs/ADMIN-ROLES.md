@@ -7,7 +7,9 @@
 | **Admin** | Company boss | Full panel access, manage users |
 | **Staff** | Employees / callers | Only the permissions ticked for that person |
 
-Both log in at `/admin/login`.
+Both log in at `/admin/login` and land on **Dashboard** (`/admin`).
+
+The dashboard shows today’s call queue: new leads, callbacks due, meetings, and overdue tasks.
 
 ## How the boss adds more employees
 
@@ -54,10 +56,19 @@ On each **Enquiry** page, staff can:
 
 - **New** — not yet called
 - **Callbacks due** — callback status with date today or overdue
+- **My leads** — assigned to the signed-in user
+- **Unassigned** — nobody owns follow-up yet
+
+**Lead assignment**
+
+- Admin can assign any lead to any staff member.
+- Staff can **take** an unassigned lead, or unassign their own.
+- Updating call tracking on an unassigned lead auto-assigns it to the caller.
+- Every create / assign / call / Calendly cancel / convert is written to the lead **activity** timeline.
 
 Calendly bookings auto-set status to **Booked**.
 
-**Caller preset permissions** (when adding staff): only `enquiries.view` — enough to view leads, update call tracking, call, and book meetings.
+**Caller preset permissions** (when adding staff): only `enquiries.view` — enough to view Dashboard, leads, update call tracking, assign/take leads, call, and book meetings.
 
 ## Deploy note
 

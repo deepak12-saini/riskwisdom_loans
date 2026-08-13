@@ -25,6 +25,7 @@
                 </div>
                 <div class="rw-admin-topbar__actions">
                     @yield('topbar_actions')
+                    @include('admin.partials.account')
                 </div>
             </header>
 

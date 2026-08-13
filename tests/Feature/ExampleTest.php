@@ -385,7 +385,7 @@ class ExampleTest extends TestCase
             'password' => 'SecretPass123',
         ]);
 
-        $response->assertRedirect(route('admin.enquiries.index'));
+        $response->assertRedirect(route('admin.dashboard'));
         $this->assertAuthenticated();
     }
 

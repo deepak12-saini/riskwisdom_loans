@@ -5,6 +5,12 @@
     @case('leads')
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         @break
+    @case('mine')
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM5 20a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        @break
+    @case('unassigned')
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 11a3 3 0 1 0-6 0 3 3 0 0 0 6 0ZM4 20a4 4 0 0 1 8 0M17 8l4 4m0-4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        @break
     @case('urgent')
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8v5m0 3h.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         @break

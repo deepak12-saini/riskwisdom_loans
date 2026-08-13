@@ -39,6 +39,7 @@ class EnquiryCallTrackingTest extends TestCase
         $this->assertSame('called', $enquiry->call_status);
         $this->assertSame('Spoke at 2pm — wants broker callback tomorrow.', $enquiry->call_notes);
         $this->assertNotNull($enquiry->last_called_at);
+        $this->assertSame($staff->id, $enquiry->assigned_user_id);
     }
 
     public function test_callback_status_requires_callback_date(): void

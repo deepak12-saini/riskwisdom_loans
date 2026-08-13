@@ -55,6 +55,9 @@
                             @else
                                 <span class="rw-admin-pill rw-admin-pill--muted">Lead only</span>
                             @endif
+                            <span class="rw-admin-pill @if ($enquiry->assigned_user_id) rw-admin-pill--accent @else rw-admin-pill--muted @endif">
+                                {{ $enquiry->assigneeLabel() }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +177,11 @@
                 @endif
             </section>
 
+            @include('admin.enquiries.partials.assignment')
+
             @include('admin.enquiries.partials.call-tracking')
+
+            @include('admin.enquiries.partials.activity')
 
             <section class="rw-lead-panel">
                 <div class="rw-lead-panel__intro">
